@@ -1,0 +1,9 @@
+#menu-posts, #menu-comments, #menu-tools, #toplevel_page_wpcf7,
+#toplevel_page_edit-post_type-acf-field-group,
+#menu-settings, #toplevel_page_cptui_main_menu, #toplevel_page_litespeed, 
+#wp-admin-bar-new-post, #toplevel_page_members,
+#toplevel_page_contact-form-listing ul,
+#menu-appearance .wp-submenu.wp-submenu-wrap .wp-first-item, 
+#menu-appearance .wp-submenu.wp-submenu-wrap .hide-if-no-customize  {
+    display: none;
+} 

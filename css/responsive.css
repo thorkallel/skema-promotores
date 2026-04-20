@@ -1,0 +1,478 @@
+:root{
+    --azul:#00347A;
+    --nara:#FC7416;
+	--gris-o: #383838;
+    --gris-c: #D9D9D9;
+    --blanco: #ffffff;
+	--negro: #000000;
+}
+
+@media (min-width: 720px){
+    .btn_wa {
+        border-radius: 15px 0px 0px 15px;
+    }
+}
+@media (max-width: 719px){
+    .btn-abrir {
+        padding: 0;
+        border: none;
+        width: 0%;
+        z-index: 999;
+        background-color: transparent;
+    }
+    .logo-skema.position-absolute {
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 2rem;
+        position: absolute !important;
+    }
+    .logo-skema.position-absolute img, .logo-skema.w-100 img  {
+        filter: brightness(0) invert(1);
+        width: 140px;
+        height: auto;
+        transition: all 0.5s ease;
+    }  
+    
+    .menu-scrolled .logo-skema.position-absolute img{
+        filter: brightness(0) invert(1);
+    }
+    .menu-scrolled .logo-skema.w-100 img{
+        filter: none;
+    }
+    .menu-scrolled #menu-menupricipal .nav-link {
+        color: var(--blanco);
+    }
+    .menu-scrolled .redes i {
+        color: white;
+    }
+    .menu-scrolled .ico-menu{
+        fill: var(--azul);
+    }
+  
+
+    .navbar-collapse {
+        position: fixed;
+        top: 0;
+        /* left: 0; */
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        bottom: 0;
+        background-color: var(--azul); /* Ajusta el color de fondo según tu diseño */
+        z-index: 9999;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        -webkit-transition: .2s;
+	    -o-transition: .2s;
+	    transition: .2s;
+        padding: 1rem;
+    }
+    .redes {
+        display: flex;
+        gap: 2rem;
+        justify-content: flex-start;
+        position: absolute;
+        left: 2.3rem;
+        bottom: 20%;
+    }
+    .redes i {
+        font-size: 2.1rem;
+    }
+    section#que-es-skema {
+        background-position-x: center;
+        background-size: cover;
+    }
+    #video-banner-movil {
+        width: 100%;
+    height: auto;
+    object-fit: cover;
+        border-radius: 0px 0px 30px 30px;
+    }
+    .item p {
+        font-size: 0.9rem;
+        letter-spacing: 4px;
+        font-weight: 400;
+        padding: 0;
+        text-align: center;
+    }
+    .somos-lideres h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    .somos-lideres p {
+        padding: 0;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    .item-team img {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+    a.btn-nosotros {
+        display: table;
+        margin: auto;
+        padding: 0.6rem 3rem;
+    }
+    #video-home {
+        height: 255px;
+    }
+    ul#menu-menupricipal {
+        transform: translate(-50%, -50%);
+        position: absolute;
+        left: 60%;
+        top: 40%;
+        width: 100%;
+    }
+    ul#menu-menupricipal .nav-link {
+        font-size: 1.15rem;
+        padding: 13px 0px;
+    }
+    
+    button.btn-cerrar {
+        border: none;
+        background-color: transparent;
+        padding: 5px;
+        font-size: 3rem;
+        color: white;
+        position: absolute;
+        top: 0;
+        line-height: 0;
+        left: 0;
+    }
+    nav#principal-menu {
+        padding: 1rem;
+    }
+    ul#menu-menupricipal > *:not(:first-child) {
+        border: none !important;
+    }
+    .txt-oportu p {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    .txt-oportu h3 {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    .proyectos h3, .clientes h3, .contacto h3 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    a.btn-catego {
+        font-size: 1.2rem;
+    }
+    .cont-pro-1, .cont-pro-1 img {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .cont-pro-1, .cont-pro-3, .cont-pro-5, .cont-pro-7, .cont-pro-9, .cont-pro-11, .cont-pro-13, .cont-pro-15, .cont-pro-17, .cont-pro-19, .cont-pro-21, .cont-pro-23,
+    .cont-pro-2, .cont-pro-4, .cont-pro-6, .cont-pro-8, .cont-pro-10, .cont-pro-12, .cont-pro-14, .cont-pro-16, .cont-pro-18, .cont-pro-20, .cont-pro-22, .cont-pro-24 {
+        padding-right: 0rem !important;
+        padding-left: 0px !important;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    .cont-pro-1 .hover-infoproyecto, .cont-pro-3 .hover-infoproyecto, .cont-pro-5 .hover-infoproyecto, .cont-pro-7 .hover-infoproyecto, .cont-pro-9 .hover-infoproyecto, .cont-pro-11 .hover-infoproyecto, .cont-pro-13 .hover-infoproyecto, .cont-pro-15 .hover-infoproyecto, .cont-pro-17 .hover-infoproyecto, .cont-pro-19 .hover-infoproyect, .cont-pro-21 .hover-infoproyecto, .cont-pro-23 .hover-infoproyect {
+        border-bottom-left-radius: 0;
+        margin-right: 0;
+    }
+    .cont-pro-2 .hover-infoproyecto, .cont-pro-4 .hover-infoproyecto, .cont-pro-6 .hover-infoproyecto, .cont-pro-8 .hover-infoproyecto, .cont-pro-10 .hover-infoproyecto, .cont-pro-12 .hover-infoproyecto, .cont-pro-14 .hover-infoproyecto, .cont-pro-16 .hover-infoproyecto, .cont-pro-18 .hover-infoproyecto, .cont-pro-20 .hover-infoproyecto, .cont-pro-22 .hover-infoproyecto, .cont-pro-24 .hover-infoproyecto {
+        border-bottom-right-radius: 0;
+        margin-left: 0;
+    }
+    .cont-pro-2 img, .cont-pro-4 img, .cont-pro-6 img, .cont-pro-8 img, .cont-pro-10 img, .cont-pro-12 img, .cont-pro-14 img, .cont-pro-16 img, .cont-pro-18 img, .cont-pro-20 img, .cont-pro-22 img, .cont-pro-24 img {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .cont-pro-1 img, .cont-pro-3 img, .cont-pro-5 img, .cont-pro-7 img, .cont-pro-9 img, .cont-pro-11 img, .cont-pro-13 img, .cont-pro-15 img, .cont-pro-17 img .cont-pro-19 img, .cont-pro-21 img, .cont-pro-23 img {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .solo-uno {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        padding-right: 0rem !important;
+        padding-left: 0px !important;
+    }
+    span.icono-mas {
+        display: none;
+    }
+    .div-cont-pro .img-desc-proyecto,.div-cont-pro:hover .img-desc-proyecto {
+        transform: translateY(-100px);
+    }
+    .div-cont-pro .hover-infoproyecto {
+        opacity: 1;
+    }
+    span.txt-estado {
+        top: 1.3rem;
+        left: 0;
+        font-size: 0.8rem;
+        font-weight: 300;
+        padding: 0.4rem 1rem;
+    }
+    .cont-pro-1 .hover-infoproyecto {
+        margin-right: 0;
+    }
+    .hover-infoproyecto h2 {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+    .hover-infoproyecto h4 {
+        font-size: 1rem;
+        text-align: center;
+    }
+    .hover-infoproyecto p {
+        padding: 0 2rem;
+        text-align: center;
+    }
+    .cont-pro-1 .hover-infoproyecto {
+        border-bottom-left-radius: 0;
+    }
+    .hover-infoproyecto {
+        transform: translateY(-140px);
+        position: relative;
+        margin-bottom: -8rem;
+    }
+    a.btn-verproyecto {
+        padding: 10px 30px;
+    }
+    .cont-pro-2 .hover-infoproyecto {
+        margin-left: 0;
+        width: 100%;
+    }
+    .cont-pro-2 .hover-infoproyecto {
+        border-bottom-right-radius: 0;
+    }
+    .cont-pro-2, .cont-pro-2 img {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    .row-select, .div-pmapas {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    .proyect-next, .proyect-prev {
+        top: 30%;
+    }
+    .proyect-prev svg, .proyect-next svg{
+        width: 35px;
+        height: 35px;
+    }
+    select#selectMapas {
+        text-align: center;
+    }
+    
+    .div-pmapas p {
+        text-align: center;
+        font-size: 0.88rem;
+    }
+    .divMapa hr {
+        display: none;
+    }
+    .divMapa h5 {
+        font-size: 0.8em;
+    }
+    .divMapa p {
+        font-size: 1.35rem;
+    }
+    .div-border img.ico-proye {
+        width: 100%;
+    }
+    .div-border {
+        border-right: none;
+    }
+    .item-nece p {
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+    .item-nece p span {
+        display: inline-block;
+        margin: 15px 0px;
+        padding: 5px;
+    }
+    .nec-prev svg, .nec-next svg{
+        width: 20px;
+    }
+    .contacto span.wpcf7-list-item {
+        margin: 0% 0% 0% 10%;
+    }
+    input.form-control, select.form-control, textarea.form-control{
+        font-size: 0.85rem !important;
+    }
+    .logo-footer img.custom-logo {
+        width: 45%;
+    }
+    .site-footer h6 {
+        font-size: 1rem;
+    }
+    .banner-nosotros img, .banner-proyectos img {
+        border-radius: 0px;
+    }
+    .banner-nosotros h1, .banner-proyectos h1 {
+        font-size: 25px;
+        text-align: center;
+    }
+    .banner-nosotros p {
+        font-size: 20px;
+        text-align: center;
+        padding: 0px 20px;
+    }
+    .banner-nosotros p br{
+        display: none;
+    }
+    .valores h2, .trayecto h2, .ofrecemos h2, .descubre h2, .contenido_proy h2, .similares h2, .avance h2 {
+        font-size: 30px;
+    }
+    .valores h3 {
+        font-size: 13px;
+        text-align: center;
+    }
+    .valores p {
+        font-size: 11px;
+        text-align: center;
+    }
+    .trayecto .div_imgs{
+        width: 100%; 
+        padding: 3px;
+    }
+    .ofrecemos h3 {
+        font-size: 28px;
+        line-height: normal;
+    }
+    .ofrecemos p{
+        font-size: 18px;
+    }
+    .sainc h3 {
+        font-size: 20px;
+        text-align: center;
+    }
+    .sainc p {
+        font-size: 17px;
+        text-align: center;
+    }
+    .div_info_anos h4 {
+       font-size: 15px;
+    }
+    .div_info_anos p, .div_info_anos span{
+            font-size: 13px;
+            line-height: normal;
+    }
+    .timeline-line {
+        left: 20px;
+    }
+    .timeline-dot.small{
+            right: 5px;
+            top: 6px;
+    }
+    a.btn-intere{
+        font-size: 20px;
+    }
+    .contenido_proy img {
+        border-radius: 10px;
+    }
+    .contenido_proy p{
+        font-size: 15px;
+    }
+    .ubica_video h2 {
+        font-size: 16px;
+        padding: 15px;
+        gap: 6px;
+        border-radius: 20px;
+    }
+    .ubica_video h2 i.bi.bi-geo-alt-fill {
+        font-size: 30px;
+    }
+    .ubica_video button {
+        width: 130px;
+        font-size: 13px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .ubica_video p {
+        font-size: 15px;
+    }
+    .single-proyectos a.btn-catego {
+        font-size: 15px;
+    }
+    .carac_zonas svg {
+        width: 70px;
+        height: auto;
+    }
+    .carac_zonas p, .carac_zonas span {
+        font-size: 17px;
+    }
+    .avance p {
+        font-size: 18px;
+        text-align: center;
+    }
+    .hover-infoproyecto h3 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    #ubica iframe {
+        width: 100%;
+        height: 300px;
+    }
+    .page-template-theme_contacto-php .banner-nosotros .card-img-overlay {
+        position: relative;
+    }
+    .page-template-theme_contacto-php .banner-nosotros h1 {
+        font-size: 40px;
+    }
+    .page-template-theme_contacto-php .banner-nosotros p {
+        font-size: 20px;
+    }
+    .info p {
+        font-size: 18px;
+    }
+    .ico-cons{
+    	width: 50px;
+    }
+    .ico-proye{
+    	width: 70px;
+    }
+    .ico-merc{
+    	width: 63px;
+    }
+    .navbar-nav .current-menu-item .nav-link {
+    font-weight: bold !important;
+    font-size: 22px !important;
+    }
+}
+@media only screen and (max-width: 500px) and (min-width: 426px) {
+    .div-selectContact:after {
+        right: 14rem;
+    }
+    .div-select:after {
+        right: 10%;
+    }
+}
+@media only screen and (max-width: 425px) and (min-width: 409px) {
+    .div-selectContact:after {
+        right: 13.5rem;
+    }
+    .div-select:after {
+        right: 4rem;
+    }
+}
+@media only screen and (max-width: 408px) and (min-width: 390px) {
+    .div-selectContact:after {
+        right: 12.5rem;
+    }
+    .div-select:after {
+        right: 3rem;
+    }
+}
+@media only screen and (max-width: 389px) and (min-width: 375px) {
+    .div-selectContact:after {
+        right: 11.5rem;
+    }
+    .div-select:after {
+        right: 3rem;
+    }
+}
+@media only screen and (max-width: 1700px) and (min-width: 1660px) {
+     .div-selectContact:after {
+        right: 23%;
+    }
+}
