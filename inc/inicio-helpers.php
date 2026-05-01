@@ -8,6 +8,40 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Indica si la vista actual usa la plantilla PHP theme_inicio.php.
+ *
+ * Algunos contextos (inicio estático, rutas de plantilla con subcarpeta) pueden hacer que
+ * is_page_template() no coincida; el slug almacenado en la página es la fuente de verdad.
+ *
+ * @return bool
+ */
+function theme_skema_is_theme_inicio_template_active() {
+	if ( is_page_template( 'theme_inicio.php' ) ) {
+		return true;
+	}
+
+	$page_id = get_queried_object_id();
+	if ( ! $page_id ) {
+		return false;
+	}
+
+	if ( 'page' !== get_post_type( $page_id ) ) {
+		return false;
+	}
+
+	$slug = get_page_template_slug( $page_id );
+	if ( 'theme_inicio.php' === $slug ) {
+		return true;
+	}
+
+	if ( $slug !== '' && preg_match( '/(^|\/)theme_inicio\.php$/', $slug ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Obtiene el ID de vídeo de YouTube a partir de una URL.
  *
  * @param string $url URL del vídeo o embed.

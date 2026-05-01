@@ -1,0 +1,77 @@
+/**
+ * Landings — cabecera Slick (inc/landings-hero-slider.php).
+ *
+ * Solo .site-main--landings .landing-hero. El inicio usa css/home/skema-home-hero.css.
+ *
+ * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase.
+ */
+
+.site-main--landings .landing-hero .slider-banner {
+	position: relative;
+}
+
+.site-main--landings .landing-hero .home-hero-dots {
+	position: absolute;
+	top: 40%;
+	left: 2.5rem;
+	right: auto;
+	z-index: 3;
+	transform: translateY(-50%) rotate(90deg);
+	min-width: 30px;
+	min-height: 30px;
+	padding: 10px 18px;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	background-color: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(5px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots {
+	position: static;
+	bottom: auto;
+	left: auto;
+	width: auto;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li {
+	width: auto;
+	height: auto;
+	margin: 0;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li button {
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	border-radius: 50%;
+	background-color: #fff;
+	opacity: 0.7;
+	transition: all 0.3s ease;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li button::before {
+	display: none;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li.slick-active button {
+	width: 25px;
+	border-radius: 10px;
+	opacity: 1;
+}
+
+@media (max-width: 991px) {
+	.site-main--landings .landing-hero .home-hero-dots {
+		display: none;
+	}
+}

@@ -1,88 +1,25 @@
 /**
- * Landings — capa compartida (todas las variantes).
- * Convive con el CSS global del tema: aquí solo reglas bajo .site-main--landings.
+ * Landings — capa compartida (NO es un skin).
+ *
+ * Qué va aquí:
+ * - Ancla .site-main--landings, base de .entry-content, logo de proyecto.
+ *
+ * Qué NO va aquí:
+ * - Cabecera slider → skema-landing-hero.css (solo landings).
+ * - Variante / fase → skins/{slug}/skin.css, phase-*.css.
+ *
+ * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase (ver inc/landings-variant.php).
  */
 
 .site-main--landings.landing-skin {
-	/* Ancla para skins; ampliar según necesidad */
+	/* Ancla común; overrides por variante en skins/{slug}/skin.css */
 }
 
 .site-main--landings .entry-content {
-	/* Reset suave respecto al blog si hiciera falta */
+	/* Base compartida; márgenes/tipografía solo de una variante → su skin */
 }
 
-/* Cabecera slider (misma idea que .page-template-theme_inicio-php en style.css) */
-.site-main--landings .landing-hero .slider-banner {
-	position: relative;
-}
-
-.site-main--landings .landing-hero .home-hero-dots {
-	position: absolute;
-	top: 40%;
-	left: 2.5rem;
-	right: auto;
-	z-index: 3;
-	transform: translateY(-50%) rotate(90deg);
-	min-width: 30px;
-	min-height: 30px;
-	padding: 10px 18px;
-	border-radius: 100px;
-	border: 1px solid rgba(255, 255, 255, 0.25);
-	background-color: rgba(255, 255, 255, 0.15);
-	backdrop-filter: blur(5px);
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.site-main--landings .landing-hero .home-hero-dots .slick-dots {
-	position: static;
-	bottom: auto;
-	left: auto;
-	width: auto;
-	height: 100%;
-	margin: 0 auto;
-	padding: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-}
-
-.site-main--landings .landing-hero .home-hero-dots .slick-dots li {
-	width: auto;
-	height: auto;
-	margin: 0;
-}
-
-.site-main--landings .landing-hero .home-hero-dots .slick-dots li button {
-	width: 8px;
-	height: 8px;
-	padding: 0;
-	border-radius: 50%;
-	background-color: #fff;
-	opacity: 0.7;
-	transition: all 0.3s ease;
-}
-
-.site-main--landings .landing-hero .home-hero-dots .slick-dots li button::before {
-	display: none;
-}
-
-.site-main--landings .landing-hero .home-hero-dots .slick-dots li.slick-active button {
-	width: 25px;
-	border-radius: 10px;
-	opacity: 1;
-}
-
-@media (max-width: 991px) {
-	.site-main--landings .landing-hero .home-hero-dots {
-		display: none;
-	}
-}
-
-/* Logo de proyecto (ACF por fase), bajo cabecera / slider */
+/* Logo de proyecto (ACF por fase) — mismo bloque en todas las variantes */
 .site-main--landings .landing-project-logo-wrap {
 	display: flex;
 	justify-content: center;

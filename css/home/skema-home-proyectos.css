@@ -1,9 +1,10 @@
 /**
- * Carrusel proyectos (inicio) — bloque .skema-proyectos
+ * Inicio — carrusel de proyectos (.skema-proyectos en theme_inicio.php).
+ *
+ * Ruta: css/home/ (capa «inicio» junto a skema-home-hero.css).
+ *
+ * @package skema
  */
- * Carrusel tipo ficha (Renvia) — solo bloque inicio .skema-proyectos
- */
-
 .skema-proyectos {
 	background-color: #f4f4f4;
 	padding-top: 3.5rem;

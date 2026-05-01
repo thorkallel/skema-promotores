@@ -12,6 +12,8 @@ if ( ! defined( '_S_VERSION' ) ) {
 	define( '_S_VERSION', '1.0.0' );
 }
 
+require_once get_template_directory() . '/inc/inicio-helpers.php';
+
 /**
  * Sets up theme defaults and registers support for various WordPress features.
  *
@@ -197,20 +199,18 @@ function theme_skema_scripts() {
 
 	wp_enqueue_script( 'theme_skema-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
-	$skema_inicio_tpl = false;
-	if ( is_page_template( 'theme_inicio.php' ) ) {
-		$skema_inicio_tpl = true;
-	} elseif ( is_singular( 'page' ) ) {
-		$pid = get_queried_object_id();
-		if ( $pid && 'theme_inicio.php' === get_page_template_slug( $pid ) ) {
-			$skema_inicio_tpl = true;
-		}
-	}
-	if ( $skema_inicio_tpl ) {
+	if ( theme_skema_is_theme_inicio_template_active() ) {
+		$home_css_uri = get_template_directory_uri() . '/css/home';
 		wp_enqueue_style(
-			'theme_skema-proyectos-inicio',
-			get_template_directory_uri() . '/css/skema-proyectos.css',
-			array( 'theme_skema-bootstrap-css', 'theme_skema-bootstrap-icons' ),
+			'theme_skema-home-hero',
+			$home_css_uri . '/skema-home-hero.css',
+			array( 'theme_skema-style', 'theme_skema-slickslider-theme' ),
+			_S_VERSION
+		);
+		wp_enqueue_style(
+			'theme_skema-home-proyectos',
+			$home_css_uri . '/skema-home-proyectos.css',
+			array( 'theme_skema-style', 'theme_skema-bootstrap-css', 'theme_skema-bootstrap-icons', 'theme_skema-home-hero' ),
 			_S_VERSION
 		);
 	}
@@ -267,9 +267,8 @@ require get_template_directory() . '/inc/landings-variant.php';
 require get_template_directory() . '/inc/acf-cpt-ficha-comun.php';
 
 /**
- * Inicio: helpers (YouTube, tarjetas) y campos ACF locales.
+ * Inicio: campos ACF locales (helpers en inc/inicio-helpers.php, cargado al inicio del tema).
  */
-require get_template_directory() . '/inc/inicio-helpers.php';
 require get_template_directory() . '/inc/acf-inicio-extendido.php';
 
 /**

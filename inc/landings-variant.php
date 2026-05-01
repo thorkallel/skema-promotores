@@ -5,8 +5,10 @@
  * Arquitectura CSS:
  * - Core del sitio (style.css, Bootstrap, icons, slick, responsive.css) sigue cargándose
  *   en todas las URLs; define tipografía, rejilla, header/footer.
- * - landings-shared.css: reglas comunes solo dentro de .site-main--landings (no sustituye al core).
- * - skin-{variante}.css: overrides por variante (ej. promo).
+ * - Inicio (theme_inicio.php): css/home/skema-home-hero.css + skema-home-proyectos.css (ver theme_skema_scripts).
+ * - landings-shared.css: layout común (entry, logo proyecto); sin cabecera hero.
+ * - skema-landing-hero.css: slider cabecera landings (solo .site-main--landings .landing-hero).
+ * - skins/{slug}/skin.css: overrides por variante (ej. promo).
  * - phase-{fase}.css: prelanding vs landing completa; se encola después del skin (misma URL puede ser teaser o página larga).
  * - Partials: entry-{variante}-{fase}.php → entry-{variante}.php → entry-default-{fase}.php → entry-default.php.
  *
@@ -22,7 +24,51 @@ const THEME_SKEMA_LANDING_VARIANT_FIELD = 'skema_landing_variant';
 const THEME_SKEMA_LANDING_PHASE_FIELD = 'skema_landing_phase';
 
 /**
- * Variantes permitidas (lista blanca). Añade aquí nuevas filas y el archivo skin-{slug}.css.
+ * Comprueba que una ruta relativa a css/landings sea segura (sin .. ni segmentos raros).
+ *
+ * @param string $relative Ruta tipo "phase-prelanding.css" o "skins/promo/skin.css".
+ */
+function theme_skema_landing_is_safe_landings_css_relative( $relative ) {
+	if ( ! is_string( $relative ) || $relative === '' ) {
+		return false;
+	}
+
+	if ( strpos( $relative, '..' ) !== false ) {
+		return false;
+	}
+
+	$normalized = str_replace( '\\', '/', $relative );
+	if ( $normalized !== '' && $normalized[0] === '/' ) {
+		return false;
+	}
+
+	$parts = explode( '/', $normalized );
+	$last_index = count( $parts ) - 1;
+
+	foreach ( $parts as $index => $part ) {
+		if ( $part === '' ) {
+			return false;
+		}
+
+		$is_filename = ( $index === $last_index );
+		if ( $is_filename ) {
+			if ( ! preg_match( '/^[a-z0-9][a-z0-9_-]*\.css$/', $part ) ) {
+				return false;
+			}
+			continue;
+		}
+
+		if ( ! preg_match( '/^[a-z0-9][a-z0-9_-]*$/', $part ) ) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Variantes permitidas (lista blanca). Añade filas y el CSS bajo css/landings/skins/{slug}/skin.css
+ * (o otra ruta relativa segura; ver theme_skema_landing_is_safe_landings_css_relative).
  *
  * @return array<string, array{label: string, skin_file: string}>
  */
@@ -30,11 +76,11 @@ function theme_skema_landing_variant_definitions() {
 	return array(
 		'default' => array(
 			'label'     => __( 'Estándar (tema)', 'theme_skema' ),
-			'skin_file' => 'skin-default.css',
+			'skin_file' => 'skins/default/skin.css',
 		),
 		'promo'   => array(
 			'label'     => __( 'Promoción / CTA destacado', 'theme_skema' ),
-			'skin_file' => 'skin-promo.css',
+			'skin_file' => 'skins/promo/skin.css',
 		),
 	);
 }
@@ -249,6 +295,17 @@ function theme_skema_enqueue_landing_variant_styles() {
 		$parent = array( 'theme_skema-landings-shared' );
 	}
 
+	$hero_css = $base_dir . '/skema-landing-hero.css';
+	if ( is_readable( $hero_css ) ) {
+		wp_enqueue_style(
+			'theme_skema-landings-hero',
+			$base_uri . '/skema-landing-hero.css',
+			$parent,
+			_S_VERSION
+		);
+		$parent = array( 'theme_skema-landings-hero' );
+	}
+
 	$footer_css = $base_dir . '/footer-landings.css';
 	if ( is_readable( $footer_css ) ) {
 		wp_enqueue_style(
@@ -265,7 +322,7 @@ function theme_skema_enqueue_landing_variant_styles() {
 	$row     = isset( $defs[ $variant ] ) ? $defs[ $variant ] : $defs['default'];
 	$file    = isset( $row['skin_file'] ) ? $row['skin_file'] : '';
 
-	if ( $file === '' || ! preg_match( '/^[a-z0-9][a-z0-9_-]*\\.css$/', $file ) ) {
+	if ( $file === '' || ! theme_skema_landing_is_safe_landings_css_relative( $file ) ) {
 		return;
 	}
 
@@ -294,7 +351,7 @@ function theme_skema_enqueue_landing_variant_styles() {
 	$phase_row   = isset( $phase_defs[ $phase ] ) ? $phase_defs[ $phase ] : $phase_defs['prelanding'];
 	$phase_file  = isset( $phase_row['phase_file'] ) ? $phase_row['phase_file'] : '';
 
-	if ( $phase_file !== '' && preg_match( '/^[a-z0-9][a-z0-9_-]*\\.css$/', $phase_file ) ) {
+	if ( $phase_file !== '' && theme_skema_landing_is_safe_landings_css_relative( $phase_file ) ) {
 		$phase_fs = $base_dir . '/' . $phase_file;
 		if ( ! is_readable( $phase_fs ) && isset( $phase_defs['prelanding']['phase_file'] ) ) {
 			$phase_file = $phase_defs['prelanding']['phase_file'];
