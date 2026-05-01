@@ -7,7 +7,7 @@
  * @package skema
  */
 
-/* Slider YouTube */
+/* Slider YouTube — ancho 100 %, 16:9 (el alto puede superar el viewport) */
 .slider-banner--youtube {
 	width: 100%;
 }
@@ -15,8 +15,8 @@
 .slider-banner--youtube .hero-yt-embed {
 	position: relative;
 	width: 100%;
-	padding-bottom: 56.25%;
-	height: 0;
+	aspect-ratio: 16 / 9;
+	height: auto;
 	overflow: hidden;
 	border-radius: 0 0 80px 80px;
 	background: #000;
@@ -31,7 +31,21 @@
 	border: 0;
 }
 
-/* Slider imágenes: puntos Slick (.site-main--inicio en theme_inicio.php) */
+/* Slider imágenes — ancho 100 %, ratio nativo de cada imagen (sin recorte; puede ser más alto que el viewport) */
+.site-main--inicio .slider-banner:not(.slider-banner--youtube),
+.page-template-theme_inicio-php .slider-banner:not(.slider-banner--youtube) {
+	position: relative;
+}
+
+.site-main--inicio .slider-banner:not(.slider-banner--youtube) .slick-slide img,
+.page-template-theme_inicio-php .slider-banner:not(.slider-banner--youtube) .slick-slide img {
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Puntos Slick: centrados en el eje vertical del viewport (no del alto del hero) */
 .site-main--inicio .slider-banner,
 .page-template-theme_inicio-php .slider-banner {
 	position: relative;
@@ -39,11 +53,11 @@
 
 .site-main--inicio .home-hero-dots,
 .page-template-theme_inicio-php .home-hero-dots {
-	position: absolute;
-	top: 40%;
+	position: fixed;
+	top: 50%;
 	left: 2.5rem;
 	right: auto;
-	z-index: 3;
+	z-index: 100;
 	transform: translateY(-50%) rotate(90deg);
 	min-width: 30px;
 	min-height: 30px;
@@ -56,6 +70,18 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Oculto cuando el .slider-banner asociado ya no cruza el viewport (ver main.js) */
+.site-main--inicio .home-hero-dots.home-hero-dots--hero-off,
+.page-template-theme_inicio-php .home-hero-dots.home-hero-dots--hero-off {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
 }
 
 .site-main--inicio .home-hero-dots .slick-dots,

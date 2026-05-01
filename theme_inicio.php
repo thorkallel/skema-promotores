@@ -163,7 +163,7 @@ if ($tipo_banner === 'Video') : ?>
             </div>
         </div>
     </section>
-    <section class="oportu pt-3 pb-sm-4" id="oportunidad">
+    <!-- <section class="oportu pt-3 pb-sm-4" id="oportunidad">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-1 px-0"></div>
@@ -225,7 +225,7 @@ if ($tipo_banner === 'Video') : ?>
                 <?php endif; ?>
             </div>
         </div>
-    </section>
+    </section> -->
     <?php
 $renvia_slider_ids = get_field( 'inicio_renvia_relacion' );
 if ( ! is_array( $renvia_slider_ids ) ) {
@@ -398,7 +398,7 @@ if ( $n_renvia > 0 ) :
 $img_fondo = get_field('img_fondo'); 
 $img_fondo = $img_fondo ? esc_url($img_fondo) : '';
 ?>
-    <section class="necesi py-sm-5" style="<?php echo $img_fondo ? "background-image: url('{$img_fondo}');" : ''; ?>">
+    <!-- <section class="necesi py-sm-5" style="<?php echo $img_fondo ? "background-image: url('{$img_fondo}');" : ''; ?>">
         <div class="container-fluid px-sm-5">
             <div class="row">
                 <div class="col-sm-1 col-1 align-self-center d-flex justify-content-center">
@@ -445,7 +445,7 @@ $img_fondo = $img_fondo ? esc_url($img_fondo) : '';
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <?php get_template_part( 'template-parts/content', 'fcontacto' ); ?>
 </main>
 <?php get_footer(); ?>

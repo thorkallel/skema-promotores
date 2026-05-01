@@ -16,6 +16,7 @@ jQuery(document).ready(function($) {
             autoplay: true,
             autoplaySpeed: 3000,
             arrows: false,
+            adaptiveHeight: true,
             dots: $dotsContainer.length > 0
         };
         if ($dotsContainer.length) {
@@ -58,6 +59,66 @@ jQuery(document).ready(function($) {
             $slider.slick(sliderConfig);
         });
     }
+
+    /**
+     * Inicio y landings: ocultar puntos del hero cuando el .slider-banner deja de cruzar el viewport.
+     */
+    function bindSkemaHomeHeroDotsVisibility() {
+        var $dotsList = $(
+            '.site-main--inicio .home-hero-dots, ' +
+            '.page-template-theme_inicio-php .home-hero-dots, ' +
+            '.site-main--landings .landing-hero .home-hero-dots'
+        );
+        if (!$dotsList.length) {
+            return;
+        }
+
+        function syncDotsToBanner($dots, bannerEl) {
+            if (!bannerEl) {
+                return;
+            }
+            var rect = bannerEl.getBoundingClientRect();
+            var isIntersecting = rect.bottom > 0 && rect.top < window.innerHeight;
+            $dots.toggleClass('home-hero-dots--hero-off', !isIntersecting);
+        }
+
+        if (typeof IntersectionObserver !== 'undefined') {
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    var $banner = $(entry.target);
+                    var $dots = $banner.find('.home-hero-dots').first();
+                    if (!$dots.length) {
+                        return;
+                    }
+                    $dots.toggleClass('home-hero-dots--hero-off', !entry.isIntersecting);
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0 });
+
+            $dotsList.each(function () {
+                var $dots = $(this);
+                var bannerEl = $dots.closest('.slider-banner').get(0);
+                if (!bannerEl) {
+                    return;
+                }
+                syncDotsToBanner($dots, bannerEl);
+                io.observe(bannerEl);
+            });
+            return;
+        }
+
+        $dotsList.each(function () {
+            var $dots = $(this);
+            var bannerEl = $dots.closest('.slider-banner').get(0);
+            if (!bannerEl) {
+                return;
+            }
+            $(window).on('scroll.skemaHeroDots resize.skemaHeroDots', function () {
+                syncDotsToBanner($dots, bannerEl);
+            });
+            syncDotsToBanner($dots, bannerEl);
+        });
+    }
+    bindSkemaHomeHeroDotsVisibility();
 
     function initInicioDestacadosSlick(width) {
         var $d = $('.project-slider--destacados-inicio');

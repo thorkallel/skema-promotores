@@ -1,21 +1,28 @@
 /**
  * Landings — cabecera Slick (inc/landings-hero-slider.php).
  *
- * Solo .site-main--landings .landing-hero. El inicio usa css/home/skema-home-hero.css.
+ * Puntos del hero: mismo criterio que css/home/skema-home-hero.css (fixed + viewport + scroll en main.js).
  *
  * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase.
  */
 
 .site-main--landings .landing-hero .slider-banner {
 	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	height: auto;
+	overflow: hidden;
+	border-radius: 0 0 80px 80px;
+	background: #000;
 }
 
+/* Puntos: centrados en vertical al viewport; ocultos al salir el .slider-banner (main.js + .home-hero-dots--hero-off) */
 .site-main--landings .landing-hero .home-hero-dots {
-	position: absolute;
-	top: 40%;
+	position: fixed;
+	top: 50%;
 	left: 2.5rem;
 	right: auto;
-	z-index: 3;
+	z-index: 100;
 	transform: translateY(-50%) rotate(90deg);
 	min-width: 30px;
 	min-height: 30px;
@@ -28,6 +35,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.site-main--landings .landing-hero .home-hero-dots.home-hero-dots--hero-off {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
 }
 
 .site-main--landings .landing-hero .home-hero-dots .slick-dots {
