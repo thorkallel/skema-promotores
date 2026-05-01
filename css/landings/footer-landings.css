@@ -1,0 +1,19 @@
+/**
+ * Pie mínimo landings — solo body.single-landings.
+ * No afecta al footer global del sitio.
+ */
+
+body.single-landings .site-footer--landings {
+	background-color: var(--azul, #00347a);
+	border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+
+body.single-landings .site-footer--landings .skema-landing-footer__copy {
+	color: var(--blanco, #fff);
+}
+
+body.single-landings .site-footer--landings a.text-white:hover {
+	color: var(--blanco, #fff);
+	opacity: 0.88;
+	text-decoration: underline;
+}

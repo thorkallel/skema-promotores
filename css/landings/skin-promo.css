@@ -1,0 +1,18 @@
+/**
+ * Variante «promo» — ejemplo de overrides sobre shared + core.
+ * Sustituir por diseño real (hero, badges, CTA).
+ */
+
+.site-main--landings.landing-skin--promo .entry-content {
+	/* Ejemplo: un poco más de aire vertical en la primera sección */
+	padding-block-start: 0.5rem;
+}
+
+/* Ejemplo de combinación variante + fase (mismas clases en <main>): */
+.site-main--landings.landing-skin--promo.landing-phase--prelanding .entry-content {
+	/* Solo en promo + prelanding */
+}
+
+.site-main--landings.landing-skin--promo.landing-phase--landing .entry-content {
+	/* Solo en promo + landing completa */
+}

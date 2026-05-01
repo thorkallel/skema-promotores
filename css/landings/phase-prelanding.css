@@ -1,0 +1,8 @@
+/**
+ * Fase «prelanding» — teaser / captación (común a todas las variantes si aplica).
+ * Combinar con .landing-skin--{variante} en el mismo <main>.
+ */
+
+.site-main--landings.landing-phase--prelanding {
+	/* Ej.: hero más compacto, CTA primario visible above the fold */
+}

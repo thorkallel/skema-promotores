@@ -1,0 +1,8 @@
+/**
+ * Variante «default» — estilos extra mínimos o vacíos.
+ * La mayoría del aspecto viene de style.css + Bootstrap + responsive del tema.
+ */
+
+.site-main--landings.landing-skin--default {
+	/* Ej.: ajustes finos solo para landings estándar */
+}

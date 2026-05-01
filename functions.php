@@ -197,6 +197,24 @@ function theme_skema_scripts() {
 
 	wp_enqueue_script( 'theme_skema-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
+	$skema_inicio_tpl = false;
+	if ( is_page_template( 'theme_inicio.php' ) ) {
+		$skema_inicio_tpl = true;
+	} elseif ( is_singular( 'page' ) ) {
+		$pid = get_queried_object_id();
+		if ( $pid && 'theme_inicio.php' === get_page_template_slug( $pid ) ) {
+			$skema_inicio_tpl = true;
+		}
+	}
+	if ( $skema_inicio_tpl ) {
+		wp_enqueue_style(
+			'theme_skema-proyectos-inicio',
+			get_template_directory_uri() . '/css/skema-proyectos.css',
+			array( 'theme_skema-bootstrap-css', 'theme_skema-bootstrap-icons' ),
+			_S_VERSION
+		);
+	}
+
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -233,6 +251,33 @@ function custom_mimes( $mimes = array() ) {
     return $mimes;
 }
 add_filter( 'upload_mimes', 'custom_mimes' );
+/**
+ * CPT Landings.
+ */
+require get_template_directory() . '/inc/cpt-landings.php';
+
+/**
+ * Landings: variante de plantilla (ACF) + CSS por capas + partial entry-{variante}.php.
+ */
+require get_template_directory() . '/inc/landings-variant.php';
+
+/**
+ * ACF: ficha común (precio, tipología, superficie, imagen) en proyectos y landings.
+ */
+require get_template_directory() . '/inc/acf-cpt-ficha-comun.php';
+
+/**
+ * Inicio: helpers (YouTube, tarjetas) y campos ACF locales.
+ */
+require get_template_directory() . '/inc/inicio-helpers.php';
+require get_template_directory() . '/inc/acf-inicio-extendido.php';
+
+/**
+ * Landings: cabecera slider (ACF + render; usa helpers de inicio-helpers).
+ */
+require get_template_directory() . '/inc/acf-landings-slider.php';
+require get_template_directory() . '/inc/landings-hero-slider.php';
+
 /**
  * Implement the Custom Header feature.
  */

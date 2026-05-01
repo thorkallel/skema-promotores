@@ -1,0 +1,312 @@
+/**
+ * Carrusel proyectos (inicio) — bloque .skema-proyectos
+ */
+.skema-proyectos {
+	background-color: #f4f4f4;
+	padding-top: 3.5rem;
+	padding-bottom: 4rem;
+}
+
+.skema-proyectos .skema-proyectos__fluid {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+@media (min-width: 1200px) {
+	.skema-proyectos .skema-proyectos__fluid {
+		padding-left: 2rem;
+		padding-right: 2rem;
+	}
+}
+
+@media (min-width: 1600px) {
+	.skema-proyectos .skema-proyectos__fluid {
+		padding-left: 4rem;
+		padding-right: 4rem;
+	}
+}
+
+.skema-proyectos .skema-proyectos__head {
+	text-align: center;
+	margin-bottom: 2.75rem;
+}
+
+.skema-proyectos .skema-proyectos__head .skema-proyectos__subtitle {
+	font-size: 0.875rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--nara);
+	margin-bottom: 0.5rem;
+	display: block;
+}
+
+.skema-proyectos .skema-proyectos__head h2 {
+	font-family: Arvo, Georgia, serif;
+	font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+	color: var(--azul);
+	margin: 0;
+	line-height: 1.25;
+}
+
+/* Márgenes entre slides Slick (misma idea que .service-slider Renvia) */
+.skema-proyectos .skema-proyectos__slider {
+	margin-left: -12px;
+	margin-right: -12px;
+}
+
+.skema-proyectos .skema-proyectos__slider .slick-slide {
+	margin-left: 12px;
+	margin-right: 12px;
+}
+
+/* Tarjeta base (style-two Renvia) */
+.skema-proyectos .renvia-service-card.style-two.service-ficha {
+	background-color: var(--blanco);
+	padding: 40px;
+	border-radius: 30px;
+	text-align: left;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .content > p {
+	margin-top: 0;
+}
+
+.skema-proyectos .service-ficha__figure {
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
+	position: relative;
+}
+
+.skema-proyectos .service-ficha__figure img {
+	width: 100%;
+	height: 100%;
+	display: block;
+	object-fit: cover;
+	object-position: center;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha {
+	overflow: hidden;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__figure {
+	margin: -40px -40px 0 -40px;
+	width: calc(100% + 80px);
+	max-width: none;
+}
+
+.skema-proyectos .service-ficha__caption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	padding: 16px 18px 18px;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .service-ficha__caption .service-ficha__nombre {
+	margin: 0 0 6px;
+	font-size: 1.35rem;
+	line-height: 1.2;
+	color: #fff;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .service-ficha__caption .service-ficha__nombre a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .service-ficha__caption .service-ficha__nombre a:hover {
+	text-decoration: underline;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .service-ficha__caption .service-ficha__tipo {
+	margin: 0;
+	font-size: 0.8125rem;
+	line-height: 1.35;
+	color: #fff;
+}
+
+.skema-proyectos .renvia-service-card.style-two.service-ficha .service-ficha__caption .service-ficha__tipo strong {
+	font-weight: 600;
+	color: #fff;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__ciudad {
+	margin-top: 14px;
+	margin-bottom: 14px;
+	font-size: 0.9rem;
+	color: var(--gris-o);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__ciudad i {
+	margin-right: 6px;
+	color: var(--nara);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .content > .read-more.style-two {
+	display: inline-flex;
+	align-items: center;
+	margin-top: 16px;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__label,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims strong,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__sup-m2 {
+	color: var(--gris-o);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__meta {
+	font-size: 0.75rem;
+	line-height: 1.3;
+	color: var(--gris-o);
+	opacity: 0.9;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__label,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__amount {
+	color: var(--nara);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 88px;
+	height: 88px;
+	flex-shrink: 0;
+	padding: 8px;
+	border: 1px solid #d8d8d8;
+	border-radius: 10px;
+	background-color: var(--blanco);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__logo img {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 8px 10px;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims strong,
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__sup-m2 {
+	flex: 1 0 100%;
+	margin-top: 2px;
+	padding-left: 1.75rem;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__spec-icon {
+	flex-shrink: 0;
+	margin-top: 2px;
+	font-size: 1.125rem;
+	line-height: 1;
+	color: var(--gris-o);
+	opacity: 0.85;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__spec-icon {
+	color: var(--nara);
+	opacity: 1;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__spec-copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 2px;
+	min-width: 0;
+	flex: 1;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims strong {
+	font-size: 1rem;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__sup-m2 {
+	font-size: 0.9375rem;
+	font-weight: 600;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__amount {
+	flex: 1 0 100%;
+	margin-top: 2px;
+	padding-left: 1.75rem;
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__label {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+/* Degradado sobre imagen (Renvia style.css) */
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__figure::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 75%;
+	z-index: 1;
+	pointer-events: none;
+	background: linear-gradient(
+		180deg,
+		rgba(0, 0, 0, 0) 0%,
+		rgba(0, 0, 0, 0.45) 45%,
+		rgba(0, 0, 0, 0.92) 100%
+	);
+}
+
+.skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__figure > img {
+	position: relative;
+	z-index: 0;
+}
+
+/* CTA read-more.style-two (extracto Renvia) */
+.skema-proyectos .read-more.style-two {
+	font-size: 14px;
+	color: var(--gris-o);
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.skema-proyectos .read-more.style-two .icon {
+	flex: 0 0 auto;
+	margin-right: 15px;
+	width: 40px;
+	height: 40px;
+	border-radius: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f8f8f8;
+	color: var(--gris-o);
+	transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.skema-proyectos .read-more.style-two:hover {
+	text-decoration: none;
+	color: var(--gris-o);
+}
+
+.skema-proyectos .read-more.style-two:hover .icon {
+	background-color: var(--nara);
+	color: var(--blanco);
+}

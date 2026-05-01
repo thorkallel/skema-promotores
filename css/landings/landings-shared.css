@@ -1,0 +1,97 @@
+/**
+ * Landings — capa compartida (todas las variantes).
+ * Convive con el CSS global del tema: aquí solo reglas bajo .site-main--landings.
+ */
+
+.site-main--landings.landing-skin {
+	/* Ancla para skins; ampliar según necesidad */
+}
+
+.site-main--landings .entry-content {
+	/* Reset suave respecto al blog si hiciera falta */
+}
+
+/* Cabecera slider (misma idea que .page-template-theme_inicio-php en style.css) */
+.site-main--landings .landing-hero .slider-banner {
+	position: relative;
+}
+
+.site-main--landings .landing-hero .home-hero-dots {
+	position: absolute;
+	top: 40%;
+	left: 2.5rem;
+	right: auto;
+	z-index: 3;
+	transform: translateY(-50%) rotate(90deg);
+	min-width: 30px;
+	min-height: 30px;
+	padding: 10px 18px;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	background-color: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(5px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots {
+	position: static;
+	bottom: auto;
+	left: auto;
+	width: auto;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li {
+	width: auto;
+	height: auto;
+	margin: 0;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li button {
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	border-radius: 50%;
+	background-color: #fff;
+	opacity: 0.7;
+	transition: all 0.3s ease;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li button::before {
+	display: none;
+}
+
+.site-main--landings .landing-hero .home-hero-dots .slick-dots li.slick-active button {
+	width: 25px;
+	border-radius: 10px;
+	opacity: 1;
+}
+
+@media (max-width: 991px) {
+	.site-main--landings .landing-hero .home-hero-dots {
+		display: none;
+	}
+}
+
+/* Logo de proyecto (ACF por fase), bajo cabecera / slider */
+.site-main--landings .landing-project-logo-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1.25rem 1rem 0;
+}
+
+.site-main--landings .landing-project-logo {
+	max-height: 4.5rem;
+	width: auto;
+	object-fit: contain;
+}

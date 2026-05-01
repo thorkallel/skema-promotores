@@ -33,6 +33,19 @@ nav#principal-menu {
 .menu-scrolled {
     background-color: rgba(255, 255, 255, 0.80); /* Añade el color de fondo deseado aquí */
 }
+/* Cabecera tipo cristal sobre el hero YouTube (clase añadida al activar Slick) */
+nav#principal-menu.navbar-glass-youtube {
+	background-color: rgba(255, 255, 255, 0.14);
+	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+nav#principal-menu.navbar-glass-youtube.menu-scrolled {
+	background-color: rgba(255, 255, 255, 0.82);
+	backdrop-filter: blur(16px);
+	-webkit-backdrop-filter: blur(16px);
+	box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
 .logo-skema.position-absolute{
     position: relative !important;
 }
@@ -315,6 +328,89 @@ a.btn-nosotros:hover{
     height: auto;
     object-fit: cover;
 	border-radius: 0px 0px 80px 80px;
+}
+/* Cabecera: slider YouTube (Theme Inicio) */
+.slider-banner--youtube {
+	width: 100%;
+}
+.slider-banner--youtube .hero-yt-embed {
+	position: relative;
+	width: 100%;
+	padding-bottom: 56.25%;
+	height: 0;
+	overflow: hidden;
+	border-radius: 0 0 80px 80px;
+	background: #000;
+}
+.slider-banner--youtube .hero-yt-embed iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+.page-template-theme_inicio-php .slider-banner {
+	position: relative;
+}
+.page-template-theme_inicio-php .home-hero-dots {
+	position: absolute;
+	top: 40%;
+	left: 2.5rem;
+	right: auto;
+	z-index: 3;
+	transform: translateY(-50%) rotate(90deg);
+	min-width: 30px;
+	min-height: 30px;
+	padding: 10px 18px;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	background-color: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(5px);
+	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.page-template-theme_inicio-php .home-hero-dots .slick-dots {
+	position: static;
+	bottom: auto;
+	left: auto;
+	width: auto;
+	height: 100%;
+	margin: 0 auto;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+}
+.page-template-theme_inicio-php .home-hero-dots .slick-dots li {
+	width: auto;
+	height: auto;
+	margin: 0;
+}
+.page-template-theme_inicio-php .home-hero-dots .slick-dots li button {
+	width: 8px;
+	height: 8px;
+	padding: 0;
+	border-radius: 50%;
+	background-color: #fff;
+	opacity: 0.7;
+	transition: all 0.3s ease;
+}
+.page-template-theme_inicio-php .home-hero-dots .slick-dots li button::before {
+	display: none;
+}
+.page-template-theme_inicio-php .home-hero-dots .slick-dots li.slick-active button {
+	width: 25px;
+	border-radius: 10px;
+	opacity: 1;
+}
+@media (max-width: 991px) {
+	.page-template-theme_inicio-php .home-hero-dots {
+		display: none;
+	}
 }
 #video-home {
     width: 100%;
@@ -739,6 +835,83 @@ input.form-control::placeholder, textarea.form-control::placeholder{
 	background-color: transparent;
 	font-weight: 500;
 }
+
+/* —— Formulario contacto en ficha de proyecto (single CPT proyectos) —— */
+.post-type-proyectos .contacto .card.formu,
+body.single-proyectos .contacto .card.formu {
+	background-color: var(--blanco);
+	border: 1px solid rgba(0, 52, 122, 0.08);
+	border-radius: 16px;
+	box-shadow: 0 16px 48px -20px rgba(0, 52, 122, 0.18);
+	padding-bottom: 1.5rem;
+}
+.post-type-proyectos .contacto .card.formu h3,
+body.single-proyectos .contacto .card.formu h3 {
+	font-weight: 600;
+	color: var(--azul);
+	padding-bottom: 0.65rem;
+	margin-bottom: 1.35rem;
+	border-bottom: 3px solid var(--nara);
+}
+.post-type-proyectos .contacto .card.formu .wpcf7-form-control-wrap,
+body.single-proyectos .contacto .card.formu .wpcf7-form-control-wrap {
+	display: block;
+	margin-bottom: 0.95rem;
+}
+.post-type-proyectos .contacto .card.formu input.form-control,
+.post-type-proyectos .contacto .card.formu textarea.form-control,
+.post-type-proyectos .contacto .card.formu select.form-control,
+body.single-proyectos .contacto .card.formu input.form-control,
+body.single-proyectos .contacto .card.formu textarea.form-control,
+body.single-proyectos .contacto .card.formu select.form-control {
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	padding: 0.75rem 1rem;
+	background-color: #f5f6f8;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.post-type-proyectos .contacto .card.formu input.form-control:hover,
+.post-type-proyectos .contacto .card.formu textarea.form-control:hover,
+body.single-proyectos .contacto .card.formu input.form-control:hover,
+body.single-proyectos .contacto .card.formu textarea.form-control:hover {
+	border-color: rgba(0, 52, 122, 0.15);
+	background-color: #fafbfc;
+}
+.post-type-proyectos .contacto .card.formu input.form-control:focus,
+.post-type-proyectos .contacto .card.formu textarea.form-control:focus,
+body.single-proyectos .contacto .card.formu input.form-control:focus,
+body.single-proyectos .contacto .card.formu textarea.form-control:focus {
+	background-color: var(--blanco);
+	border-color: var(--azul);
+	box-shadow: 0 0 0 3px rgba(0, 52, 122, 0.12);
+}
+.post-type-proyectos .contacto .card.formu textarea.form-control,
+body.single-proyectos .contacto .card.formu textarea.form-control {
+	min-height: 120px;
+	resize: vertical;
+}
+.post-type-proyectos .contacto .card.formu .btn-enviar,
+.post-type-proyectos .contacto .card.formu input.wpcf7-submit,
+body.single-proyectos .contacto .card.formu .btn-enviar,
+body.single-proyectos .contacto .card.formu input.wpcf7-submit {
+	width: 100%;
+	max-width: 100%;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.85rem 1.25rem;
+	border-radius: 10px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	margin-top: 0.25rem;
+}
+.post-type-proyectos .contacto .card.formu .wpcf7-response-output,
+body.single-proyectos .contacto .card.formu .wpcf7-response-output {
+	margin: 1rem 0 0;
+	border-radius: 8px;
+	font-size: 0.9rem;
+}
+
 .site-footer{
 	background-color: var(--azul);
 }
@@ -1106,6 +1279,17 @@ a.pdt {
 }
 .banner-nosotros img{
     border-radius: 0px 0px 110px 110px;
+}
+.proyecto-project-logo-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1.25rem 1rem 0;
+}
+.proyecto-project-logo {
+	max-height: 4.5rem;
+	width: auto;
+	object-fit: contain;
 }
 section.valores, section.similares  {
     max-width: 1440px;
