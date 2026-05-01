@@ -1,8 +1,412 @@
 /**
- * Fase «prelanding» — teaser / captación (común a todas las variantes si aplica).
+ * Fase «prelanding» — hero a pantalla completa (estructura tipo Renvia) + contenido inferior.
+ *
  * Combinar con .landing-skin--{variante} en el mismo <main>.
  */
 
-.site-main--landings.landing-phase--prelanding {
-	/* Ej.: hero más compacto, CTA primario visible above the fold */
+/* --- Hero prelanding (slider + overlay + copy + CF7) --- */
+.site-main--landings.landing-phase--prelanding .prelanding-hero {
+	position: relative;
+	z-index: 1;
+	min-height: 100vh;
+	min-height: 100dvh;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero::after {
+	content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(28, 28, 37, 0.42);
+    clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero > .slider-banner {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	border-radius: 0;
+	aspect-ratio: unset;
+	overflow: hidden;
+	background: #000;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner .slick-list,
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner .slick-track,
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner .slick-slide,
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner .slick-slide > div,
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-slide {
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner .slick-slide img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero--prelanding-empty {
+	background: #1c1c25;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-hero__solid-bg {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(145deg, #0a1628 0%, #1c1c25 55%, #0d2138 100%);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner--youtube .hero-yt-embed {
+	aspect-ratio: unset;
+	height: 100%;
+	min-height: 100%;
+	border-radius: 0;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner--youtube .hero-yt-slide,
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner--youtube .prelanding-slide {
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .slider-banner--youtube .hero-yt-embed iframe {
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .shape-one {
+	position: absolute;
+	bottom: -10px;
+	right: 0;
+	z-index: 2;
+	pointer-events: none;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .shape-one span {
+	display: block;
+	width: min(500px, 55vw);
+	height: min(500px, 55vw);
+	background-color: var(--nara, #fc7416);
+	clip-path: polygon(100% 0, 20% 100%, 100% 100%);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		90deg,
+		rgba(8, 14, 32, 0.78) 0%,
+		rgba(8, 14, 32, 0.48) 42%,
+		rgba(8, 14, 32, 0.72) 100%
+	);
+	z-index: 1;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	padding: 140px 0 60px;
+	pointer-events: none;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap .container {
+	position: relative;
+	z-index: 2;
+	pointer-events: auto;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy {
+	color: #fff;
+	max-width: 560px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-branding {
+	margin: 4px 0 16px;
+	display: inline-flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	border-radius: 16px;
+	padding: 12px 18px;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+	aspect-ratio: 1/1;
+	min-width: 170px;
+	min-height: 170px;
+	max-width: 170px;
+	max-height: 170px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo:empty {
+	display: none;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo img {
+	display: block;
+	width: clamp(120px, 22vw, 200px);
+	height: auto;
+	max-width: 120px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text {
+	color: #fff;
+	text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text--solo h1 {
+	color: #fff;
+	text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text h1 {
+	margin: 0 0 6px;
+	font-size: clamp(28px, 3vw, 46px);
+	line-height: 1.1;
+	color: #fff;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p {
+	margin: 0;
+	color: #fff;
+	max-width: 420px;
+	font-size: clamp(14px, 1.2vw, 18px);
+	line-height: 1.45;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p + p {
+	margin-top: 4px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__location {
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .tag-line {
+	display: inline-block;
+	margin-bottom: 16px;
+	font-size: 0.9rem;
+	letter-spacing: 0.02em;
+	opacity: 0.95;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__intro {
+	color: rgba(255, 255, 255, 0.92);
+	font-size: 16px;
+	max-width: 520px;
+	margin-bottom: 12px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-points {
+	list-style: none;
+	padding: 0;
+	margin: 10px 0 0;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-points li {
+	display: flex;
+	gap: 10px;
+	color: rgba(255, 255, 255, 0.95);
+	margin-bottom: 5px;
+	font-size: 15px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-points i {
+	color: var(--nara, #fc7416);
+	margin-top: 3px;
+	flex-shrink: 0;
+}
+
+.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead {
+	background: rgba(255, 255, 255, 0.96);
+	border-radius: 12px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
+	padding: 20px 20px 18px;
+}
+
+.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead h5 {
+	margin-bottom: 8px;
+	color: var(--azul, #00347a);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-form-control-wrap {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group, 
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group p, 
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group span.wpcf7-form-control-wrap {
+	margin-bottom: 0 !important;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group .form-contact>div {
+	margin-right: 0 !important;
+	margin-left: 0 !important;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="text"],
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="email"],
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="tel"],
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="url"],
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="number"],
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea {
+	width: 100%;
+	border: 1px solid #d8dfeb;
+	min-height: 46px;
+	border-radius: 4px;
+	background: #fff;
+	color: #0b1f42;
+	padding: 10px 14px;
+	font-size: 0.95rem;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input::placeholder,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea::placeholder {
+	color: #5b6b84;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input:focus,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea:focus,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select:focus {
+	border-color: var(--nara, #fc7416);
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2);
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.wpcf7-submit {
+	width: 100%;
+	margin-top: 4px;
+	padding: 12px 16px;
+	font-weight: 600;
+	border: none;
+	border-radius: 4px;
+	background: var(--azul, #00347a);
+	color: #fff;
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.wpcf7-submit:hover {
+	background: #00245a;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-response-output {
+	margin: 12px 0 0;
+	font-size: 0.9rem;
+}
+
+@media screen and (max-width: 1199.98px) {
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .shape-one {
+		display: none;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
+		position: relative;
+		align-items: flex-start;
+		padding-top: 110px;
+		padding-bottom: 40px;
+	}
+
+	.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead {
+		margin-top: 24px;
+	}
+}
+
+@media (max-width: 767.98px) {
+	.site-main--landings.landing-phase--prelanding .prelanding-hero {
+		min-height: unset;
+		height: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero {
+		position: relative;
+		inset: auto;
+		min-height: 52vh;
+		height: 52vh;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero > .slider-banner {
+		position: relative;
+		inset: auto;
+		min-height: 52vh;
+		height: 52vh;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
+		position: relative;
+		inset: auto;
+		padding-top: 100px;
+		padding-bottom: 40px;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-branding {
+		margin: 8px 0 12px;
+		gap: 12px;
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo {
+		padding: 10px 14px;
+		max-width: 80%;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo img {
+		margin: 0 auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text {
+		text-align: center;
+		width: 100%;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 100%;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__location {
+		justify-content: center;
+	}
+}
+
+/* Contenido del editor bajo el hero */
+.site-main--landings.landing-phase--prelanding .landing-main {
+	position: relative;
+	z-index: 3;
+	background: #fff;
 }
