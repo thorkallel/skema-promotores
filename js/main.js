@@ -372,10 +372,17 @@ $(document).on('blur change', '#selectMapas', function() {
     //     $('#menuPrincipal').collapse('toggle');
     // });
 
-    // Cerrar el menú al hacer clic en un enlace
+    // Cerrar el drawer solo en viewport donde el menú es off-canvas (no tocar desktop horizontal).
     $('.navbar-nav a').click(function() {
+        var w = $(window).width();
+        var isLandingsShell = $('body').hasClass('skema-landing-shell');
+        if (isLandingsShell && w >= 1200) {
+            return;
+        }
+        if (!isLandingsShell && w > 719) {
+            return;
+        }
         $('.navbar-collapse').css({'right':'-100%'});
-        // Cambiar el ícono a menú de hamburguesa
     });
 
 

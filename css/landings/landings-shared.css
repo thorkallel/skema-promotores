@@ -11,7 +11,7 @@
  *
  * Convención: CSS mobile-first en landings/ y css/home/ (base = móvil; min-width para tablet/desktop).
  *
- * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase (ver inc/landings-variant.php).
+ * Orden: landings-shared → skema-landings-header-renvia-desktop → skema-landing-hero → footer-landings → skin → phase (ver inc/landings-variant.php).
  */
 
 @layer skema-theme-base, skema-theme-landings;

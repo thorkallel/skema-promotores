@@ -1,0 +1,304 @@
+/**
+ * Cabecera tipo Renvia «header-one» — solo singles CPT landings (body.skema-landing-shell).
+ * Desktop ≥1200px (Bootstrap xl): barra blanca redondeada, primary-menu flex, submenús estilo Renvia.
+ * <1200px: drawer full-screen coherente con el tema (btn-abrir / btn-cerrar + jQuery existente).
+ *
+ * Orden de carga: después de landings-shared (ver inc/landings-variant.php).
+ */
+@layer skema-theme-base, skema-theme-landings;
+
+@layer skema-theme-landings {
+	/* ——— Móvil / tablet landings: overlay hasta xl (alineado con navbar-expand-xl) ——— */
+	@media (max-width: 1199.98px) {
+		body.skema-landing-shell .skema-nav-renvia-landings .navbar-collapse#menuPrincipal.theme-nav-menu {
+			display: flex !important;
+			flex-direction: column;
+			position: fixed;
+			top: 0;
+			right: -100%;
+			width: 100%;
+			height: 100vh;
+			bottom: 0;
+			background-color: var(--azul);
+			z-index: 9999;
+			overflow-x: hidden;
+			overflow-y: auto;
+			transition: right 0.2s ease, opacity 0.2s ease;
+			padding: 1rem;
+		}
+
+		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings {
+			padding: 1rem;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal {
+			transform: translate(-50%, -50%);
+			position: absolute;
+			left: 60%;
+			top: 40%;
+			width: 100%;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .nav-link {
+			font-size: 1.15rem;
+			padding: 13px 0;
+			color: var(--blanco);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .logo-skema.position-absolute img,
+		body.skema-landing-shell .skema-nav-renvia-landings .logo-skema.w-100 img {
+			filter: brightness(0) invert(1);
+			width: 140px;
+			height: auto;
+			transition: filter 0.35s ease, width 0.35s ease;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .logo-skema.position-absolute {
+			transform: translate(-50%, -50%);
+			left: 50%;
+			top: 2rem;
+			position: absolute !important;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .skema-landing-redes--drawer {
+			display: flex;
+			gap: 2rem;
+			justify-content: flex-start;
+			position: absolute;
+			left: 2.3rem;
+			bottom: 20%;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .skema-landing-redes--drawer i {
+			font-size: 2.1rem;
+			color: var(--blanco);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .btn-cerrar {
+			border: none;
+			background-color: transparent;
+			padding: 5px;
+			font-size: 3rem;
+			color: #fff;
+			position: absolute;
+			top: 0;
+			left: 0;
+			line-height: 0;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .btn-abrir.btn-abrir--renvia {
+			padding: 0;
+			border: none;
+			width: auto;
+			min-width: 44px;
+			min-height: 44px;
+			z-index: 10000;
+			background-color: transparent;
+			margin-left: 12px;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > *:not(:first-child) {
+			border: none !important;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings.menu-scrolled ul#menu-menupricipal .nav-link {
+			color: var(--blanco);
+		}
+	}
+
+	/* ——— Desktop xl+: barra tipo Renvia header-one ——— */
+	@media (min-width: 1200px) {
+		body.skema-landing-shell .skema-landing-header-area.header-one {
+			margin-top: 1.25rem;
+		}
+
+		body.skema-landing-shell .skema-renvia-header-fluid {
+			padding-left: clamp(1rem, 4vw, 5.625rem);
+			padding-right: clamp(1rem, 4vw, 5.625rem);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .header-navigation {
+			padding: 0 clamp(1rem, 2vw, 1.875rem);
+			border-radius: 100px;
+			box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+			width: 100%;
+			height: 100px;
+			border-radius: 100px;
+			border: 0.5px solid rgba(255, 255, 255, 0.26);
+			background-color: rgba(255, 255, 255, 0.1);
+			backdrop-filter: blur(25px);
+			padding: 0 40px;
+			margin-top: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .primary-menu {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			width: 100%;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .site-branding {
+			max-width: 220px;
+			flex-shrink: 0;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .site-branding .custom-logo,
+		body.skema-landing-shell .skema-nav-renvia-landings .site-branding img {
+			width: auto;
+			max-width: 100%;
+			height: auto;
+			max-height: 52px;
+			object-fit: contain;
+			filter: none;
+			filter: brightness(0) invert(1);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu {
+			position: static !important;
+			right: auto !important;
+			left: auto !important;
+			top: auto !important;
+			width: auto !important;
+			height: auto !important;
+			min-height: 0;
+			padding: 0 !important;
+			margin: 0;
+			flex: 1 1 auto;
+			display: flex !important;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: center;
+			background: transparent !important;
+			overflow: visible !important;
+			transform: none !important;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .navbar-nav{
+			width: 100%;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .btn-cerrar,
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal .logo-skema.position-absolute {
+			display: none !important;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal .redes {
+			display: none;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal {
+			position: static;
+			transform: none;
+			left: auto;
+			top: auto;
+			width: auto;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: wrap;
+			justify-content: center;
+			row-gap: 0.25rem;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > .nav-item {
+			position: relative;
+			margin: 0 10px;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > .nav-item > .nav-link {
+			position: relative;
+			display: block;
+			font-weight: 600;
+			font-size: 15px;
+			line-height: 1.1;
+			text-transform: none;
+			color: var(--gris-o);
+			padding: 1.75rem 0;
+			border: none;
+			background: transparent;
+			transition: color 0.2s ease;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings.menu-scrolled ul#menu-menupricipal > .nav-item > .nav-link {
+			color: var(--gris-o);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > .nav-item > .nav-link:hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > .nav-item.current-menu-item > .nav-link {
+			color: var(--azul);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal > .nav-item > .dropdown-menu {
+			position: absolute;
+			left: 0;
+			top: 100%;
+			min-width: 250px;
+			padding: 10px 0;
+			margin: 0;
+			border: none;
+			border-radius: 7px;
+			box-shadow: 0 30px 80px 15px rgba(0, 0, 0, 0.09);
+			background-color: var(--blanco);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-item {
+			padding: 0.5rem 1.75rem;
+			font-size: 15px;
+			color: var(--gris-o);
+			line-height: 1.5;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-item:hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-item:focus {
+			background-color: transparent;
+			color: var(--azul);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .nav-right-item .header-nav-social {
+			gap: 0.5rem;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .nav-right-item .header-nav-social a {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 2.25rem;
+			height: 2.25rem;
+			color: var(--gris-o);
+			font-size: 1.15rem;
+			transition: color 0.2s ease, transform 0.2s ease;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings .nav-right-item .header-nav-social a:hover {
+			color: var(--azul);
+		}
+
+		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings {
+			padding: 1rem clamp(0.5rem, 2vw, 2rem);
+			background: transparent;
+		}
+
+		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings.menu-scrolled {
+			background-color: rgba(255, 255, 255, 0.92);
+		}
+
+		body.skema-landing-shell ul#menu-menupricipal > .nav-item:not(:first-child) {
+			border-left: none;
+		}
+
+		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings.menu-scrolled img{
+			filter: none;
+		}
+	}
+}

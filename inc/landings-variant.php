@@ -297,6 +297,17 @@ function theme_skema_enqueue_landing_variant_styles() {
 		$parent = array( 'theme_skema-landings-shared' );
 	}
 
+	$header_renvia_path = $base_dir . '/skema-landings-header-renvia-desktop.css';
+	if ( is_readable( $header_renvia_path ) ) {
+		wp_enqueue_style(
+			'theme_skema-landings-header-renvia',
+			$base_uri . '/skema-landings-header-renvia-desktop.css',
+			$parent,
+			_S_VERSION
+		);
+		$parent = array( 'theme_skema-landings-header-renvia' );
+	}
+
 	$hero_css = $base_dir . '/skema-landing-hero.css';
 	if ( is_readable( $hero_css ) ) {
 		wp_enqueue_style(
