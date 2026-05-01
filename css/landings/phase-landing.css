@@ -1,7 +1,10 @@
 /**
  * Fase «landing» — página completa de conversión / detalle.
+ *
+ * Convención: CSS mobile-first al añadir reglas aquí.
  */
 
 .site-main--landings.landing-phase--landing {
 	/* Ej.: más bloques, formulario largo, galería */
+	background-color: #f4f4f4;
 }

@@ -3,6 +3,8 @@
  *
  * Ruta: css/home/ (capa «inicio» junto a skema-home-hero.css).
  *
+ * Convención: CSS mobile-first (este archivo ya usa min-width).
+ *
  * @package skema
  */
 .skema-proyectos {

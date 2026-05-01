@@ -7,6 +7,8 @@
 	--negro: #000000;
 }
 
+@layer skema-theme-base, skema-theme-landings;
+
 @media (min-width: 720px){
     .btn_wa {
         border-radius: 15px 0px 0px 15px;
@@ -293,11 +295,13 @@
     .nec-prev svg, .nec-next svg{
         width: 20px;
     }
+    @layer skema-theme-base {
     .contacto span.wpcf7-list-item {
         margin: 0% 0% 0% 10%;
     }
     input.form-control, select.form-control, textarea.form-control{
         font-size: 0.85rem !important;
+    }
     }
     .logo-footer img.custom-logo {
         width: 45%;

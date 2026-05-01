@@ -306,8 +306,14 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 		$tipo_txt = get_field( 'tipo_proyecto_text', $post_id );
 		if ( is_string( $tipo_txt ) && trim( $tipo_txt ) !== '' ) {
 			$tipo_label = trim( $tipo_txt );
+		} elseif (
+			'landings' === $post_type
+			&& function_exists( 'theme_skema_get_landing_phase' )
+			&& 'prelanding' === theme_skema_get_landing_phase( $post_id )
+		) {
+			$tipo_label = __( 'Prelanding', 'theme_skema' );
 		} else {
-			$pto = get_post_type_object( $post_type );
+			$pto        = get_post_type_object( $post_type );
 			$tipo_label = $pto ? $pto->labels->singular_name : '';
 		}
 		$ciudad_cf = get_field( 'ciudad_texto', $post_id );

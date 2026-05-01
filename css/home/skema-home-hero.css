@@ -4,6 +4,8 @@
  * Encolado solo cuando theme_skema_is_theme_inicio_template_active().
  * Landings: css/landings/skema-landing-hero.css (selectores distintos).
  *
+ * Convención: CSS mobile-first (base = móvil; @media (min-width: …) refina desktop).
+ *
  * @package skema
  */
 
@@ -67,7 +69,7 @@
 	background-color: rgba(255, 255, 255, 0.15);
 	backdrop-filter: blur(5px);
 	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	opacity: 1;
@@ -129,9 +131,9 @@
 	opacity: 1;
 }
 
-@media (max-width: 991px) {
+@media (min-width: 992px) {
 	.site-main--inicio .home-hero-dots,
 	.page-template-theme_inicio-php .home-hero-dots {
-		display: none;
+		display: flex;
 	}
 }

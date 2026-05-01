@@ -3,13 +3,42 @@
  *
  * Qué va aquí:
  * - Ancla .site-main--landings, base de .entry-content, logo de proyecto.
+ * - Barra de desplazamiento tipo plantilla Renvia (solo singles landings: body.skema-landing-shell).
  *
  * Qué NO va aquí:
  * - Cabecera slider → skema-landing-hero.css (solo landings).
  * - Variante / fase → skins/{slug}/skin.css, phase-*.css.
  *
+ * Convención: CSS mobile-first en landings/ y css/home/ (base = móvil; min-width para tablet/desktop).
+ *
  * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase (ver inc/landings-variant.php).
  */
+
+@layer skema-theme-base, skema-theme-landings;
+
+/* Scroll tipo Renvia (common.css): solo prelanding + landing del CPT «landings» */
+@layer skema-theme-landings {
+	html:has(body.skema-landing-shell) {
+		scrollbar-width: thin;
+		scrollbar-color: #13172b #abafb9;
+	}
+
+	html:has(body.skema-landing-shell)::-webkit-scrollbar,
+	body.skema-landing-shell *::-webkit-scrollbar {
+		width: 5px;
+		height: 5px;
+	}
+
+	html:has(body.skema-landing-shell)::-webkit-scrollbar-track,
+	body.skema-landing-shell *::-webkit-scrollbar-track {
+		background: #abafb9;
+	}
+
+	html:has(body.skema-landing-shell)::-webkit-scrollbar-thumb,
+	body.skema-landing-shell *::-webkit-scrollbar-thumb {
+		background-color: #13172b;
+	}
+}
 
 .site-main--landings.landing-skin {
 	/* Ancla común; overrides por variante en skins/{slug}/skin.css */

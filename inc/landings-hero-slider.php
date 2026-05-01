@@ -327,7 +327,7 @@ function theme_skema_echo_prelanding_hero_copy_and_lead( $post_id ) {
                 </div>
             </div>
             <?php if ( $show_lead_block ) : ?>
-            <div class="col-xl-4 col-lg-5 ms-xl-auto">
+            <div class="col-xl-5 col-lg-5 ms-xl-auto">
                 <div class="project-info-box project-info-box--lead" id="<?php echo esc_attr( $anchor_id ); ?>">
                     <?php if ( $lead_heading !== '' ) : ?>
                     <h5><?php echo esc_html( $lead_heading ); ?></h5>

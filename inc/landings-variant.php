@@ -5,6 +5,8 @@
  * Arquitectura CSS:
  * - Core del sitio (style.css, Bootstrap, icons, slick, responsive.css) sigue cargándose
  *   en todas las URLs; define tipografía, rejilla, header/footer.
+ * - @layer skema-theme-base, skema-theme-landings (style.css + responsive): formularios globales
+ *   en «base»; overrides de landings/prelanding en «landings» (ver phase-prelanding.css).
  * - Inicio (theme_inicio.php): css/home/skema-home-hero.css + skema-home-proyectos.css (ver theme_skema_scripts).
  * - landings-shared.css: layout común (entry, logo proyecto); sin cabecera hero.
  * - skema-landing-hero.css: slider cabecera landings (solo .site-main--landings .landing-hero).

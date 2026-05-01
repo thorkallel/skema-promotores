@@ -20,5 +20,5 @@ if ( function_exists( 'theme_skema_render_landing_project_logo' ) && 'prelanding
 }
 ?>
 <div class="landing-main landing-main--solo-contenido">
-	<?php the_content(); ?>
+    <?php the_content(); ?>
 </div>

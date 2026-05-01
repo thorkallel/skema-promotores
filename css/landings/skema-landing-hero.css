@@ -1,7 +1,9 @@
 /**
- * Landings — cabecera Slick (inc/landings-hero-slider.php).
+ * Landings — cabecera Slick (inc/landings.-hero-slider.php).
  *
  * Puntos del hero: mismo criterio que css/home/skema-home-hero.css (fixed + viewport + scroll en main.js).
+ *
+ * Convención: CSS mobile-first (estilos base = móvil; @media (min-width: …) amplía desktop).
  *
  * Orden: landings-shared → skema-landing-hero → footer-landings → skin → phase.
  */
@@ -32,7 +34,7 @@
 	background-color: rgba(255, 255, 255, 0.15);
 	backdrop-filter: blur(5px);
 	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 	opacity: 1;
@@ -87,8 +89,8 @@
 	opacity: 1;
 }
 
-@media (max-width: 991px) {
+@media (min-width: 992px) {
 	.site-main--landings .landing-hero .home-hero-dots {
-		display: none;
+		display: flex;
 	}
 }

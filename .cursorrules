@@ -4,3 +4,4 @@ Al refactorizar o generar código, sigue siempre este estándar de "Legibilidad 
 - Nomenclatura Semántica: Booleanos (is/has/should) y Funciones (verbos).
 - Nivel de complejidad: Junior+ (Evita 'one-liners' o sintaxis críptica).
 - Mantén siempre las interfaces y firmas de funciones públicas existentes.
+- CSS en `css/landings/` y `css/home/`: mobile-first (reglas base = móvil; solo `min-width` para ampliar).

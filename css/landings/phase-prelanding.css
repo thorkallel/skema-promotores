@@ -1,26 +1,43 @@
 /**
  * Fase «prelanding» — hero a pantalla completa (estructura tipo Renvia) + contenido inferior.
  *
+ * Cascada CSS (formularios / CF7):
+ * - En style.css y responsive.css se declara @layer skema-theme-base, skema-theme-landings.
+ * - Reglas globales de formularios (.form-control, .contacto + wpcf7) están en skema-theme-base.
+ * - Los estilos del lead van en @layer skema-theme-landings: ganan al «base» del tema con la
+ *   misma especificidad sin encadenar selectores artificiales.
+ * - Entre reglas con !important en distintas capas, la cascada favorece la capa anterior; por
+ *   eso el bloque «prelanding-cf7-escape» al final queda sin @layer y solo redefine color,
+ *   fondo, placeholder y focus dentro de .prelanding-cf7-wrap.
+ *
  * Combinar con .landing-skin--{variante} en el mismo <main>.
+ *
+ * Hero: CSS mobile-first (base <768px; min-width: 768px tablet; min-width: 1200px escritorio XL).
  */
 
-/* --- Hero prelanding (slider + overlay + copy + CF7) --- */
+@layer skema-theme-base, skema-theme-landings;
+
+/* --- Hero prelanding (slider + overlay + copy + CF7) — mobile-first --- */
 .site-main--landings.landing-phase--prelanding .prelanding-hero {
 	position: relative;
 	z-index: 1;
-	min-height: 100vh;
-	min-height: 100dvh;
+	/* Altura mínima del «escenario» hero: el slider va absolute y no aporta flujo; el copy queda encima. */
+	min-height: min(60vh, 26rem);
+	min-height: min(60dvh, 26rem);
+	height: auto;
 	overflow: hidden;
+	background-color: #1c1c25;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-hero::after {
 	content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(28, 28, 37, 0.42);
-    clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
-    z-index: 1;
-    pointer-events: none;
+	position: absolute;
+	inset: 0;
+	/* prelanding-static.html: capa ligera sobre la foto (overlay global lleva el contraste) */
+	background-color: rgba(28, 28, 37, 0.22);
+	clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+	z-index: 1;
+	pointer-events: none;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero {
@@ -90,6 +107,7 @@
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-hero .shape-one {
+	display: none;
 	position: absolute;
 	bottom: -10px;
 	right: 0;
@@ -108,22 +126,24 @@
 .site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-overlay {
 	position: absolute;
 	inset: 0;
+	/* Misma intención que prelanding-static.html (deja leer mejor el texto sobre la foto) */
 	background: linear-gradient(
 		90deg,
-		rgba(8, 14, 32, 0.78) 0%,
-		rgba(8, 14, 32, 0.48) 42%,
-		rgba(8, 14, 32, 0.72) 100%
+		rgba(8, 14, 32, 0.45) 0%,
+		rgba(8, 14, 32, 0.22) 42%,
+		rgba(8, 14, 32, 0.48) 100%
 	);
 	z-index: 1;
+	pointer-events: none;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
-	position: absolute;
-	inset: 0;
+	position: relative;
+	inset: auto;
 	z-index: 2;
 	display: flex;
-	align-items: center;
-	padding: 140px 0 60px;
+	align-items: flex-start;
+	padding: 120px 0 40px;
 	pointer-events: none;
 }
 
@@ -131,18 +151,26 @@
 	position: relative;
 	z-index: 2;
 	pointer-events: auto;
+	max-width: 1340px;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap .row {
+	justify-content: center;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy {
 	color: #fff;
-	max-width: 560px;
+	max-width: 100%;
+	margin-inline: auto;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-branding {
-	margin: 4px 0 16px;
+	margin: 8px 0 12px;
 	display: inline-flex;
 	align-items: center;
-	gap: 20px;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo {
@@ -151,14 +179,15 @@
 	align-items: center;
 	justify-content: center;
 	background: #fff;
-	border-radius: 16px;
-	padding: 12px 18px;
+	border-radius: 12px;
+	padding: 10px 14px;
 	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-	aspect-ratio: 1/1;
-	min-width: 170px;
-	min-height: 170px;
-	max-width: 170px;
-	max-height: 170px;
+	aspect-ratio: unset;
+	min-width: unset;
+	min-height: unset;
+	max-width: 80%;
+	max-height: none;
+	width: 100%;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo:empty {
@@ -167,14 +196,21 @@
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo img {
 	display: block;
-	width: clamp(120px, 22vw, 200px);
+	width: 100%;
 	height: auto;
-	max-width: 120px;
+	max-width: 150px;
+	margin: 0 auto;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text {
 	color: #fff;
 	text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+	text-align: center;
+	width: 100%;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text--solo {
+	text-align: center;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text--solo h1 {
@@ -190,9 +226,9 @@
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p {
-	margin: 0;
+	margin: 0 auto;
 	color: #fff;
-	max-width: 420px;
+	max-width: 100%;
 	font-size: clamp(14px, 1.2vw, 18px);
 	line-height: 1.45;
 }
@@ -204,28 +240,36 @@
 .site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__location {
 	display: flex;
 	align-items: flex-start;
+	justify-content: center;
 	gap: 6px;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .tag-line {
-	display: inline-block;
+	display: block;
 	margin-bottom: 16px;
 	font-size: 0.9rem;
 	letter-spacing: 0.02em;
 	opacity: 0.95;
+	text-align: center;
+	width: 100%;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__intro {
 	color: rgba(255, 255, 255, 0.92);
 	font-size: 16px;
-	max-width: 520px;
+	max-width: 32rem;
+	margin-left: auto;
+	margin-right: auto;
 	margin-bottom: 12px;
+	text-align: left;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-points {
 	list-style: none;
 	padding: 0;
-	margin: 10px 0 0;
+	margin: 10px auto 0;
+	max-width: 32rem;
+	text-align: left;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-points li {
@@ -242,11 +286,106 @@
 	flex-shrink: 0;
 }
 
+/* Tablet y portátil: hero a alto viewport; copy en fila; sin centrados de móvil */
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--prelanding .prelanding-hero {
+		min-height: 100vh;
+		min-height: 100dvh;
+		height: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		min-height: 100%;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
+		padding-top: 110px;
+		padding-bottom: 40px;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap .row {
+		justify-content: flex-start;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy {
+		max-width: 560px;
+		margin-inline: 0;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-branding {
+		margin: 4px 0 16px;
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo {
+		border-radius: 16px;
+		padding: 12px 18px;
+		aspect-ratio: 1 / 1;
+		min-width: 170px;
+		min-height: 170px;
+		max-width: 170px;
+		max-height: 170px;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo img {
+		width: clamp(120px, 22vw, 200px);
+		max-width: 120px;
+		margin: 0;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text {
+		text-align: unset;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text--solo {
+		text-align: unset;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p {
+		margin: 0;
+		max-width: 420px;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__location {
+		justify-content: flex-start;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .tag-line {
+		display: inline-block;
+		text-align: unset;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__intro {
+		max-width: 520px;
+		margin-left: unset;
+		margin-right: unset;
+		text-align: unset;
+	}
+
+	.site-main--landings.landing-phase--prelanding .prelanding-points {
+		margin: 10px 0 0;
+		max-width: none;
+		text-align: unset;
+	}
+}
+
+@layer skema-theme-landings {
 .site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead {
 	background: rgba(255, 255, 255, 0.96);
 	border-radius: 12px;
 	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
 	padding: 20px 20px 18px;
+	margin-top: 24px;
 }
 
 .site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead h5 {
@@ -259,15 +398,39 @@
 	margin-bottom: 10px;
 }
 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group, 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group p, 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group span.wpcf7-form-control-wrap {
-	margin-bottom: 0 !important;
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group p,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group .wpcf7-form-control-wrap {
+	margin-bottom: 10px !important;
 }
 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-group .form-contact>div {
-	margin-right: 0 !important;
-	margin-left: 0 !important;
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .form-contact .form-group > div {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+/* Checkbox / aceptación CF7: input al lado del texto (fila flexible) */
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-list-item,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-acceptance {
+	display: block;
+	margin-bottom: 0.25rem;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-list-item label,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-acceptance label {
+	display: flex !important;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 0.55rem;
+	cursor: pointer;
+	margin-bottom: 0;
+	font-size: 0.8rem;
+	line-height: 1.4;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap .wpcf7-list-item-label {
+	flex: 1;
+	min-width: 0;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="text"],
@@ -288,7 +451,9 @@
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea {
-	min-height: 100px;
+	max-height: 80px;
+	height: 80px;
+	min-height: 80px;
 	resize: vertical;
 }
 
@@ -326,82 +491,66 @@
 	margin: 12px 0 0;
 	font-size: 0.9rem;
 }
+}
 
-@media screen and (max-width: 1199.98px) {
+/* Escritorio ancho: decoración, overlay centrado y separación del lead como en diseño XL */
+@media (min-width: 1200px) {
 	.site-main--landings.landing-phase--prelanding .prelanding-hero .shape-one {
-		display: none;
+		display: block;
 	}
 
 	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
-		position: relative;
-		align-items: flex-start;
-		padding-top: 110px;
-		padding-bottom: 40px;
+		position: absolute;
+		inset: 0;
+		align-items: center;
+		padding: 140px 0 60px;
 	}
 
 	.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead {
-		margin-top: 24px;
+		margin-top: 0;
 	}
 }
 
-@media (max-width: 767.98px) {
-	.site-main--landings.landing-phase--prelanding .prelanding-hero {
-		min-height: unset;
-		height: auto;
-	}
+/*
+ * Sin @layer: supera .form-control global (color/fondo/placeholder/focus con !important en
+ * skema-theme-base) y el font-size móvil !important de responsive.css.
+ */
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.form-control,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea.form-control,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select.form-control {
+	background-color: #fff !important;
+	color: #0b1f42 !important;
+	border: 1px solid #d8dfeb !important;
+	font-size: 0.95rem !important;
+}
 
-	.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero {
-		position: relative;
-		inset: auto;
-		min-height: 52vh;
-		height: 52vh;
-	}
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.form-control::placeholder,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea.form-control::placeholder {
+	color: #5b6b84 !important;
+}
 
-	.site-main--landings.landing-phase--prelanding .prelanding-hero .landing-hero > .slider-banner {
-		position: relative;
-		inset: auto;
-		min-height: 52vh;
-		height: 52vh;
-	}
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.form-control:focus,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea.form-control:focus,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select.form-control:focus {
+	background-color: #fff !important;
+	color: #0b1f42 !important;
+	border-color: var(--nara, #fc7416) !important;
+	outline: none !important;
+	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2) !important;
+}
 
-	.site-main--landings.landing-phase--prelanding .prelanding-hero .prelanding-content-wrap {
-		position: relative;
-		inset: auto;
-		padding-top: 100px;
-		padding-bottom: 40px;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-branding {
-		margin: 8px 0 12px;
-		gap: 12px;
-		flex-direction: column;
-		align-items: center;
-		width: 100%;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo {
-		padding: 10px 14px;
-		max-width: 80%;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-logo img {
-		margin: 0 auto;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text {
-		text-align: center;
-		width: 100%;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .project-hero-text p {
-		margin-left: auto;
-		margin-right: auto;
-		max-width: 100%;
-	}
-
-	.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__location {
-		justify-content: center;
-	}
+/* Checkbox nativo visible y alineado (vence estilos .contacto del tema si aplican por herencia) */
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input[type="checkbox"] {
+	position: static !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	width: 1.1rem !important;
+	height: 1.1rem !important;
+	min-width: 1.1rem !important;
+	min-height: 1.1rem !important;
+	margin: 0.2rem 0 0 !important;
+	flex-shrink: 0 !important;
+	accent-color: var(--nara, #fc7416);
 }
 
 /* Contenido del editor bajo el hero */
@@ -409,4 +558,7 @@
 	position: relative;
 	z-index: 3;
 	background: #fff;
+	max-width: 1340px;
+	margin: 60px auto;
+	padding: 0 20px;
 }
