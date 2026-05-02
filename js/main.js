@@ -10,13 +10,14 @@ jQuery(document).ready(function($) {
     $('.slick-slider-banner:not(.slick-slider-banner--youtube)').each(function () {
         var $slider = $(this);
         var $dotsContainer = $slider.closest('.slider-banner').find('.home-hero-dots').first();
+        var isLandingFull = $slider.hasClass('slick-slider-banner--landing-full');
         var sliderConfig = {
             slidesToShow: 1,
             slidesToScroll: 1,
             autoplay: true,
             autoplaySpeed: 3000,
             arrows: false,
-            adaptiveHeight: true,
+            adaptiveHeight: !isLandingFull,
             dots: $dotsContainer.length > 0
         };
         if ($dotsContainer.length) {
@@ -44,6 +45,7 @@ jQuery(document).ready(function($) {
         $ytBanners.each(function () {
             var $slider = $(this);
             var $dotsContainer = $slider.closest('.slider-banner').find('.home-hero-dots').first();
+            var isLandingFullYt = $slider.hasClass('slick-slider-banner--landing-full');
             var sliderConfig = {
                 slidesToShow: 1,
                 slidesToScroll: 1,
@@ -51,6 +53,7 @@ jQuery(document).ready(function($) {
                 autoplaySpeed: 5000,
                 infinite: false,
                 arrows: false,
+                adaptiveHeight: !isLandingFullYt,
                 dots: $dotsContainer.length > 0
             };
             if ($dotsContainer.length) {

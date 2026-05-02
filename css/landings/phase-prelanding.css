@@ -21,9 +21,9 @@
 .site-main--landings.landing-phase--prelanding .prelanding-hero {
 	position: relative;
 	z-index: 1;
-	/* Altura mínima del «escenario» hero: el slider va absolute y no aporta flujo; el copy queda encima. */
-	min-height: min(60vh, 26rem);
-	min-height: min(60dvh, 26rem);
+	/* Escenario hero = alto del viewport; el slider va absolute y no aporta flujo; el copy queda encima. */
+	min-height: 100vh;
+	min-height: 100dvh;
 	height: auto;
 	overflow: hidden;
 	background-color: #1c1c25;
@@ -557,7 +557,6 @@
 .site-main--landings.landing-phase--prelanding .landing-main {
 	position: relative;
 	z-index: 3;
-	background: #fff;
 	max-width: 1340px;
 	margin: 60px auto;
 	padding: 0 20px;

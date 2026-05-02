@@ -11,7 +11,9 @@
 .site-main--landings .landing-hero .slider-banner {
 	position: relative;
 	width: 100%;
-	aspect-ratio: 16 / 9;
+	min-height: 100vh;
+	min-height: 100dvh;
+	aspect-ratio: unset;
 	height: auto;
 	overflow: hidden;
 	border-radius: 0 0 80px 80px;

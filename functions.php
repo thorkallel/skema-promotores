@@ -276,6 +276,7 @@ require get_template_directory() . '/inc/acf-inicio-extendido.php';
  */
 require get_template_directory() . '/inc/acf-landings-slider.php';
 require get_template_directory() . '/inc/landings-hero-slider.php';
+require get_template_directory() . '/inc/landings-project-characteristics.php';
 
 /**
  * Implement the Custom Header feature.

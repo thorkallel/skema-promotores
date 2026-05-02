@@ -1,10 +1,443 @@
 /**
- * Fase «landing» — página completa de conversión / detalle.
+ * Fase «landing» — página completa (hero tipo Renvia project-page-hero + contenido).
  *
- * Convención: CSS mobile-first al añadir reglas aquí.
+ * Convención: CSS mobile-first (base = móvil; solo min-width para ampliar).
+ * Hero full: referencia landing-static.html (.renvia-hero_one.project-page-hero).
  */
 
 .site-main--landings.landing-phase--landing {
-	/* Ej.: más bloques, formulario largo, galería */
 	background-color: #f4f4f4;
+}
+
+/* --- Hero landing completa (slider + copy por slide) — mobile-first --- */
+.site-main--landings.landing-phase--landing .landing-full-hero {
+	position: relative;
+	z-index: 1;
+	height: 100vh;
+	height: 100dvh;
+	min-height: 100vh;
+	min-height: 100dvh;
+	overflow: hidden;
+	background-color: #1c1c25;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .shape-one {
+	display: none;
+	position: absolute;
+	bottom: -10px;
+	right: 0;
+	z-index: 4;
+	pointer-events: none;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .shape-one span {
+	display: block;
+	width: min(500px, 55vw);
+	height: min(500px, 55vw);
+	background-color: var(--nara, #fc7416);
+	clip-path: polygon(100% 0, 20% 100%, 100% 100%);
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-hero {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-hero > .slider-banner {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	border-radius: 0;
+	aspect-ratio: unset;
+	overflow: hidden;
+	background: #000;
+}
+
+/*
+ * La foto va en .landing-full-slide__media (absolute) → no aporta altura al slide.
+ * Slick calcula el alto del .slick-list con el slide; solo ve el copy en flujo → lista ~mitad de pantalla.
+ * Solución: min-height viewport en slides + llenar el contenedor del slick + !important si Slick pone height inline.
+ */
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner > .slick-slider-banner {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner .slick-list,
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner .slick-track {
+	height: 100% !important;
+	min-height: 100vh !important;
+	min-height: 100dvh !important;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner .slick-slide,
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner .slick-slide > div,
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide {
+	height: 100%;
+	min-height: 100vh;
+	min-height: 100dvh;
+}
+
+/* Misma lógica que prelanding: sin flex en el slide (evita colapsar altura). */
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide {
+	position: relative;
+	display: block;
+	box-sizing: border-box;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	display: block;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
+	background-color: rgba(28, 28, 37, 0.42);
+	clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__inner {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	min-height: 100%;
+	display: flex;
+	align-items: center;
+	box-sizing: border-box;
+	padding-top: 120px;
+	padding-bottom: 100px;
+	pointer-events: none;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__inner .container {
+	pointer-events: auto;
+	max-width: 1340px;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content {
+	text-align: center;
+	color: #fff;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-branding {
+	margin: 14px 0 16px;
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-logo {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	border-radius: 12px;
+	padding: 10px 14px;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+	width: 100%;
+	max-width: 80%;
+	aspect-ratio: 1 / 1;
+	min-width: 250px;
+	min-height: 250px;
+	max-width: 250px;
+	max-height: 250px;
+	width: auto;
+	height: auto;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-logo img {
+	display: block;
+	width: 100%;
+	max-width: 70%;
+	height: auto;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text {
+	color: #fff;
+	text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+	width: 100%;
+	text-align: center;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1 {
+	margin: 0 0 6px;
+	font-size: clamp(26px, 6vw, 40px);
+	line-height: 1.1;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text .tag-line {
+	display: block;
+	margin: 0 0 10px;
+	font-size: 0.9rem;
+	letter-spacing: 0.02em;
+	opacity: 0.95;
+	width: 100%;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .landing-full-hero__location {
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	gap: 6px;
+	margin: 0 auto;
+	max-width: 100%;
+	font-size: clamp(14px, 3.5vw, 17px);
+	line-height: 1.45;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner--youtube .hero-yt-embed {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	aspect-ratio: unset;
+	height: 100%;
+	min-height: 100%;
+	border-radius: 0;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner--youtube .landing-full-slide--youtube,
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner--youtube .hero-yt-slide {
+	height: 100%;
+	min-height: 100%;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .slider-banner--youtube .hero-yt-embed iframe {
+	width: 100%;
+	height: 100%;
+	min-height: 100%;
+	border: 0;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__overlay--youtube {
+	clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%);
+	background-color: rgba(28, 28, 37, 0.35);
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__inner {
+		padding-top: 120px;
+		padding-bottom: 120px;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content {
+		text-align: left;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text .tag-line {
+		display: inline-block;
+		text-align: unset;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-branding {
+		flex-direction: row;
+		align-items: center;
+		gap: 20px;
+		width: auto;
+		margin: 18px 0 20px;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-logo {
+		border-radius: 16px;
+		padding: 12px 18px;
+		width: auto;
+		max-width: none;
+		min-width: 350px;
+		min-height: 350px;
+		max-width: 350px;
+		max-height: 350px;
+		width: auto;
+		height: auto;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-logo img {
+		width: clamp(180px, 28vw, 320px);
+		max-width: 250px;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text {
+		text-align: left;
+		width: auto;
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1 {
+		font-size: clamp(28px, 3vw, 46px);
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .landing-full-hero__location {
+		justify-content: flex-start;
+		margin-left: 0;
+		margin-right: 0;
+		max-width: 420px;
+		font-size: clamp(14px, 1.2vw, 18px);
+	}
+
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text--solo {
+		text-align: left;
+	}
+}
+
+@media (min-width: 1200px) {
+	.site-main--landings.landing-phase--landing .landing-full-hero .shape-one {
+		display: block;
+	}
+}
+
+/* Ficha resumen (características) — referencia Renvia .project-meta-list + .renvia-info-item.style-three; mobile-first */
+.site-main--landings.landing-phase--landing .skema-landing-project-details-sec {
+	position: relative;
+	z-index: 3;
+	max-width: 1340px;
+	margin: 0 auto;
+	padding: 2.5rem 1.25rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-project-details-sec {
+		padding-top: 3rem;
+		padding-bottom: 2rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-details-inner .project-content .project-meta-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	gap: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-details-inner .project-meta-list .skema-landing-meta-item {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-project-details-inner .project-meta-list .skema-landing-meta-item {
+		width: 50%;
+	}
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-project-details-inner .project-meta-list {
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-project-details-inner .project-meta-list .skema-landing-meta-item {
+		width: auto;
+		flex: 1 1 0;
+		min-width: 0;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item.mb-30 {
+	margin-bottom: 1.25rem;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-meta-item.mb-30 {
+		margin-bottom: 1.875rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item.renvia-info-item.style-three {
+	display: flex;
+	align-items: center;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .icon {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-right: 1rem;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	background-color: #fff;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .icon img {
+	display: block;
+	width: 32px;
+	height: 32px;
+	object-fit: contain;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.35;
+	color: rgba(28, 28, 37, 0.65);
+	margin-bottom: 0.2rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6 {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 700;
+	line-height: 1.35;
+	color: #1c1c25;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-intro {
+	margin-top: 0.5rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-intro > p {
+	margin-bottom: 1.25rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-intro > p:last-child {
+	margin-bottom: 0;
+}
+
+/* Contenido del editor bajo el hero */
+.site-main--landings.landing-phase--landing .landing-main {
+	position: relative;
+	z-index: 3;
+	max-width: 1340px;
+	margin: 60px auto;
+	padding: 0 20px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-project-details-sec ~ .landing-main {
+	margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-project-details-sec ~ .landing-main {
+		margin-top: 2rem;
+	}
 }

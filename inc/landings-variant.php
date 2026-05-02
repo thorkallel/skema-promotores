@@ -11,7 +11,7 @@
  * - landings-shared.css: layout común (entry, logo proyecto); sin cabecera hero.
  * - skema-landing-hero.css: slider cabecera landings (solo .site-main--landings .landing-hero).
  * - skins/{slug}/skin.css: overrides por variante (ej. promo).
- * - phase-{fase}.css: prelanding vs landing completa; se encola después del skin (misma URL puede ser teaser o página larga).
+ * - phase-{fase}.css: prelanding vs landing completa (hero full viewport en phase-landing.css); encola después del skin.
  * - Partials: entry-{variante}-{fase}.php → entry-{variante}.php → entry-default-{fase}.php → entry-default.php.
  *
  * @package skema
