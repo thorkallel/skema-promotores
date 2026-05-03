@@ -85,6 +85,20 @@ function theme_skema_sanitize_cf7_shortcode( $raw ) {
 }
 
 /**
+ * Comprueba si un WYSIWYG ACF (valor en bruto, format_value false) tiene texto visible.
+ *
+ * @param mixed $raw Valor del campo.
+ * @return bool
+ */
+function theme_skema_landing_acf_wysiwyg_has_content( $raw ) {
+	if ( ! is_string( $raw ) ) {
+		return false;
+	}
+
+	return trim( wp_strip_all_tags( $raw ) ) !== '';
+}
+
+/**
  * ID seguro para el contenedor del formulario (ancla).
  *
  * @param mixed $raw Valor del campo ACF.

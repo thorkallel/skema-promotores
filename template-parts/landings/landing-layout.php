@@ -27,5 +27,8 @@ if ( function_exists( 'theme_skema_render_landing_project_characteristics' ) ) {
 }
 ?>
 <div class="landing-main landing-main--solo-contenido">
-    <?php the_content(); ?>
+	<?php the_content(); ?>
 </div>
+<?php if ( 'landing' === $skema_landing_phase_layout ) : ?>
+	<?php get_template_part( 'template-parts/landings/landing', 'content-box' ); ?>
+<?php endif; ?>

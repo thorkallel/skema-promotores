@@ -280,6 +280,10 @@ function theme_skema_enqueue_landing_variant_styles() {
 		return;
 	}
 
+	if ( function_exists( 'theme_skema_get_landing_phase' ) && 'landing' === theme_skema_get_landing_phase( $post_id ) && function_exists( 'theme_skema_enqueue_fontawesome_on_landings' ) ) {
+		theme_skema_enqueue_fontawesome_on_landings();
+	}
+
 	$base_uri = get_template_directory_uri() . '/css/landings';
 	$base_dir = get_template_directory() . '/css/landings';
 
