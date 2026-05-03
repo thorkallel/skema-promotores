@@ -279,6 +279,8 @@ require get_template_directory() . '/inc/landings-hero-slider.php';
 require get_template_directory() . '/inc/landings-project-characteristics.php';
 require get_template_directory() . '/inc/landings-ficha-apartamento-fa.php';
 require get_template_directory() . '/inc/landings-info-proyecto.php';
+require get_template_directory() . '/inc/landings-medios-galerias.php';
+require get_template_directory() . '/inc/landings-respaldo-slider.php';
 
 /**
  * Implement the Custom Header feature.

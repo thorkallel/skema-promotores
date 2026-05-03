@@ -388,6 +388,119 @@ function theme_skema_enqueue_landing_variant_styles() {
 add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_variant_styles', 25 );
 
 /**
+ * Encola JS de galería modal (Apto modelo) en single landings fase «landing».
+ *
+ * @return void
+ */
+function theme_skema_enqueue_landing_medios_gallery_script() {
+	if ( ! is_singular( 'landings' ) ) {
+		return;
+	}
+
+	$post_id = (int) get_queried_object_id();
+	if ( $post_id <= 0 ) {
+		return;
+	}
+
+	if ( ! function_exists( 'theme_skema_get_landing_phase' ) || 'landing' !== theme_skema_get_landing_phase( $post_id ) ) {
+		return;
+	}
+
+	$path = get_template_directory() . '/js/skema-landing-medios-gallery.js';
+	if ( ! is_readable( $path ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'theme-skema-landing-medios-gallery',
+		get_template_directory_uri() . '/js/skema-landing-medios-gallery.js',
+		array( 'theme_skema-bootstrap-bundle-js' ),
+		_S_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_medios_gallery_script', 26 );
+
+/**
+ * Encola JS del slider «Plantas» (Slick + pestaña Bootstrap 4) en single landings fase «landing».
+ *
+ * @return void
+ */
+function theme_skema_enqueue_landing_plantas_slider_script() {
+	if ( ! is_singular( 'landings' ) ) {
+		return;
+	}
+
+	$post_id = (int) get_queried_object_id();
+	if ( $post_id <= 0 ) {
+		return;
+	}
+
+	if ( ! function_exists( 'theme_skema_get_landing_phase' ) || 'landing' !== theme_skema_get_landing_phase( $post_id ) ) {
+		return;
+	}
+
+	$path = get_template_directory() . '/js/skema-landing-plantas-slider.js';
+	if ( ! is_readable( $path ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'theme-skema-landing-plantas-slider',
+		get_template_directory_uri() . '/js/skema-landing-plantas-slider.js',
+		array( 'jquery', 'theme_skema-slickslider-js ', 'theme_skema-bootstrap-bundle-js' ),
+		_S_VERSION,
+		true
+	);
+
+	wp_localize_script(
+		'theme-skema-landing-plantas-slider',
+		'skemaLandingPlantasI18n',
+		array(
+			'prevMain' => __( 'Planta anterior', 'theme_skema' ),
+			'nextMain' => __( 'Planta siguiente', 'theme_skema' ),
+			'prevNav'  => __( 'Miniaturas anteriores', 'theme_skema' ),
+			'nextNav'  => __( 'Miniaturas siguientes', 'theme_skema' ),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_plantas_slider_script', 26 );
+
+/**
+ * Encola JS del carrusel «Con el respaldo de» (Slick) en single landings fase «landing».
+ *
+ * @return void
+ */
+function theme_skema_enqueue_landing_respaldo_slider_script() {
+	if ( ! is_singular( 'landings' ) ) {
+		return;
+	}
+
+	$post_id = (int) get_queried_object_id();
+	if ( $post_id <= 0 ) {
+		return;
+	}
+
+	if ( ! function_exists( 'theme_skema_get_landing_phase' ) || 'landing' !== theme_skema_get_landing_phase( $post_id ) ) {
+		return;
+	}
+
+	$path = get_template_directory() . '/js/skema-landing-respaldo-slider.js';
+	if ( ! is_readable( $path ) ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'theme-skema-landing-respaldo-slider',
+		get_template_directory_uri() . '/js/skema-landing-respaldo-slider.js',
+		array( 'jquery', 'theme_skema-slickslider-js ' ),
+		_S_VERSION,
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_respaldo_slider_script', 26 );
+
+/**
  * Clase en body para targeting global opcional.
  *
  * @param array<int, string> $classes Clases existentes.

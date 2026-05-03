@@ -447,8 +447,16 @@
 	position: relative;
 	z-index: 3;
 	max-width: 1340px;
-	margin: 0 auto 3rem;
+	margin: 0 auto;
 	padding: 0 1.25rem 2rem;
+}
+
+/*
+ * Modales Bootstrap: backdrop ~1040. Este wrap tenía z-index:3 → el velo tapaba la galería.
+ * Con body.modal-open (Bootstrap 4) subimos el contexto por encima del backdrop, por debajo del header del tema.
+ */
+body.modal-open .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap {
+	z-index: 1055;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .content-box {
@@ -687,6 +695,466 @@
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .property-tabs .nav-link.active {
 	background-color: var(--nara, #fc7416);
 	color: #fff;
+}
+
+/* Galería «Apto modelo» + modal (referencia landing-static Renvia) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-item .renvia-gallery-thumb-btn {
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	cursor: zoom-in;
+	position: relative;
+	text-align: left;
+	border-radius: inherit;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-item .renvia-gallery-thumb-btn:focus-visible {
+	outline: 2px solid var(--nara, #fc7416);
+	outline-offset: 2px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-item .renvia-gallery-thumb-btn img {
+	display: block;
+	width: 100%;
+	height: auto;
+	transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-item .renvia-gallery-thumb-btn:hover img {
+	transform: scale(1.02);
+	filter: brightness(0.92);
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-hint {
+	position: absolute;
+	right: 14px;
+	bottom: 14px;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.55);
+	color: #fff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.125rem;
+	pointer-events: none;
+	transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-thumb-btn:hover .renvia-gallery-hint {
+	background: var(--nara, #fc7416);
+	transform: scale(1.05);
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-gallery-grid .renvia-gallery-thumb-btn img {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-gallery-grid .renvia-gallery-item,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-gallery-grid .renvia-image {
+	height: 100%;
+}
+
+/* Plantas: Slick principal + miniaturas (referencia landing-static Renvia) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap {
+	--plantas-nav-h: 72px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main {
+	position: relative;
+	background: #f6f7f8;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner {
+	padding: 12px 48px;
+	text-align: center;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img {
+	display: inline-block;
+	max-width: 100%;
+	width: auto;
+	max-height: min(50vh, 480px);
+	height: auto;
+	object-fit: contain;
+	vertical-align: middle;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav {
+	position: relative;
+	margin-top: 12px;
+	padding: 0 36px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .slick-list {
+	margin: 0 -6px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .slick-slide {
+	padding: 0 6px;
+	opacity: 0.45;
+	transition: opacity 0.25s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .slick-slide.slick-current {
+	opacity: 1;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-inner {
+	border: 2px solid transparent;
+	border-radius: 4px;
+	overflow: hidden;
+	cursor: pointer;
+	height: var(--plantas-nav-h);
+	background: #eee;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .slick-current .plantas-nav-inner {
+	border-color: var(--nara, #fc7416);
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-inner img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 4;
+	width: 40px;
+	height: 40px;
+	border: 0;
+	border-radius: 50%;
+	padding: 0;
+	font-size: 1rem;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.95);
+	color: #1c1c25;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+	transition:
+		background 0.2s ease,
+		color 0.2s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn::before {
+	display: none !important;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn:hover,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn:focus {
+	background: var(--nara, #fc7416);
+	color: #fff;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn--main.plantas-slick-btn--prev {
+	left: 8px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn--main.plantas-slick-btn--next {
+	right: 8px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-slick-btn--nav.plantas-slick-btn--prev {
+	left: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-slick-btn--nav.plantas-slick-btn--next {
+	right: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-slick-btn--nav {
+	top: calc(var(--plantas-nav-h) / 2 + 2px);
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap {
+		--plantas-nav-h: 88px;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner {
+		padding: 16px 56px;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img {
+		max-height: min(56vh, 560px);
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav {
+		margin-top: 16px;
+		padding: 0 40px;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn--main.plantas-slick-btn--prev {
+		left: 10px;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slick-btn--main.plantas-slick-btn--next {
+		right: 10px;
+	}
+}
+
+/* Pestaña Videos: YouTube iframe o HTML5 MP4 (Bootstrap 4 embed-responsive) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video {
+	background: #0f0f12;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video .skema-landing-medios-video__ratio {
+	background: #000;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video .skema-landing-medios-video__iframe,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video .skema-landing-medios-video__html5 {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	vertical-align: middle;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video .skema-landing-medios-video__html5 {
+	object-fit: contain;
+	background: #000;
+}
+
+/* Pestaña Zonas sociales: rejilla estática 2 → 6 columnas + pie de foto */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria {
+	margin-bottom: 1.5rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__item {
+	margin: 0;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__media {
+	border-radius: 4px;
+	overflow: hidden;
+	background: #f0f0f0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__media img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__caption {
+	margin-top: 0.5rem;
+	padding: 0 0.15rem;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.35;
+	color: #4a4a55;
+	text-align: center;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__caption {
+		font-size: 0.875rem;
+		margin-top: 0.65rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__nota {
+	margin-top: 0.25rem;
+}
+
+/* «Con el respaldo de»: carrusel de logos (referencia Renvia clients-slider) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .renvia-client-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 0.5rem 0.25rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-slider-item-title {
+	font-size: 0.7rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #1c1c25;
+	opacity: 0.8;
+	margin: 0 0 0.5rem;
+	text-align: center;
+	max-width: 10rem;
+	line-height: 1.25;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-img {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 3.5rem;
+	width: 100%;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-img img {
+	display: block;
+	max-width: 100%;
+	width: auto;
+	max-height: 52px;
+	height: auto;
+	object-fit: contain;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-aliados-slider .slick-track {
+	align-items: flex-start;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-slider-item-title {
+		font-size: 0.75rem;
+		max-width: 8rem;
+	}
+
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-img img {
+		max-height: 56px;
+	}
+}
+
+/* Brochure: botón Renvia (.theme-btn.style-one) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-slot--brochure-cta {
+	margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-slot--brochure-cta {
+		margin-top: 2.5rem;
+	}
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-slot--brochure-cta {
+		margin-top: 3.75rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	padding: 0.95rem 1.75rem;
+	border-radius: 50px;
+	font-size: 0.875rem;
+	line-height: 1.25;
+	text-decoration: none;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn i {
+	margin-left: 0.65rem;
+	transition: transform 0.35s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn.style-one {
+	background-color: var(--nara, #fc7416);
+	color: #fff;
+	border: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn.style-one:hover,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn.style-one:focus {
+	background-color: #1c1c25;
+	color: #fff;
+	text-decoration: none;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn.style-one:hover i,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn.style-one:focus i {
+	transform: rotate(-45deg);
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn {
+		padding: 1.1rem 1.85rem;
+		font-size: 0.9375rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-header .close {
+	margin: 0;
+	padding: 0.5rem;
+	opacity: 0.6;
+	font-size: 1.5rem;
+	line-height: 1;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-header .close:hover {
+	opacity: 1;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-content {
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-stage {
+	min-height: 200px;
+	background: #111;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-img {
+	max-height: min(78vh, 820px);
+	width: auto;
+	max-width: 100%;
+	object-fit: contain;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-fab {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 2;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	border: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.92);
+	color: #111;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+	transition: background 0.2s ease, color 0.2s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-fab:hover {
+	background: var(--nara, #fc7416);
+	color: #fff;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-fab:disabled {
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-prev {
+	left: 10px;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-next {
+	right: 10px;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-lead-sidebar {
