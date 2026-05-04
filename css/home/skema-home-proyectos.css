@@ -8,9 +8,13 @@
  * @package skema
  */
 .skema-proyectos {
-	background-color: #f4f4f4;
+	background-color: #F7F5EF;
 	padding-top: 3.5rem;
 	padding-bottom: 4rem;
+	background-image: url('../../img/fondo-proyectos.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: -3.5rem;
 }
 
 .skema-proyectos .skema-proyectos__fluid {
@@ -33,8 +37,12 @@
 }
 
 .skema-proyectos .skema-proyectos__head {
-	text-align: center;
+	text-align: left;
 	margin-bottom: 2.75rem;
+}
+
+.skema-proyectos .skema-proyectos__head strong{
+	color: var(--nara);
 }
 
 .skema-proyectos .skema-proyectos__head .skema-proyectos__subtitle {
@@ -48,11 +56,17 @@
 }
 
 .skema-proyectos .skema-proyectos__head h2 {
-	font-family: Arvo, Georgia, serif;
+	font-family: "Readex Pro", sans-serif !important;
 	font-size: clamp(1.35rem, 2.5vw, 1.85rem);
 	color: var(--azul);
 	margin: 0;
 	line-height: 1.25;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.skema-proyectos .skema-proyectos__head h2 .skema-proyectos__h2-subline {
+	font-weight: 400;
 }
 
 /* Márgenes entre slides Slick (misma idea que .service-slider Renvia) */
@@ -161,7 +175,7 @@
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__label,
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims strong,
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__sup-m2 {
-	color: var(--gris-o);
+	color: var(--azul);
 }
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__meta {
@@ -212,7 +226,6 @@
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__dims .service-ficha__sup-m2 {
 	flex: 1 0 100%;
 	margin-top: 2px;
-	padding-left: 1.75rem;
 }
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__spec-icon {
@@ -220,7 +233,7 @@
 	margin-top: 2px;
 	font-size: 1.125rem;
 	line-height: 1;
-	color: var(--gris-o);
+	color: var(--azul);
 	opacity: 0.85;
 }
 
@@ -250,7 +263,6 @@
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__amount {
 	flex: 1 0 100%;
 	margin-top: 2px;
-	padding-left: 1.75rem;
 	font-size: 1rem;
 	font-weight: 700;
 }
@@ -288,7 +300,7 @@
 /* CTA read-more.style-two (extracto Renvia) */
 .skema-proyectos .read-more.style-two {
 	font-size: 14px;
-	color: var(--gris-o);
+	color: var(--azul);
 	font-weight: 700;
 	text-decoration: none;
 }

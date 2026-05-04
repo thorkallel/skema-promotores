@@ -268,7 +268,7 @@ $skema_prior_content_block = false;
                                         <button class="nav-link" type="button" data-toggle="tab"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos"
                                             role="tab" aria-selected="false" tabindex="-1">
-                                            <?php esc_html_e( 'Videos', 'theme_skema' ); ?>
+                                            <?php esc_html_e( 'Video', 'theme_skema' ); ?>
                                         </button>
                                     </li>
                                     <li class="nav-item" role="presentation">

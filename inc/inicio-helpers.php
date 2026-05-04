@@ -329,6 +329,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 			break;
 		}
 	}
+	$logo_url = is_string( $logo_url ) ? trim( $logo_url ) : '';
 
 	$area_priv  = get_field( 'area_priv', $post_id );
 	$area_const = get_field( 'area_const', $post_id );
@@ -368,32 +369,35 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
         </p>
         <?php endif; ?>
         <div class="row align-items-center service-ficha__specs">
+            <?php if ( $logo_url !== '' ) : ?>
             <div
                 class="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
                 <div class="service-ficha__logo">
-                    <?php if ( $logo_url ) : ?>
                     <img src="<?php echo esc_url( $logo_url ); ?>" alt="" loading="lazy" />
-                    <?php endif; ?>
                 </div>
             </div>
+            <?php endif; ?>
+
             <div class="col-12 col-md-4 d-flex align-items-center mb-3 mb-md-0">
                 <div class="service-ficha__dims w-100">
-                    <i class="bi bi-rulers service-ficha__spec-icon" aria-hidden="true"></i><br>
+
                     <div class="service-ficha__spec-copy">
+                        <i class="bi bi-rulers service-ficha__spec-icon" aria-hidden="true"></i>
                         <span class="service-ficha__label"><?php esc_html_e( 'Superficie', 'theme_skema' ); ?></span>
-                        <span
-                            class="service-ficha__meta"><?php echo esc_html( $tipologia_line !== '' ? $tipologia_line : '—' ); ?></span>
+
+                        <?php if ( $sup_strong ) : ?>
+                        <strong class="service-ficha__sup-m2"
+                            title="<?php esc_attr_e( 'Detalle en m²', 'theme_skema' ); ?>"><?php echo esc_html( $sup_strong !== '' ? $sup_strong : '—' ); ?></strong>
+                        <?php endif; ?>
                     </div>
-                    <?php if ( $sup_strong ) : ?>
-                    <strong class="service-ficha__sup-m2"
-                        title="<?php esc_attr_e( 'Detalle en m²', 'theme_skema' ); ?>"><?php echo esc_html( $sup_strong ); ?></strong>
-                    <?php endif; ?>
+
                 </div>
             </div>
             <div class="col-12 col-md-4 d-flex align-items-center">
                 <div class="service-ficha__precio w-100">
-                    <i class="bi bi-currency-dollar service-ficha__spec-icon" aria-hidden="true"></i>
+
                     <div class="service-ficha__spec-copy">
+                        <i class="bi bi-currency-dollar service-ficha__spec-icon" aria-hidden="true"></i>
                         <span class="service-ficha__label"><?php esc_html_e( 'Desde', 'theme_skema' ); ?></span>
                     </div>
                     <span class="service-ficha__amount"><?php echo esc_html( $precio !== '' ? $precio : '—' ); ?></span>

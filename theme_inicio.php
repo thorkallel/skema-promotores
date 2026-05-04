@@ -257,9 +257,9 @@ if ( $n_renvia > 0 ) :
 	$tit_renvia = get_field( 'inicio_renvia_titulo' );
 	if ( ! is_string( $tit_renvia ) || $tit_renvia === '' ) {
 		$tit_renvia = sprintf(
-			/* translators: %s: palabra «PROYECTOS» ya envuelta en <strong> y salto de línea HTML. */
-			__( 'CONOCE NUESTROS %s en construcción y ventas', 'theme_skema' ),
-			'<strong>' . esc_html__( 'PROYECTOS', 'theme_skema' ) . '</strong><br />'
+			/* translators: %s: «PROYECTOS» en <strong>, salto de línea y «en construcción y ventas» en <span>. */
+			__( 'CONOCE NUESTROS %s', 'theme_skema' ),
+			'<strong>' . esc_html__( 'PROYECTOS', 'theme_skema' ) . '</strong><br /> <span class="skema-proyectos__h2-subline">' . esc_html__( 'en construcción y ventas', 'theme_skema' ) . '</span>'
 		);
 	}
 	$sub_renvia = get_field( 'inicio_renvia_subtitulo' );
@@ -267,9 +267,16 @@ if ( $n_renvia > 0 ) :
 	?>
     <section class="skema-proyectos" id="proyectos"
         aria-label="<?php echo esc_attr( wp_strip_all_tags( $tit_renvia ) ); ?>">
-        <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-11 col-12 px-sm-0 px-3 py-sm-4 py-1 item text-right">
+                    <p class="text-right"><b>02</b><?php echo esc_html( __( 'PROYECTOS', 'theme_skema' ) ); ?></p>
+                </div>
+                <div class="col-sm-1 px-0"></div>
+            </div>
             <div class="row justify-content-center">
-                <div class="col-xl-12">
+                <div class="col-sm-1 px-0"></div>
+                <div class="col-sm-11 col-12 px-sm-0 px-3 py-sm-4 py-1 item">
                     <div class="skema-proyectos__head">
                         <?php if ( is_string( $sub_renvia ) && $sub_renvia !== '' ) : ?>
                         <span class="skema-proyectos__subtitle"><?php echo esc_html( $sub_renvia ); ?></span>
@@ -291,7 +298,7 @@ if ( $n_renvia > 0 ) :
         </div>
     </section>
     <?php endif; ?>
-    <section class="mapa mt-sm-4 pt-sm-5">
+    <section class="mapa pt-sm-5">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-4"></div>

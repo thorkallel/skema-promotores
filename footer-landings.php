@@ -13,10 +13,11 @@ $home_url      = home_url( '/' );
 $solicitar_href = $landing_id ? ( get_permalink( $landing_id ) . '#solicitar-informacion' ) : '#solicitar-informacion';
 ?>
 <footer id="colophon" class="site-footer site-footer--landings main-footer footer-v1 py-3 py-md-4">
-	<div class="container">
-		<div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 text-center text-md-start">
-			<p class="text-white mb-0 small skema-landing-footer__copy">
-				<?php
+    <div class="container">
+        <div
+            class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-2 text-center text-md-start">
+            <p class="text-white mb-0 small skema-landing-footer__copy">
+                <?php
 				echo esc_html(
 					sprintf(
 						/* translators: 1: year, 2: site name, 3: landing title */
@@ -27,17 +28,18 @@ $solicitar_href = $landing_id ? ( get_permalink( $landing_id ) . '#solicitar-inf
 					)
 				);
 				?>
-			</p>
-			<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end column-gap-3 row-gap-1">
-				<a class="text-white text-decoration-none small" href="<?php echo esc_url( $home_url ); ?>">
-					<?php esc_html_e( 'Inicio', 'theme_skema' ); ?>
-				</a>
-				<a class="text-white text-decoration-none small" href="<?php echo esc_url( $solicitar_href ); ?>">
-					<?php esc_html_e( 'Solicitar información', 'theme_skema' ); ?>
-				</a>
-			</div>
-		</div>
-	</div>
+            </p>
+            <div
+                class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end column-gap-3 row-gap-1">
+                <a class="text-white text-decoration-none small mr-3" href="<?php echo esc_url( $home_url ); ?>">
+                    <?php esc_html_e( 'Inicio', 'theme_skema' ); ?>
+                </a>
+                <a class="text-white text-decoration-none small" href="<?php echo esc_url( $solicitar_href ); ?>">
+                    <?php esc_html_e( 'Solicitar información', 'theme_skema' ); ?>
+                </a>
+            </div>
+        </div>
+    </div>
 </footer><!-- #colophon -->
 
 </div><!-- #page -->
@@ -45,4 +47,5 @@ $solicitar_href = $landing_id ? ( get_permalink( $landing_id ) . '#solicitar-inf
 <?php wp_footer(); ?>
 
 </body>
+
 </html>
