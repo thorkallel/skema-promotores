@@ -1,0 +1,98 @@
+/**
+ * CPT landings — tipografía unificada (prelanding + landing completa).
+ * Cuerpo / párrafos / span: #797E88 · Títulos (h1–h6): #00347A.
+ * Carga después de phase-*.css (ver inc/landings-variant.php).
+ * No cubre el hero a pantalla completa (.prelanding-hero, .landing-full-hero).
+ */
+
+/* Contenedores principales: herencia para p, span, li, texto corrido */
+.site-main--landings .landing-main,
+.site-main--landings .skema-landing-content-box-wrap,
+.site-main--landings .skema-landing-project-details-sec .skema-landing-project-intro {
+	color: #797e88;
+}
+
+.site-main--landings .landing-main h1,
+.site-main--landings .landing-main h2,
+.site-main--landings .landing-main h3,
+.site-main--landings .landing-main h4,
+.site-main--landings .landing-main h5,
+.site-main--landings .landing-main h6,
+.site-main--landings .skema-landing-content-box-wrap h1,
+.site-main--landings .skema-landing-content-box-wrap h2,
+.site-main--landings .skema-landing-content-box-wrap h3,
+.site-main--landings .skema-landing-content-box-wrap h4,
+.site-main--landings .skema-landing-content-box-wrap h5,
+.site-main--landings .skema-landing-content-box-wrap h6,
+.site-main--landings .skema-landing-project-intro h1,
+.site-main--landings .skema-landing-project-intro h2,
+.site-main--landings .skema-landing-project-intro h3,
+.site-main--landings .skema-landing-project-intro h4,
+.site-main--landings .skema-landing-project-intro h5,
+.site-main--landings .skema-landing-project-intro h6 {
+	color: #00347a;
+}
+
+/* Enlaces en contenido editorial (pestañas y botones mantienen sus reglas) */
+.site-main--landings .landing-main a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link),
+.site-main--landings .skema-landing-content-box-wrap a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link):not(.close) {
+	color: var(--nara, #fc7416);
+}
+
+.site-main--landings .landing-main a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):hover,
+.site-main--landings .skema-landing-content-box-wrap a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):hover {
+	color: #00347a;
+}
+
+/* --- Landing completa: ajustes sobre reglas de phase-landing.css --- */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-content-box__main > h3 {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5 {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-ficha-grid--fa-cats .skema-ficha-apto-category__title {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-ficha-apto-item {
+	color: #797e88;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.skema-landing-slot--info-proyecto ul.skema-lland-info-proyecto-list > li {
+	color: #797e88;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.skema-landing-slot--info-proyecto .skema-lland-info-proyecto-list__valor {
+	color: #797e88;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.skema-landing-slot--info-proyecto .skema-lland-info-proyecto-list__valor a:hover {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .property-tabs .nav-link {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .property-tabs .nav-link.active {
+	color: #fff;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span {
+	color: #797e88;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6 {
+	color: #00347a;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__caption {
+	color: #797e88;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-slider-item-title {
+	color: #00347a;
+}

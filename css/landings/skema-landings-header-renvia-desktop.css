@@ -289,10 +289,6 @@
 			background: transparent;
 		}
 
-		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings.menu-scrolled {
-			background-color: rgba(255, 255, 255, 0.92);
-		}
-
 		body.skema-landing-shell ul#menu-menupricipal > .nav-item:not(:first-child) {
 			border-left: none;
 		}
@@ -300,5 +296,23 @@
 		body.skema-landing-shell nav#principal-menu.skema-nav-renvia-landings.menu-scrolled img{
 			filter: none;
 		}
+	}
+}
+
+/*
+ * Fondo transparente con scroll en landings (desktop xl+): fuera de @layer.
+ * style.css define .menu-scrolled sin capa; las reglas sin capa vencen a @layer
+ * aunque la especificidad sea menor. Estas reglas compiten en la cascada global.
+ */
+@media (min-width: 1200px) {
+	body.skema-landing-shell.landing-phase--prelanding nav#principal-menu.skema-nav-renvia-landings.menu-scrolled,
+	body.skema-landing-shell.landing-phase--landing nav#principal-menu.skema-nav-renvia-landings.menu-scrolled,
+	body.skema-landing-shell.landing-phase--prelanding nav#principal-menu.skema-nav-renvia-landings.navbar-glass-youtube.menu-scrolled,
+	body.skema-landing-shell.landing-phase--landing nav#principal-menu.skema-nav-renvia-landings.navbar-glass-youtube.menu-scrolled {
+		background-color: transparent;
+		background: transparent;
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+		box-shadow: none;
 	}
 }

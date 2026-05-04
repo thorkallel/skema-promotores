@@ -382,6 +382,16 @@ function theme_skema_enqueue_landing_variant_styles() {
 				array( $skin_handle ),
 				_S_VERSION
 			);
+
+			$typography_path = $base_dir . '/landings-typography.css';
+			if ( is_readable( $typography_path ) ) {
+				wp_enqueue_style(
+					'theme_skema-landings-typography',
+					$base_uri . '/landings-typography.css',
+					array( 'theme_skema-landing-phase-' . $phase ),
+					_S_VERSION
+				);
+			}
 		}
 	}
 }

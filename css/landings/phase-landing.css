@@ -393,6 +393,7 @@
 	width: 32px;
 	height: 32px;
 	object-fit: contain;
+	filter: brightness(0) invert(0);
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-meta-item .info span {
@@ -697,6 +698,83 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	color: #fff;
 }
 
+/*
+ * Medios del proyecto: el HTML usa row-cols-* y g-* (BS5); el tema carga BS4 → sin calles.
+ * Rejilla explícita + más aire (referencia renvia/landing-static.html, galerías y zonas).
+ */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios {
+	margin-bottom: 2rem;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios {
+		margin-bottom: 2.75rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .property-tabs {
+	margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .property-tabs {
+		margin-bottom: 1.875rem;
+	}
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .tab-content {
+	padding-bottom: 0.75rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .tab-pane.skema-landing-tab-pane {
+	padding-bottom: 0.5rem;
+}
+
+/* Apto modelo / Renders: 2 col móvil, 4 desktop */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .project-gallery-grid {
+	margin-left: -0.625rem;
+	margin-right: -0.625rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .project-gallery-grid > .col {
+	flex: 0 0 50%;
+	max-width: 50%;
+	padding-left: 0.625rem;
+	padding-right: 0.625rem;
+	margin-bottom: 1.25rem;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .project-gallery-grid > .col {
+		flex: 0 0 25%;
+		max-width: 25%;
+		margin-bottom: 1.5rem;
+	}
+}
+
+/* Zonas sociales (pestaña medios): 2 col → 6 col */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .zonas-sociales-gallery {
+	margin-left: -0.625rem;
+	margin-right: -0.625rem;
+	margin-bottom: 2rem;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .zonas-sociales-gallery > .col {
+	flex: 0 0 50%;
+	max-width: 50%;
+	padding-left: 0.625rem;
+	padding-right: 0.625rem;
+	margin-bottom: 1.25rem;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .zonas-sociales-gallery > .col {
+		flex: 0 0 16.666667%;
+		max-width: 16.666667%;
+		margin-bottom: 1.5rem;
+	}
+}
+
 /* Galería «Apto modelo» + modal (referencia landing-static Renvia) */
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .renvia-gallery-item .renvia-gallery-thumb-btn {
 	display: block;
@@ -762,6 +840,15 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	height: 100%;
 }
 
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .renvia-gallery-item {
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .renvia-gallery-item .renvia-gallery-thumb-btn img {
+	border-radius: 5px;
+}
+
 /* Plantas: Slick principal + miniaturas (referencia landing-static Renvia) */
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap {
 	--plantas-nav-h: 72px;
@@ -770,7 +857,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main {
 	position: relative;
 	background: #f6f7f8;
-	border-radius: 4px;
+	border-radius: 5px;
 	overflow: hidden;
 }
 
@@ -811,7 +898,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-inner {
 	border: 2px solid transparent;
-	border-radius: 4px;
+	border-radius: 5px;
 	overflow: hidden;
 	cursor: pointer;
 	height: var(--plantas-nav-h);
@@ -911,7 +998,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 /* Pestaña Videos: YouTube iframe o HTML5 MP4 (Bootstrap 4 embed-responsive) */
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-medios-video {
 	background: #0f0f12;
-	border-radius: 4px;
+	border-radius: 5px;
 	overflow: hidden;
 }
 
@@ -933,10 +1020,6 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 /* Pestaña Zonas sociales: rejilla estática 2 → 6 columnas + pie de foto */
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria {
-	margin-bottom: 1.5rem;
-}
-
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__item {
 	margin: 0;
 	height: 100%;
@@ -945,7 +1028,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__media {
-	border-radius: 4px;
+	border-radius: 5px;
 	overflow: hidden;
 	background: #f0f0f0;
 }
@@ -953,12 +1036,13 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__media img {
 	display: block;
 	width: 100%;
+	border-radius: 5px;
 	aspect-ratio: 4 / 3;
 	object-fit: cover;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__caption {
-	margin-top: 0.5rem;
+	margin-top: 0.75rem;
 	padding: 0 0.15rem;
 	font-size: 0.8125rem;
 	font-weight: 600;
@@ -970,12 +1054,13 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 @media (min-width: 992px) {
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__caption {
 		font-size: 0.875rem;
-		margin-top: 0.65rem;
+		margin-top: 0.875rem;
 	}
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-zonas-galeria__nota {
-	margin-top: 0.25rem;
+	margin-top: 0.75rem;
+	padding-bottom: 0.25rem;
 }
 
 /* «Con el respaldo de»: carrusel de logos (referencia Renvia clients-slider) */
@@ -1112,6 +1197,8 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-stage {
 	min-height: 200px;
 	background: #111;
+	border-radius: 5px;
+	overflow: hidden;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-img {
@@ -1119,6 +1206,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	width: auto;
 	max-width: 100%;
 	object-fit: contain;
+	border-radius: 5px;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-fab {
@@ -1164,6 +1252,18 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 @media (min-width: 1200px) {
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-lead-sidebar {
 		margin-top: 0;
+	}
+
+	/*
+	 * Formulario lead: sticky solo desktop (xl), debajo de la barra fija .fixed-top.
+	 * Las columnas del .row siguen en stretch para que la columna derecha tenga altura
+	 * como la principal y el sticky tenga recorrido al hacer scroll.
+	 */
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.project-info-box--lead {
+		position: sticky;
+		/* Separación bajo #principal-menu.fixed-top (antes ~5.5rem quedaba tapado) */
+		top: calc(5.5rem + 1.75rem);
+		scroll-margin-top: calc(5.5rem + 1.75rem);
 	}
 }
 
@@ -1263,3 +1363,4 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	border-color: var(--nara, #fc7416) !important;
 	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2) !important;
 }
+
