@@ -1,4 +1,71 @@
 jQuery(document).ready(function($) {
+    /**
+     * Bootstrap 4: los submenús anidados en navbar llaman a Dropdown._clearMenus() dentro de toggle(),
+     * lo que cierra el padre antes de abrir el hijo. Evitamos _clearMenus en el clic del toggle anidado
+     * y sustituimos toggle() solo para enlaces dentro de #menuPrincipal .navbar-nav .dropdown-menu.
+     */
+    (function patchBootstrap4NestedNavbarDropdowns() {
+        if (!$.fn.dropdown || !$.fn.dropdown.Constructor) {
+            return;
+        }
+        var Dropdown = $.fn.dropdown.Constructor;
+        var CLASS_SHOW = 'show';
+        var MENU_PRINCIPAL = '#menuPrincipal';
+        var NESTED_TOGGLE = MENU_PRINCIPAL + ' .navbar-nav .dropdown-menu a[data-toggle="dropdown"]';
+
+        var originalClearMenus = Dropdown._clearMenus;
+        Dropdown._clearMenus = function(event) {
+            if (event && event.type === 'click' && event.target && typeof event.target.closest === 'function') {
+                var nestedToggle = event.target.closest(NESTED_TOGGLE);
+                if (nestedToggle) {
+                    return;
+                }
+            }
+            originalClearMenus.apply(this, arguments);
+            $(MENU_PRINCIPAL + ' .navbar-nav .dropdown-menu .dropdown-menu').removeClass(CLASS_SHOW);
+            $(MENU_PRINCIPAL + ' .navbar-nav .dropdown-menu li.dropdown').removeClass(CLASS_SHOW);
+        };
+
+        var originalToggle = Dropdown.prototype.toggle;
+        Dropdown.prototype.toggle = function() {
+            var isNestedInPrincipalMenu = $(this._element).closest(MENU_PRINCIPAL + ' .navbar-nav .dropdown-menu').length > 0;
+            if (!isNestedInPrincipalMenu) {
+                return originalToggle.call(this);
+            }
+
+            if (this._element.disabled || $(this._element).hasClass('disabled')) {
+                return;
+            }
+
+            var $menu = $(this._menu);
+            var isActive = $menu.hasClass(CLASS_SHOW);
+            var parentLi = Dropdown._getParentFromElement(this._element);
+            var $parentUl = $(this._element).closest('ul.dropdown-menu');
+
+            $parentUl.children('li.dropdown').not(parentLi).each(function() {
+                var $sibling = $(this);
+                $sibling.removeClass(CLASS_SHOW);
+                $sibling.find('> .dropdown-menu').removeClass(CLASS_SHOW);
+                $sibling.find('> a[data-toggle="dropdown"]').attr('aria-expanded', 'false');
+            });
+
+            if (isActive) {
+                $menu.removeClass(CLASS_SHOW);
+                $(parentLi).removeClass(CLASS_SHOW);
+                this._element.setAttribute('aria-expanded', 'false');
+                if (this._popper) {
+                    this._popper.destroy();
+                    this._popper = null;
+                }
+                return;
+            }
+
+            $menu.addClass(CLASS_SHOW);
+            $(parentLi).addClass(CLASS_SHOW);
+            this._element.setAttribute('aria-expanded', 'true');
+        };
+    })();
+
     $(window).scroll(function() {
         var scroll = $(window).scrollTop();
         if (scroll >= 50) { // Ajusta este valor según la altura deseada para iniciar el cambio
@@ -377,6 +444,10 @@ $(document).on('blur change', '#selectMapas', function() {
 
     // Cerrar el drawer solo en viewport donde el menú es off-canvas (no tocar desktop horizontal).
     $('.navbar-nav a').click(function() {
+        var $link = $(this);
+        if ($link.hasClass('dropdown-toggle') || $link.is('[data-toggle="dropdown"], [data-bs-toggle="dropdown"]')) {
+            return;
+        }
         var w = $(window).width();
         var isLandingsShell = $('body').hasClass('skema-landing-shell');
         if (isLandingsShell && w >= 1200) {

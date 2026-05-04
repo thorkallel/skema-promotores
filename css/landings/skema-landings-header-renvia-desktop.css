@@ -104,6 +104,59 @@
 		body.skema-landing-shell .skema-nav-renvia-landings.menu-scrolled ul#menu-menupricipal .nav-link {
 			color: var(--blanco);
 		}
+
+		/* Bootstrap 4: submenús en flujo en el drawer (< xl), coherente con responsive.css del tema base. */
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .navbar-nav .dropdown-menu {
+			position: static;
+			float: none;
+			width: 100%;
+			margin-top: 0.35rem;
+			margin-bottom: 0.5rem;
+			border: 0;
+			box-shadow: none;
+			background-color: rgba(255, 255, 255, 0.08);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .navbar-nav .dropdown-menu .dropdown-menu {
+			position: static !important;
+			left: auto !important;
+			top: auto !important;
+			transform: none !important;
+			margin-left: 0.75rem;
+			width: calc(100% - 0.75rem);
+			background-color: rgba(255, 255, 255, 0.06);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings #menuPrincipal.theme-nav-menu .navbar-nav .dropdown-item.dropdown-toggle {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle span {
+			color: var(--azul);
+			background-color: rgba(255, 255, 255, 0.92);
+			border-radius: 4px;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
+			color: var(--azul);
+			background-color: var(--blanco);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
+			color: var(--nara);
+			padding-left: 20px;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
+			color: var(--nara);
+			background-color: rgba(252, 116, 22, 0.15);
+		}
 	}
 
 	/* ——— Desktop xl+: barra tipo Renvia header-one ——— */
@@ -247,6 +300,59 @@
 			border-radius: 7px;
 			box-shadow: 0 30px 80px 15px rgba(0, 0, 0, 0.09);
 			background-color: var(--blanco);
+		}
+
+		/* Submenús anidados: debajo del ítem padre (misma columna), no a la derecha. */
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown {
+			position: relative;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu .dropdown-menu {
+			position: static !important;
+			float: none !important;
+			top: auto !important;
+			left: auto !important;
+			right: auto !important;
+			transform: none !important;
+			width: 100%;
+			min-width: 0;
+			margin-top: 0.35rem;
+			margin-bottom: 0.35rem;
+			margin-left: 0;
+			padding: 0.35rem 0;
+			border: none;
+			border-radius: 4px;
+			box-shadow: none;
+			background-color: rgba(0, 52, 122, 0.06);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu .dropdown-item.dropdown-toggle {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle span {
+			color: var(--azul);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
+			color: var(--azul);
+			background-color: rgba(0, 52, 122, 0.06);
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
+			color: var(--nara);
+			padding-left: 20px;
+		}
+
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
+		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
+			color: var(--nara);
+			background-color: rgba(252, 116, 22, 0.1);
 		}
 
 		body.skema-landing-shell .skema-nav-renvia-landings ul#menu-menupricipal .dropdown-item {

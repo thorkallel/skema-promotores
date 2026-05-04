@@ -13,6 +13,59 @@
     .btn_wa {
         border-radius: 15px 0px 0px 15px;
     }
+    /* Barra horizontal: que los submenús no queden recortados por el contenedor del collapse. */
+    #menuPrincipal.navbar-collapse {
+        overflow: visible !important;
+    }
+    nav#principal-menu .navbar-nav > .nav-item.dropdown {
+        position: relative;
+    }
+    /* Submenús anidados: siempre debajo del ítem padre (misma columna que en móvil). */
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown {
+        position: relative;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-menu {
+        position: static !important;
+        float: none !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: 100%;
+        min-width: 0;
+        margin-top: 0.25rem;
+        margin-bottom: 0.35rem;
+        margin-left: 0;
+        padding: 0.35rem 0;
+        border: 0;
+        box-shadow: none;
+    }
+    #menuPrincipal .navbar-nav .dropdown-item.dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    /* Padres de 2.º nivel (y más): texto en azul corporativo sobre panel claro. */
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle,
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle span {
+        color: var(--azul);
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
+        color: var(--azul);
+        background-color: rgba(0, 52, 122, 0.06);
+    }
+    /* Enlaces hoja bajo padres con submenú: naranja corporativo + sangría 20px. */
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
+        color: var(--nara);
+        padding-left: 20px;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
+        color: var(--nara);
+        background-color: rgba(252, 116, 22, 0.1);
+    }
 }
 @media (max-width: 719px){
     .btn-abrir {
@@ -62,12 +115,62 @@
         bottom: 0;
         background-color: var(--azul); /* Ajusta el color de fondo según tu diseño */
         z-index: 9999;
-        overflow-y: hidden;
+        overflow-y: auto;
         overflow-x: hidden;
         -webkit-transition: .2s;
 	    -o-transition: .2s;
 	    transition: .2s;
         padding: 1rem;
+    }
+    /* Bootstrap 4: submenús en flujo dentro del drawer (evita recortes y posición rara con ul transformado). */
+    #menuPrincipal .navbar-nav .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0.35rem;
+        margin-bottom: 0.5rem;
+        border: 0;
+        box-shadow: none;
+        background-color: transparent;
+    }
+    /* Niveles 2+: sangría respecto al primer panel; sin fondo (drawer ya es azul). */
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-menu {
+        margin-left: 0.75rem;
+        width: calc(100% - 0.75rem);
+        background-color: transparent;
+    }
+    /* Drawer: categorías y subcategorías — texto blanco, sin fondo, tipografía 1.15rem. */
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item,
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item span {
+        font-size: 1.15rem;
+        color: var(--blanco);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item:hover,
+    #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item:focus {
+        color: var(--blanco);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle,
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle span {
+        color: var(--blanco);
+        background-color: transparent;
+        border-radius: 0;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
+    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
+        color: var(--blanco);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
+        color: var(--blanco);
+        padding-left: 20px;
+    }
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
+    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
+        color: var(--blanco);
+        background-color: transparent;
     }
     .redes {
         display: flex;
@@ -128,6 +231,12 @@
     ul#menu-menupricipal .nav-link {
         font-size: 1.15rem;
         padding: 13px 0px;
+        color: var(--blanco);
+    }
+    ul#menu-menupricipal .nav-link:hover,
+    ul#menu-menupricipal .nav-link:focus {
+        color: var(--blanco);
+        background-color: transparent;
     }
     
     button.btn-cerrar {

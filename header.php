@@ -80,7 +80,7 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 			wp_nav_menu(
 				array(
 					'theme_location' => 'menu-pincipal',
-					'depth'          => 2,
+					'depth'          => 0,
 					'container'      => false,
 					'menu_class'     => 'navbar-nav align-items-sm-center',
 					'fallback_cb'    => 'WP_Bootstrap_Navwalker::fallback',
