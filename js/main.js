@@ -7,6 +7,69 @@ jQuery(document).ready(function($) {
     }
 
     /**
+     * Accesibilidad: anuncia cambios de slide para lectores de pantalla.
+     */
+    function ensureSlickLiveRegion($slider) {
+        if (!$slider || !$slider.length) {
+            return null;
+        }
+        var $region = $slider.siblings('.sr-only.slick-live-region').first();
+        if ($region.length) {
+            return $region;
+        }
+        $region = $('<span class="screen-reader-text sr-only slick-live-region" aria-live="polite" aria-atomic="true"></span>');
+        $slider.after($region);
+        return $region;
+    }
+
+    function announceSlickSlide($slider, slick, currentSlide) {
+        if (!$slider || !$slider.length || !slick) {
+            return;
+        }
+        var total = typeof slick.slideCount === 'number' ? slick.slideCount : $slider.find('.slick-slide:not(.slick-cloned)').length;
+        if (!total || total < 1) {
+            return;
+        }
+        var index = typeof currentSlide === 'number' ? currentSlide : slick.currentSlide;
+        if (typeof index !== 'number' || index < 0) {
+            index = 0;
+        }
+        var $region = ensureSlickLiveRegion($slider);
+        if (!$region || !$region.length) {
+            return;
+        }
+        var $current = $slider.find('.slick-slide[data-slick-index="' + index + '"]').first();
+        var contextualTitle = '';
+        if ($current.length) {
+            contextualTitle = $.trim(
+                $current.find('h1, h2, h3, h4, h5, h6, .project-title, .skema-proyectos__title, .ciudad-proyecto-meta').first().text()
+            );
+            if (!contextualTitle) {
+                contextualTitle = $.trim($current.find('img[alt]').first().attr('alt') || '');
+            }
+        }
+
+        var baseMessage = 'Diapositiva ' + (index + 1) + ' de ' + total;
+        $region.text(contextualTitle ? (baseMessage + ': ' + contextualTitle) : baseMessage);
+    }
+
+    function bindSlickLiveAnnouncements(selector) {
+        if (typeof $.fn.slick !== 'function') {
+            return;
+        }
+        $(document).on('init.a11yLive afterChange.a11yLive reInit.a11yLive', selector, function(event, slick, currentSlide) {
+            announceSlickSlide($(this), slick, currentSlide);
+        });
+    }
+
+    bindSlickLiveAnnouncements('.slick-slider-banner');
+    bindSlickLiveAnnouncements('.project-slider--destacados-inicio');
+    bindSlickLiveAnnouncements('.skema-proyectos__slider');
+    bindSlickLiveAnnouncements('.slider_project--similares');
+    bindSlickLiveAnnouncements('.slider-avance');
+    bindSlickLiveAnnouncements('.slider-zonas');
+
+    /**
      * Bootstrap 4: los submenús anidados en navbar llaman a Dropdown._clearMenus() dentro de toggle(),
      * lo que cierra el padre antes de abrir el hijo. Evitamos _clearMenus en el clic del toggle anidado
      * y sustituimos toggle() solo para enlaces dentro de #menuPrincipal .navbar-nav .dropdown-menu.

@@ -15,6 +15,7 @@ Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-com
 :root{
     --azul:#00347A;
     --nara:#FC7416;
+    --nara-contrast:#B64900;
 	--gris-o: #383838;
     --gris-c: #D9D9D9;
     --blanco: #ffffff;
@@ -819,6 +820,35 @@ input.form-control::placeholder, textarea.form-control::placeholder{
     display: inline-block;
     margin-bottom: 0.5rem;
     line-height: 1.2 !important;
+}
+
+/* CF7 aceptación: caja y texto legal alineados (sitio general; landings usan css/landings/) */
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance {
+	display: block;
+	margin-bottom: 0.65rem;
+}
+
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance label {
+	display: block;
+	position: relative;
+	margin-bottom: 0;
+	line-height: 1.35 !important;
+	cursor: pointer;
+}
+
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance .wpcf7-list-item-label {
+	display: block;
+	position: relative;
+	padding-left: 1.85rem;
+	min-height: 1.2em;
+}
+
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span:before {
+	top: 0.15em;
+}
+
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span:after {
+	top: calc(-9px + 0.15em);
 }
 .btn-enviar {
     background-color: var(--nara);
@@ -1792,6 +1822,41 @@ input[type="file"].custom-file-input {
   -webkit-transform: rotate(135deg);
       -ms-transform: rotate(135deg);
           transform: rotate(135deg);
+}
+
+/* Contraste AA: superficies naranjas con texto blanco en controles interactivos. */
+a.btn-nosotros,
+a.btn-ponte,
+a.btn-verproyecto,
+.btn-enviar,
+input.wpcf7-submit.btn-enviar,
+.ubica_video button,
+span.txt-estado {
+    background-color: var(--nara-contrast);
+    border-color: var(--nara-contrast);
+    color: #fff;
+}
+
+a.btn-intere {
+    background-color: var(--nara-contrast);
+    color: #fff;
+}
+
+.btn-map {
+    background-color: var(--nara-contrast);
+    color: #fff;
+}
+
+a.btn-nosotros:hover,
+a.btn-ponte:hover,
+a.btn-verproyecto:hover,
+.btn-enviar:hover,
+.ubica_video button:hover,
+.ubica_video button.active,
+.btn-map:hover,
+.btn-map.active,
+a.btn-intere:hover {
+    color: var(--nara-contrast);
 }
 
 @media only screen and (max-width: 767px) {

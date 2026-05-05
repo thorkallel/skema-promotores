@@ -202,7 +202,8 @@ get_header(); ?>
                                         <div class="img-proyect">
                                             <span class="txt-estado"><?= $estado; ?></span>
                                             <?= get_the_post_thumbnail(get_the_ID(), 'full', array('class' => 'img-desc-proyecto img-fluid w-100')); ?>
-                                            <a class="icono-mas" href="<?php the_permalink(); ?>">
+                                            <a class="icono-mas" href="<?php the_permalink(); ?>"
+                                                aria-label="<?php echo esc_attr( sprintf( __( 'Ver proyecto %s', 'theme_skema' ), get_the_title() ) ); ?>">
                                                 <?php echo file_get_contents(get_template_directory() . '/img/ico-mas.svg'); ?>
                                             </a>
                                         </div>

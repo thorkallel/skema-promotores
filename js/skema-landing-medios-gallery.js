@@ -44,6 +44,11 @@
 
 		var current = 0;
 
+		ctrEl.setAttribute('aria-live', 'polite');
+		ctrEl.setAttribute('aria-atomic', 'true');
+		capEl.setAttribute('aria-live', 'polite');
+		capEl.setAttribute('aria-atomic', 'true');
+
 		function render() {
 			var item = slides[current];
 			if (!item) {
