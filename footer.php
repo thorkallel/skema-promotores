@@ -20,7 +20,18 @@
 							<div class="ciu-<?php echo $c; ?> divContact" style="display:none;">
 								<?php $location = get_sub_field('ubicacion');
     								if( $location ):
-    									echo $location; 
+    									$city_name = get_sub_field( 'ciudad' );
+    									$map_title = is_string( $city_name ) && '' !== trim( $city_name )
+    										? sprintf(
+											/* translators: %s: city name */
+											__( 'Mapa de oficina en %s', 'theme_skema' ),
+											$city_name
+										)
+    										: __( 'Mapa de oficina', 'theme_skema' );
+    									$location_html = function_exists( 'theme_skema_accessible_embed_html' )
+    										? theme_skema_accessible_embed_html( $location, $map_title )
+    										: ( is_string( $location ) ? $location : '' );
+    									echo $location_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     								endif; ?>
 							</div>
 							<?php $c++; 
@@ -42,6 +53,9 @@
 							<h6 class="mb-1">Contacto en:</h6>
 							<hr>
 							<div class="div-selectContact mb-2">
+								<label for="selectContact" class="screen-reader-text">
+									<?php esc_html_e( 'Selecciona la ciudad de contacto', 'theme_skema' ); ?>
+								</label>
 								<select id="selectContact">
 								<?php if (have_rows('into_ofi', 'option')): $c = 0;
                 					while (have_rows('into_ofi', 'option')): the_row(); ?>

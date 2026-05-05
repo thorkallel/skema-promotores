@@ -25,11 +25,13 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
+<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Saltar al contenido principal', 'theme_skema' ); ?></a>
 <div id="page" class="site">
 <header id="masthead" class="site-header<?php echo $skema_is_landing_nav ? ' header-area header-one skema-landing-header-area' : ''; ?>">
 	<nav class="navbar fixed-top <?php echo $skema_is_landing_nav ? 'navbar-expand-xl' : 'navbar-expand-lg'; ?> navbar-light slide-in-top<?php echo $skema_is_landing_nav ? ' skema-nav-renvia-landings' : ''; ?>" role="navigation" id="principal-menu">
 		<?php if ( ! $skema_is_landing_nav ) : ?>
-		<button class="btn-abrir d-sm-none" type="button">
+		<button class="btn-abrir d-sm-none" type="button" aria-controls="menuPrincipal" aria-expanded="false"
+			aria-label="<?php echo esc_attr__( 'Abrir menú principal', 'theme_skema' ); ?>">
 			<?php echo file_get_contents( get_template_directory() . '/img/btn-abrir.svg' ); ?>
 		</button>
 		<?php endif; ?>
@@ -64,7 +66,9 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 		<?php } ?>
 
 		<div class="navbar-collapse justify-content-sm-between<?php echo $skema_is_landing_nav ? ' theme-nav-menu' : ''; ?>" id="menuPrincipal">
-			<button class="btn-cerrar<?php echo $skema_is_landing_nav ? ' d-xl-none' : ' d-sm-none'; ?>" type="button">
+			<button class="btn-cerrar<?php echo $skema_is_landing_nav ? ' d-xl-none' : ' d-sm-none'; ?>" type="button"
+				aria-controls="menuPrincipal" aria-expanded="true"
+				aria-label="<?php echo esc_attr__( 'Cerrar menú principal', 'theme_skema' ); ?>">
 				<i class="bi bi-x"></i>
 			</button>
 
@@ -92,12 +96,14 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 			<?php if ( $skema_is_landing_nav ) : ?>
 			<div class="redes skema-landing-redes--drawer d-xl-none">
 				<?php if ( get_field( 'face', 'option' ) ) : ?>
-				<a href="<?php echo esc_url( get_field( 'face', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer">
+				<a href="<?php echo esc_url( get_field( 'face', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"
+					aria-label="<?php echo esc_attr__( 'Facebook', 'theme_skema' ); ?>">
 					<i class="bi bi-facebook" aria-hidden="true"></i>
 				</a>
 				<?php endif; ?>
 				<?php if ( get_field( 'inst', 'option' ) ) : ?>
-				<a href="<?php echo esc_url( get_field( 'inst', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer">
+				<a href="<?php echo esc_url( get_field( 'inst', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"
+					aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>">
 					<i class="bi bi-instagram" aria-hidden="true"></i>
 				</a>
 				<?php endif; ?>
@@ -105,12 +111,14 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 			<?php else : ?>
 			<div class="redes">
 				<?php if ( get_field( 'face', 'option' ) ) : ?>
-				<a href="<?php echo esc_url( get_field( 'face', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer">
+				<a href="<?php echo esc_url( get_field( 'face', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"
+					aria-label="<?php echo esc_attr__( 'Facebook', 'theme_skema' ); ?>">
 					<i class="bi bi-facebook" aria-hidden="true"></i>
 				</a>
 				<?php endif; ?>
 				<?php if ( get_field( 'inst', 'option' ) ) : ?>
-				<a href="<?php echo esc_url( get_field( 'inst', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer">
+				<a href="<?php echo esc_url( get_field( 'inst', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"
+					aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>">
 					<i class="bi bi-instagram" aria-hidden="true"></i>
 				</a>
 				<?php endif; ?>
@@ -132,7 +140,8 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 							</a>
 							<?php endif; ?>
 						</div>
-						<button class="btn-abrir btn-abrir--renvia d-xl-none" type="button" aria-controls="menuPrincipal" aria-expanded="false">
+						<button class="btn-abrir btn-abrir--renvia d-xl-none" type="button" aria-controls="menuPrincipal" aria-expanded="false"
+							aria-label="<?php echo esc_attr__( 'Abrir menú principal', 'theme_skema' ); ?>">
 							<?php echo file_get_contents( get_template_directory() . '/img/btn-abrir.svg' ); ?>
 						</button>
 					</div>
@@ -145,12 +154,14 @@ $skema_logo_marca     = function_exists( 'get_field' ) ? get_field( 'logo_marca'
 <div class="bnts_wa_tel">
 	<?php if ( get_field( 'wp', 'option' ) ) : ?>
 		<div class="btn_wa">
-			<a href="https://wa.me/<?php echo esc_attr( get_field( 'wp', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
+			<a href="https://wa.me/<?php echo esc_attr( get_field( 'wp', 'option' ) ); ?>" target="_blank" rel="noopener noreferrer"
+				aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
 		</div>
 	<?php endif; ?>
 	<?php if ( get_field( 'tele', 'option' ) ) : ?>
 		<div class="btn_tel d-flex d-sm-none">
-			<a href="tel:<?php echo esc_attr( get_field( 'tele', 'option' ) ); ?>"><i class="bi bi-phone"></i></a>
+			<a href="tel:<?php echo esc_attr( get_field( 'tele', 'option' ) ); ?>"
+				aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone"></i></a>
 		</div>
 	<?php endif; ?>
 </div>

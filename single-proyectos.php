@@ -81,14 +81,30 @@ $banner_alt      = sprintf(
                     <?php endif; 
                 $video    = get_field('video_proy');
                 $location = get_field('iframe_mapa');
+                $video_embed_title = sprintf(
+                    /* translators: %s: project title */
+                    __( 'Video del proyecto %s', 'theme_skema' ),
+                    $titulo_proyecto
+                );
+                $map_embed_title = sprintf(
+                    /* translators: %s: project title */
+                    __( 'Mapa de ubicación del proyecto %s', 'theme_skema' ),
+                    $titulo_proyecto
+                );
+                $video_embed_html = function_exists( 'theme_skema_accessible_embed_html' )
+                    ? theme_skema_accessible_embed_html( $video, $video_embed_title )
+                    : ( is_string( $video ) ? $video : '' );
+                $map_embed_html   = function_exists( 'theme_skema_accessible_embed_html' )
+                    ? theme_skema_accessible_embed_html( $location, $map_embed_title )
+                    : ( is_string( $location ) ? $location : '' );
                 if ( $video ) : ?>
                     <div id="video_proy" class="embed-responsive embed-responsive-16by9">
-                        <?php echo $video; ?>
+                        <?php echo $video_embed_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
                     <?php endif; 
                 if ( $location ) : ?>
                     <div id="ubica">
-                        <?php echo $location; ?>
+                        <?php echo $map_embed_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -128,7 +144,7 @@ $banner_alt      = sprintf(
                     <ul class="nav text-center justify-content-between" id="myTab" role="tablist">
                         <?php if(get_field('area_const') || get_field('area_priv')): ?>
                         <li class="col-sm-4 col-5 px-0 px-sm-3">
-                            <a href="#caract" class="nav-link btn-catego active" data-toggle="tab" role="tab"
+                            <a id="caract-tab" href="#caract" class="nav-link btn-catego active" data-toggle="tab" role="tab"
                                 aria-controls="caract" aria-selected="true">
                                 Caracteristicas
                             </a>
@@ -137,7 +153,7 @@ $banner_alt      = sprintf(
                         <?php endif; ?>
                         <?php if(get_field('imagenes')): ?>
                         <li class="col-sm-4 col-5 px-0 px-sm-3">
-                            <a href="#zonas" class="nav-link btn-catego" data-toggle="tab" role="tab"
+                            <a id="zonas-tab" href="#zonas" class="nav-link btn-catego" data-toggle="tab" role="tab"
                                 aria-controls="zonas" aria-selected="false">
                                 Zonas comunes
                             </a>
@@ -150,7 +166,7 @@ $banner_alt      = sprintf(
             <div class="row justify-content-center">
                 <div class="col-sm-10 col-12">
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="caract" role="tabpanel">
+                        <div class="tab-pane fade show active" id="caract" role="tabpanel" aria-labelledby="caract-tab">
                             <div class="row justify-content-center">
                                 <?php if(get_field('area_const')): ?>
                                 <div class="col-sm-5 col-6">
@@ -176,7 +192,7 @@ $banner_alt      = sprintf(
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="zonas" role="tabpanel">
+                        <div class="tab-pane fade" id="zonas" role="tabpanel" aria-labelledby="zonas-tab">
                             <div class="row justify-content-center">
                                 <div class="col-sm-12">
                                     <?php if(get_field('imagenes')): ?>
@@ -277,7 +293,9 @@ if ($query->have_posts()) :  $cont = 1;
                 <div class="col-sm-7 px-sm-0 d-sm-flex align-items-sm-end justify-content-sm-around">
                     <p>Seleccione el mes que desea visualizar:</p>
                     <div class="custom-select-wrapper mb-sm-4 mb-3 mx-sm-0 mx-auto">
-
+                        <label for="selectAvance" class="screen-reader-text">
+                            <?php esc_html_e( 'Selecciona el mes del avance de obra', 'theme_skema' ); ?>
+                        </label>
                         <select id="selectAvance" class="custom-select-control">
                             <?php if (have_rows('avance')) :
                                 $i = 0;
@@ -326,7 +344,7 @@ if ($query->have_posts()) :  $cont = 1;
             </div>
             <div class="row justify-content-center">
                 <div class="col-sm-7 col-12">
-                    <a href="" class="btn-intere text-center">Estoy interesado en un proyecto</a>
+                    <a href="#info" class="btn-intere text-center">Estoy interesado en un proyecto</a>
                 </div>
             </div>
         </div>

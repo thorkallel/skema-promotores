@@ -458,7 +458,7 @@ function theme_skema_enqueue_landing_plantas_slider_script() {
 	wp_enqueue_script(
 		'theme-skema-landing-plantas-slider',
 		get_template_directory_uri() . '/js/skema-landing-plantas-slider.js',
-		array( 'jquery', 'theme_skema-slickslider-js ', 'theme_skema-bootstrap-bundle-js' ),
+		array( 'jquery', 'theme_skema-slickslider-js', 'theme_skema-bootstrap-bundle-js' ),
 		_S_VERSION,
 		true
 	);
@@ -503,7 +503,7 @@ function theme_skema_enqueue_landing_respaldo_slider_script() {
 	wp_enqueue_script(
 		'theme-skema-landing-respaldo-slider',
 		get_template_directory_uri() . '/js/skema-landing-respaldo-slider.js',
-		array( 'jquery', 'theme_skema-slickslider-js ' ),
+		array( 'jquery', 'theme_skema-slickslider-js' ),
 		_S_VERSION,
 		true
 	);

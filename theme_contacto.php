@@ -13,7 +13,9 @@ get_header(); ?>
                 <?php endif; ?>
                 <?php $banner_movil = get_field('banner_movil');
                 if ($banner_movil) : ?>
-                    <img src="<?php echo esc_url($banner_movil); ?>" alt="Banner" class="img-fluid d-sm-none d-block w-100">
+                    <img src="<?php echo esc_url($banner_movil); ?>"
+                        alt="<?php echo esc_attr( sprintf( __( 'Banner de %s', 'theme_skema' ), get_the_title() ) ); ?>"
+                        class="img-fluid d-sm-none d-block w-100">
                 <?php endif; ?> 
                 <div class="card-img-overlay p-sm-5 px-0 d-sm-flex align-items-center justify-content-end w-100">
                     <div class="col-sm-6 col-12"></div>
@@ -41,10 +43,14 @@ get_header(); ?>
                         <?php the_custom_logo(); ?>
                     </div>
                     <div class="redes-info py-3">
-                         <a href="<?php the_field('face', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
-				        <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
-				        <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
-                        <a href="tel:<?php the_field('tele', 'option') ?>"><i class="bi bi-phone"></i></a>
+                         <a href="<?php the_field('face', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                            aria-label="<?php echo esc_attr__( 'Facebook', 'theme_skema' ); ?>"><i class="bi bi-facebook"></i></a>
+				        <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                            aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>"><i class="bi bi-instagram"></i></a>
+				        <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                            aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
+                        <a href="tel:<?php the_field('tele', 'option') ?>"
+                            aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone"></i></a>
                     </div>
                 </div>
 			</div>

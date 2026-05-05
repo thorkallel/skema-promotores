@@ -5,6 +5,13 @@
 get_header(); ?>
 <main id="primary" class="site-main site-main--inicio">
     <?php
+$home_h1 = trim( wp_strip_all_tags( (string) get_the_title() ) );
+if ( '' === $home_h1 ) {
+	$home_h1 = get_bloginfo( 'name' );
+}
+?>
+    <h1 class="screen-reader-text"><?php echo esc_html( $home_h1 ); ?></h1>
+    <?php
 $tipo_banner = get_field('tipo_banner');
 
 if ($tipo_banner === 'Video') : ?>
@@ -112,7 +119,7 @@ if ($tipo_banner === 'Video') : ?>
                 <div class="hero-yt-embed">
                     <iframe class="hero-yt-iframe" src="<?php echo esc_url( $embed_src ); ?>"
                         title="<?php echo esc_attr( $slide_title ); ?>" width="560" height="315"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
                         loading="<?php echo 0 === $idx ? 'eager' : 'lazy'; ?>"></iframe>
                 </div>
@@ -305,6 +312,9 @@ if ( $n_renvia > 0 ) :
                 <div class="col-sm-8 col-12 pt-sm-3 pl-sm-5">
                     <div class="row row-select">
                         <div class="col-sm-4 col-12 pl-sm-4 py-4 py-sm-0 div-select align-self-center">
+                            <label for="selectMapas" class="screen-reader-text">
+                                <?php esc_html_e( 'Selecciona un tipo de proyecto para ver su mapa', 'theme_skema' ); ?>
+                            </label>
                             <select id="selectMapas">
                                 <?php if (have_rows('info_mapas')): $c = 0;
                 				while (have_rows('info_mapas')): the_row(); ?>
@@ -326,7 +336,8 @@ if ( $n_renvia > 0 ) :
             while (have_rows('info_mapas')): the_row(); ?>
             <div id="map-<?php echo $c; ?>" class="divMapa row" style="display:none;">
                 <div class="col-sm-5 col-12 pl-sm-5 order-1 order-sm-0 py-sm-0 py-4">
-                    <img class="img-fluid pl-sm-5 w-100 img-mapa" src="<?php the_sub_field('img_mapa'); ?>" alt="">
+                    <img class="img-fluid pl-sm-5 w-100 img-mapa" src="<?php the_sub_field('img_mapa'); ?>"
+                        alt="<?php echo esc_attr( sprintf( __( 'Mapa de proyecto %d', 'theme_skema' ), ( $c + 1 ) ) ); ?>">
                 </div>
                 <div class="col-sm-7 col-12 pt-sm-5 pr-sm-5 order-0 order-sm-1 py-4">
                     <div class="row pt-sm-4 pr-sm-3">
@@ -334,9 +345,11 @@ if ( $n_renvia > 0 ) :
                             class="col-sm-6 col-12 py-4 pl-5 d-flex flex-sm-column justify-content-start flex-row align-items-center">
                             <?php $ico_txt1 = get_field('ico_txt1'); 
                                 if ($ico_txt1) :
-                                    $ico = $ico_txt1['ico']; ?>
+                                    $ico = $ico_txt1['ico'];
+                                    $ico_txt1_text = isset( $ico_txt1['text'] ) ? trim( (string) $ico_txt1['text'] ) : ''; ?>
                             <?php if ($ico) : ?>
-                            <img class="ico-cons" src="<?= esc_url($ico); ?>" alt="icono">
+                            <img class="ico-cons" src="<?= esc_url($ico); ?>"
+                                alt="<?php echo esc_attr( $ico_txt1_text !== '' ? $ico_txt1_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
                             <?php endif; ?>
                             <?php endif; ?>
                             <div class="ml-3 d-flex flex-column align-items-start align-items-sm-center">
@@ -354,9 +367,11 @@ if ( $n_renvia > 0 ) :
                             class="col-sm-6 col-12 py-4 pl-5 d-flex flex-sm-column justify-content-start flex-row align-items-center">
                             <?php $ico_txt2 = get_field('ico_txt2'); 
                                 if ($ico_txt2) :
-                                    $ico = $ico_txt2['ico']; ?>
+                                    $ico = $ico_txt2['ico'];
+                                    $ico_txt2_text = isset( $ico_txt2['text'] ) ? trim( (string) $ico_txt2['text'] ) : ''; ?>
                             <?php if ($ico) : ?>
-                            <img class="ico-proye" src="<?= esc_url($ico); ?>" alt="<?= esc_html($text); ?>">
+                            <img class="ico-proye" src="<?= esc_url($ico); ?>"
+                                alt="<?php echo esc_attr( $ico_txt2_text !== '' ? $ico_txt2_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
                             <?php endif; ?>
                             <?php endif; ?>
                             <div class="ml-3 d-flex flex-column align-items-start align-items-sm-center">
@@ -375,11 +390,13 @@ if ( $n_renvia > 0 ) :
                         <div
                             class="col-sm-6 col-2 py-4 px-0 px-sm-3 d-flex flex-column align-items-sm-end justify-content-sm-center div-border">
                             <div class="d-flex flex-column justify-content-center">
-                                <?php $ico_txt3 = get_field('ico_txt3'); 
+                            <?php $ico_txt3 = get_field('ico_txt3'); 
                                 if ($ico_txt3) :
-                                    $ico = $ico_txt3['ico']; ?>
+                                    $ico = $ico_txt3['ico'];
+                                    $ico_txt3_text = isset( $ico_txt3['text'] ) ? trim( (string) $ico_txt3['text'] ) : ''; ?>
                                 <?php if ($ico) : ?>
-                                <img class="ico-merc mx-auto" src="<?= esc_url($ico); ?>" alt="<?= esc_html($text); ?>">
+                                <img class="ico-merc mx-auto" src="<?= esc_url($ico); ?>"
+                                    alt="<?php echo esc_attr( $ico_txt3_text !== '' ? $ico_txt3_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
                                 <?php endif; ?>
                                 <?php endif; ?>
                                 <?php if ($ico_txt3) :

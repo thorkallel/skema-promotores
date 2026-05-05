@@ -53,7 +53,7 @@ $skema_v_poster = isset( $skema_medios_video['poster_url'] ) && is_string( $skem
 					src="<?php echo esc_url( $skema_v_iframe ); ?>"
 					title="<?php echo esc_attr( $skema_v_title ); ?>"
 					loading="lazy"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 					allowfullscreen
 				></iframe>
 			</div>

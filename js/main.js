@@ -1,4 +1,11 @@
 jQuery(document).ready(function($) {
+    // Si Slick no está cargado en esta vista, evitamos errores y mantenemos funcional el resto del JS.
+    if (typeof $.fn.slick !== 'function') {
+        $.fn.slick = function() {
+            return this;
+        };
+    }
+
     /**
      * Bootstrap 4: los submenús anidados en navbar llaman a Dropdown._clearMenus() dentro de toggle(),
      * lo que cierra el padre antes de abrir el hijo. Evitamos _clearMenus en el clic del toggle anidado
@@ -432,9 +439,13 @@ $(document).on('blur change', '#selectMapas', function() {
 
     $('.btn-cerrar').click(function() {
         $('.navbar-collapse').css({'right':'-100%'});
+        $('.btn-abrir').attr('aria-expanded', 'false');
+        $(this).attr('aria-expanded', 'false');
     });
     $('.btn-abrir').click(function(){
 		$('.navbar-collapse').css({'right':'0'});
+        $(this).attr('aria-expanded', 'true');
+        $('.btn-cerrar').attr('aria-expanded', 'true');
         
 	});
     // $('.navbar-toggler').click(function() {
@@ -457,6 +468,8 @@ $(document).on('blur change', '#selectMapas', function() {
             return;
         }
         $('.navbar-collapse').css({'right':'-100%'});
+        $('.btn-abrir').attr('aria-expanded', 'false');
+        $('.btn-cerrar').attr('aria-expanded', 'false');
     });
 
 

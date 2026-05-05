@@ -217,7 +217,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 			echo '<div class="hero-yt-slide prelanding-slide" data-slide-index="' . esc_attr( (string) $idx ) . '" data-youtube-id="' . esc_attr( $slide_yt_id ) . '">';
 			echo '<div class="hero-yt-embed">';
 			printf(
-				'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
+				'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
 				esc_url( $embed_src ),
 				esc_attr( $slide_title ),
 				esc_attr( 0 === $idx ? 'eager' : 'lazy' )
@@ -475,12 +475,14 @@ function theme_skema_get_landing_full_hero_copy_bundle( $post_id ) {
  * Bloque interior hero-content (referencia Renvia single-slider / project-page-hero).
  *
  * @param array{tagline: string, h1: string, location: string, logo_url: string} $bundle Datos de theme_skema_get_landing_full_hero_copy_bundle.
+ * @param string                                                           $heading_tag Etiqueta de encabezado permitida (h1 o h2).
  */
-function theme_skema_echo_landing_full_hero_inner_markup( array $bundle ) {
+function theme_skema_echo_landing_full_hero_inner_markup( array $bundle, $heading_tag = 'h2' ) {
 	$tagline  = isset( $bundle['tagline'] ) ? $bundle['tagline'] : '';
 	$h1       = isset( $bundle['h1'] ) ? $bundle['h1'] : '';
 	$location = isset( $bundle['location'] ) ? $bundle['location'] : '';
 	$logo_url = isset( $bundle['logo_url'] ) ? $bundle['logo_url'] : '';
+	$heading_tag = 'h1' === $heading_tag ? 'h1' : 'h2';
 
 	$show_branding_row = ( $logo_url !== '' );
 	?>
@@ -496,7 +498,8 @@ function theme_skema_echo_landing_full_hero_inner_markup( array $bundle ) {
                             loading="lazy" decoding="async" />
                     </div>
                     <div class="project-hero-text">
-                        <h1><?php echo esc_html( $h1 ); ?></h1>
+                        <<?php echo esc_attr( $heading_tag ); ?> class="project-hero-title"><?php echo esc_html( $h1 ); ?>
+                        </<?php echo esc_attr( $heading_tag ); ?>>
                         <?php if ( $tagline !== '' ) : ?>
                         <span class="tag-line"><?php echo esc_html( $tagline ); ?></span>
                         <?php endif; ?>
@@ -510,7 +513,8 @@ function theme_skema_echo_landing_full_hero_inner_markup( array $bundle ) {
                 </div>
                 <?php else : ?>
                 <div class="project-hero-text project-hero-text--solo">
-                    <h1><?php echo esc_html( $h1 ); ?></h1>
+                    <<?php echo esc_attr( $heading_tag ); ?> class="project-hero-title"><?php echo esc_html( $h1 ); ?>
+                    </<?php echo esc_attr( $heading_tag ); ?>>
                     <?php if ( $tagline !== '' ) : ?>
                     <span class="tag-line"><?php echo esc_html( $tagline ); ?></span>
                     <?php endif; ?>
@@ -557,8 +561,15 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 
 	$landing_title = get_the_title( $post_id );
 	$copy_bundle   = theme_skema_get_landing_full_hero_copy_bundle( $post_id );
+	$copy_h1       = isset( $copy_bundle['h1'] ) ? trim( (string) $copy_bundle['h1'] ) : '';
+	if ( '' === $copy_h1 ) {
+		$copy_h1 = trim( (string) $landing_title );
+	}
 
 	echo '<section class="landing-full-hero project-page-hero renvia-hero_one">';
+	if ( $copy_h1 !== '' ) {
+		echo '<h1 class="screen-reader-text">' . esc_html( $copy_h1 ) . '</h1>';
+	}
 	echo '<div class="shape-one" aria-hidden="true"><span></span></div>';
 
 	if ( 'images' === $tipo ) {
@@ -595,7 +606,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
 				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle );
+				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
 				echo '</div></div>';
 				++$slide_i;
 			}
@@ -625,7 +636,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
 				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle );
+				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
 				echo '</div></div>';
 				++$slide_m;
 			}
@@ -666,7 +677,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		echo '<div class="landing-full-slide landing-full-slide--youtube hero-yt-slide" data-slide-index="' . esc_attr( (string) $idx ) . '" data-youtube-id="' . esc_attr( $slide_yt_id ) . '">';
 		echo '<div class="hero-yt-embed">';
 		printf(
-			'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
+			'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
 			esc_url( $embed_src ),
 			esc_attr( $slide_title ),
 			esc_attr( 0 === $idx ? 'eager' : 'lazy' )
@@ -674,7 +685,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		echo '</div>';
 		echo '<div class="landing-full-slide__overlay landing-full-slide__overlay--youtube" aria-hidden="true"></div>';
 		echo '<div class="landing-full-slide__inner">';
-		theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle );
+		theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
 		echo '</div></div>';
 	}
 	echo '</div>';

@@ -94,6 +94,64 @@ function theme_skema_get_meta_description_text() {
 }
 
 /**
+ * Canonical principal según tipo de consulta.
+ *
+ * @return string
+ */
+function theme_skema_get_canonical_url() {
+	if ( is_singular() ) {
+		$url = get_permalink();
+		return $url ? (string) $url : '';
+	}
+
+	if ( is_front_page() || is_home() ) {
+		return (string) home_url( '/' );
+	}
+
+	if ( function_exists( 'wp_get_canonical_url' ) ) {
+		$canon = wp_get_canonical_url();
+		if ( is_string( $canon ) && '' !== $canon ) {
+			return $canon;
+		}
+	}
+
+	$paged = max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
+
+	if ( is_category() || is_tag() || is_tax() ) {
+		$term = get_queried_object();
+		if ( isset( $term->term_id, $term->taxonomy ) ) {
+			$url = get_term_link( (int) $term->term_id, (string) $term->taxonomy );
+			if ( ! is_wp_error( $url ) ) {
+				return $paged > 1 ? (string) get_pagenum_link( $paged ) : (string) $url;
+			}
+		}
+	}
+
+	if ( is_post_type_archive() ) {
+		$post_type = get_query_var( 'post_type' );
+		$post_type = is_array( $post_type ) ? reset( $post_type ) : $post_type;
+		$url       = is_string( $post_type ) ? get_post_type_archive_link( $post_type ) : '';
+		if ( $url ) {
+			return $paged > 1 ? (string) get_pagenum_link( $paged ) : (string) $url;
+		}
+	}
+
+	if ( is_author() ) {
+		$author_id = (int) get_query_var( 'author' );
+		if ( $author_id > 0 ) {
+			$url = get_author_posts_url( $author_id );
+			return $paged > 1 ? (string) get_pagenum_link( $paged ) : (string) $url;
+		}
+	}
+
+	if ( is_search() ) {
+		return (string) get_search_link();
+	}
+
+	return (string) home_url( add_query_arg( array(), $GLOBALS['wp']->request ?? '' ) );
+}
+
+/**
  * Meta description en el head.
  */
 function theme_skema_meta_description() {
@@ -116,22 +174,17 @@ function theme_skema_og_tags() {
 		return;
 	}
 	$desc = theme_skema_get_meta_description_text();
-	$url  = '';
+	$url  = theme_skema_get_canonical_url();
 	$type = 'website';
 	$title = wp_get_document_title();
 
 	if ( is_singular() ) {
-		$url  = get_permalink();
 		$type = 'article';
-	} elseif ( is_front_page() || is_home() ) {
-		$url = home_url( '/' );
-	} elseif ( function_exists( 'wp_get_canonical_url' ) ) {
-		$canon = wp_get_canonical_url();
-		$url   = $canon ? $canon : '';
 	}
 
 	echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
 	echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
+	echo '<meta property="og:locale" content="' . esc_attr( str_replace( '_', '-', get_locale() ) ) . '">' . "\n";
 	if ( $url ) {
 		echo '<meta property="og:url" content="' . esc_url( $url ) . '">' . "\n";
 	}
@@ -141,8 +194,10 @@ function theme_skema_og_tags() {
 	}
 
 	$og_image = '';
+	$og_image_id = 0;
 	if ( is_singular() && has_post_thumbnail() ) {
-		$og_image = get_the_post_thumbnail_url( null, 'large' );
+		$og_image_id = (int) get_post_thumbnail_id();
+		$og_image    = get_the_post_thumbnail_url( null, 'large' );
 	} elseif ( function_exists( 'get_field' ) ) {
 		$logo = get_field( 'logo_marca', 'option' );
 		if ( $logo ) {
@@ -151,10 +206,18 @@ function theme_skema_og_tags() {
 	}
 	if ( $og_image ) {
 		echo '<meta property="og:image" content="' . esc_url( $og_image ) . '">' . "\n";
+		if ( $og_image_id > 0 ) {
+			$image_meta = wp_get_attachment_metadata( $og_image_id );
+			if ( is_array( $image_meta ) && ! empty( $image_meta['width'] ) && ! empty( $image_meta['height'] ) ) {
+				echo '<meta property="og:image:width" content="' . esc_attr( (string) (int) $image_meta['width'] ) . '">' . "\n";
+				echo '<meta property="og:image:height" content="' . esc_attr( (string) (int) $image_meta['height'] ) . '">' . "\n";
+			}
+		}
 	}
 
 	// Twitter Cards (alineadas con Open Graph).
 	echo '<meta name="twitter:card" content="summary_large_image">' . "\n";
+	echo '<meta name="twitter:site" content="@' . esc_attr( sanitize_title( get_bloginfo( 'name' ) ) ) . '">' . "\n";
 	echo '<meta name="twitter:title" content="' . esc_attr( $title ) . '">' . "\n";
 	if ( $desc ) {
 		echo '<meta name="twitter:description" content="' . esc_attr( $desc ) . '">' . "\n";
@@ -164,6 +227,21 @@ function theme_skema_og_tags() {
 	}
 }
 add_action( 'wp_head', 'theme_skema_og_tags', 2 );
+
+/**
+ * Canonical en el head cuando no hay plugin SEO.
+ */
+function theme_skema_canonical_tag() {
+	if ( theme_skema_seo_plugin_active() ) {
+		return;
+	}
+	$canonical = theme_skema_get_canonical_url();
+	if ( '' === $canonical ) {
+		return;
+	}
+	echo '<link rel="canonical" href="' . esc_url( $canonical ) . '">' . "\n";
+}
+add_action( 'wp_head', 'theme_skema_canonical_tag', 2 );
 
 /**
  * JSON-LD Organization / RealEstateAgent.

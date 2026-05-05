@@ -131,7 +131,8 @@ get_header(); ?>
                     <?php endif; ?>
                     <?php $banner_movil = get_field('banner_movil');
                 if ($banner_movil) : ?>
-                    <img src="<?php echo esc_url($banner_movil); ?>" alt="Banner"
+                    <img src="<?php echo esc_url($banner_movil); ?>"
+                        alt="<?php echo esc_attr( sprintf( __( 'Banner de %s', 'theme_skema' ), get_the_title() ) ); ?>"
                         class="img-fluid d-sm-none d-block w-100">
                     <?php endif; ?>
                     <div
@@ -159,7 +160,7 @@ get_header(); ?>
                     $active_tab_index = theme_skema_proyectos_resolve_active_tab( $terms );
                     foreach ($terms as $index => $term) { ?>
                         <li class="col-sm-3 px-4 col-6 mb-4 mb-sm-0">
-                            <a href="#<?= $term->slug; ?>"
+                            <a id="<?= $term->slug; ?>-tab" href="#<?= $term->slug; ?>"
                                 class="nav-link btn-catego <?php echo ($index === $active_tab_index) ? 'active' : ''; ?>"
                                 data-toggle="tab" role="tab" aria-controls="<?= $term->slug ?>"
                                 aria-selected="<?= $index === $active_tab_index ? 'true' : 'false' ?>">
@@ -223,7 +224,7 @@ get_header(); ?>
             </div>
             <div class="row justify-content-center">
                 <div class="col-sm-7 col-12">
-                    <a href="" class="btn-intere">Estoy interesado en un proyecto</a>
+                    <a href="#info" class="btn-intere">Estoy interesado en un proyecto</a>
                 </div>
             </div>
         </div>

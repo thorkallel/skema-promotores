@@ -184,7 +184,9 @@
 	text-align: center;
 }
 
-.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1 {
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1,
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h2,
+.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text .project-hero-title {
 	margin: 0 0 6px;
 	font-size: clamp(26px, 6vw, 40px);
 	line-height: 1.1;
@@ -285,7 +287,9 @@
 		width: auto;
 	}
 
-	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1 {
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h1,
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text h2,
+	.site-main--landings.landing-phase--landing .landing-full-hero .hero-content .project-hero-text .project-hero-title {
 		font-size: clamp(28px, 3vw, 46px);
 	}
 

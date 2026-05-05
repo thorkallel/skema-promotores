@@ -25,16 +25,20 @@
                     <?php endif; ?>
                     <div class="redes-info py-3">
                         <?php if(get_field('face', 'option')): ?>
-                            <a href="<?php the_field('face', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-facebook"></i></a>
+                            <a href="<?php the_field('face', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                                aria-label="<?php echo esc_attr__( 'Facebook', 'theme_skema' ); ?>"><i class="bi bi-facebook"></i></a>
                         <?php endif; ?>
                         <?php if(get_field('inst', 'option')): ?>
-				            <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-instagram"></i></a>
+				            <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                                aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>"><i class="bi bi-instagram"></i></a>
                         <?php endif; ?>
                         <?php if(get_field('wp', 'option')): ?>
-				            <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"><i class="bi bi-whatsapp"></i></a>
+				            <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                                aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
                         <?php endif; ?>
                         <?php if(get_field('tele', 'option')): ?>
-                            <a href="tel:<?php the_field('tele', 'option') ?>"><i class="bi bi-phone"></i></a>
+                            <a href="tel:<?php the_field('tele', 'option') ?>"
+                                aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone"></i></a>
                         <?php endif; ?>
                     </div>
                 </div>
