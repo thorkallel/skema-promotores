@@ -8,6 +8,35 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Definición ACF del logo de marca (meta `logo_proyecto`), compartida por proyectos y landings.
+ *
+ * @param string $context 'proyectos' | 'landings'.
+ * @return array<string, mixed>
+ */
+function theme_skema_acf_ficha_logo_proyecto_field_row( $context ) {
+	$is_proyectos = ( 'proyectos' === $context );
+
+	$field_key = $is_proyectos
+		? 'field_skema_ficha_logo_proyecto'
+		: 'field_skema_ficha_logo_proyecto_landings';
+
+	$instructions = $is_proyectos
+		? __( 'Opcional. Marca del desarrollo: carrusel de inicio, fichas y cabecera de la ficha del proyecto.', 'theme_skema' )
+		: __( 'Opcional. Marca del desarrollo en el carrusel de inicio y en la tarjeta de ficha (como en proyectos).', 'theme_skema' );
+
+	return array(
+		'key'           => $field_key,
+		'label'         => __( 'Logo del proyecto', 'theme_skema' ),
+		'name'          => 'logo_proyecto',
+		'type'          => 'image',
+		'instructions'  => $instructions,
+		'return_format' => 'array',
+		'preview_size'  => 'medium',
+		'required'      => 0,
+	);
+}
+
+/**
  * Campos reutilizables (mismos nombres en ambos CPT para unificar post_meta).
  *
  * @param string $context 'proyectos' | 'landings'.
@@ -74,25 +103,15 @@ function theme_skema_acf_ficha_comun_fields( $context ) {
 		),
 	);
 
+	// Tras «Imagen carrusel»: logo (misma meta `logo_proyecto` en proyectos y landings; usa el carrusel de inicio).
+	array_splice(
+		$fields,
+		2,
+		0,
+		array( theme_skema_acf_ficha_logo_proyecto_field_row( $context ) )
+	);
+
 	if ( $is_proyectos ) {
-		// Tras «Imagen carrusel»: logo del desarrollo (misma meta que usa el carrusel de inicio).
-		array_splice(
-			$fields,
-			2,
-			0,
-			array(
-				array(
-					'key'           => 'field_skema_ficha_logo_proyecto',
-					'label'         => __( 'Logo del proyecto', 'theme_skema' ),
-					'name'          => 'logo_proyecto',
-					'type'          => 'image',
-					'instructions'  => __( 'Opcional. Marca del desarrollo: carrusel de inicio, fichas y cabecera de la ficha del proyecto.', 'theme_skema' ),
-					'return_format' => 'array',
-					'preview_size'  => 'medium',
-					'required'      => 0,
-				),
-			)
-		);
 		$fields[] = array(
 			'key'           => 'field_skema_ficha_ciudad_txt_p',
 			'label'         => __( 'Ciudad (texto alternativo)', 'theme_skema' ),
