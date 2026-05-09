@@ -152,20 +152,21 @@ add_action( 'after_setup_theme', 'theme_skema_content_width', 0 );
 
 function wp_change_cat_checkboxes_to_radios(){
     ?>
-    <script type="text/javascript">
-        jQuery(document).ready(function($){
-            // Lista de los IDs de los divs de las taxonomías que quieres modificar
-            var taxonomies = ['tipo_proyectodiv', 'estado_proyectodiv', 'ciudad_proyectodiv']; // Asegúrate que estos son los IDs correctos
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+    // Lista de los IDs de los divs de las taxonomías que quieres modificar
+    var taxonomies = ['tipo_proyectodiv', 'estado_proyectodiv',
+    'ciudad_proyectodiv']; // Asegúrate que estos son los IDs correctos
 
-            // Cambiar cada checkbox de cada taxonomía a radio buttons
-            taxonomies.forEach(function(taxonomy){
-                $('#' + taxonomy).find('input[type=checkbox]').each(function(){
-                    $(this).replaceWith($(this).clone(true).attr('type', 'radio'));
-                });
-            });
+    // Cambiar cada checkbox de cada taxonomía a radio buttons
+    taxonomies.forEach(function(taxonomy) {
+        $('#' + taxonomy).find('input[type=checkbox]').each(function() {
+            $(this).replaceWith($(this).clone(true).attr('type', 'radio'));
         });
-    </script>
-    <?php
+    });
+});
+</script>
+<?php
 }
 
 add_action('admin_footer', 'wp_change_cat_checkboxes_to_radios');
@@ -293,6 +294,16 @@ add_filter( 'upload_mimes', 'custom_mimes' );
 require get_template_directory() . '/inc/cpt-landings.php';
 
 /**
+ * Landings: menú y pantallas de admin solo para usuarios autorizados (lista en opción o filtros).
+ */
+require get_template_directory() . '/inc/landings-admin-menu-access.php';
+
+/**
+ * Landings: lista de IDs permitidos vía tema (filtro `theme_skema_landings_menu_user_ids`).
+ */
+require get_template_directory() . '/inc/landings-menu-allowlist.php';
+
+/**
  * Landings: variante de plantilla (ACF) + CSS por capas + partial entry-{variante}.php.
  */
 require get_template_directory() . '/inc/landings-variant.php';
@@ -317,6 +328,7 @@ require get_template_directory() . '/inc/landings-ficha-apartamento-fa.php';
 require get_template_directory() . '/inc/landings-info-proyecto.php';
 require get_template_directory() . '/inc/landings-medios-galerias.php';
 require get_template_directory() . '/inc/landings-respaldo-slider.php';
+require get_template_directory() . '/inc/landings-google-map.php';
 
 /**
  * Implement the Custom Header feature.
@@ -379,17 +391,17 @@ function add_custom_js() {
 function mi_custom_login_logo() {
 	$logo_url = esc_url( get_stylesheet_directory_uri() . '/img/logo-skema-color.png' ); 
     ?>
-   <style type="text/css">
-        #login h1 a, .login h1 a {
-            background-image: url(<?php echo $logo_url; ?>);
-          
-            background-size: contain;
-			width: 100%;
+<style type="text/css">
+#login h1 a,
+.login h1 a {
+    background-image: url(<?php echo $logo_url; ?>);
+
+    background-size: contain;
+    width: 100%;
     height: 60px;
-        }
-		
-    </style>
-	<?php
+}
+</style>
+<?php
 }
 add_action( 'login_enqueue_scripts', 'mi_custom_login_logo' );
 
@@ -407,44 +419,47 @@ add_filter( 'login_headertext', 'cambiar_title_logo_login' );
 // Agregar pie de página personalizado en la pantalla de inicio de sesión
 function agregar_pie_de_pagina_login() {
     ?>
-    <div class="container-fluid pb-sm-0 pb-0">
-        <div class="row">
-            <div class="col-12">
-                <div class="copyrights">					
-                    <a class="" href="https://himalayadigital.co/" target="_blank">
-                        Diseñado y desarrollado por:
-                        <img class="logo-himalaya" src="<?php echo esc_url(get_template_directory_uri() . '/img/logo-himalaya-azul.svg'); ?>" alt="logo-himalaya-sem" loading="lazy">
-                    </a>
-                </div>
+<div class="container-fluid pb-sm-0 pb-0">
+    <div class="row">
+        <div class="col-12">
+            <div class="copyrights">
+                <a class="" href="https://himalayadigital.co/" target="_blank">
+                    Diseñado y desarrollado por:
+                    <img class="logo-himalaya"
+                        src="<?php echo esc_url(get_template_directory_uri() . '/img/logo-himalaya-azul.svg'); ?>"
+                        alt="logo-himalaya-sem" loading="lazy">
+                </a>
             </div>
         </div>
     </div>
-    <style>
-       .copyrights>a {
-	font-size: 0.9em;
-	color: #06379c;
-	display: flex;
+</div>
+<style>
+.copyrights>a {
+    font-size: 0.9em;
+    color: #06379c;
+    display: flex;
     width: 100%;
     align-items: center;
     justify-content: center;
-	flex-direction: column;
-	text-decoration: none;
-  }
-  .copyrights>a img{
-	width: 150px;
-  }
-  .copyrights>a:hover{
-	text-decoration: underline;
-  }
- 
+    flex-direction: column;
+    text-decoration: none;
+}
 
-  .copyrights {
-	display: flex;
-	justify-content: center;
-  }
-        
-    </style>
-    <?php
+.copyrights>a img {
+    width: 150px;
+}
+
+.copyrights>a:hover {
+    text-decoration: underline;
+}
+
+
+.copyrights {
+    display: flex;
+    justify-content: center;
+}
+</style>
+<?php
 }
 add_action('login_footer', 'agregar_pie_de_pagina_login');
 

@@ -114,6 +114,44 @@ function theme_skema_landing_get_ficha_apartamento_categorias_for_display( $post
 }
 
 /**
+ * Ítems de la lista «Zonas sociales» (texto + opcional icono Font Awesome).
+ *
+ * @param int $post_id ID de la entrada landings.
+ * @return array<int, array{fa_classes: string, texto: string}>
+ */
+function theme_skema_landing_get_zonas_sociales_items_for_display( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || ! function_exists( 'get_field' ) ) {
+		return array();
+	}
+
+	$rows = get_field( 'skema_lland_zonas_items', $post_id );
+	if ( ! is_array( $rows ) ) {
+		return array();
+	}
+
+	$out = array();
+	foreach ( $rows as $row ) {
+		if ( ! is_array( $row ) ) {
+			continue;
+		}
+
+		$texto = isset( $row['texto'] ) ? trim( (string) $row['texto'] ) : '';
+		if ( $texto === '' ) {
+			continue;
+		}
+
+		$fa_raw = isset( $row['fa_classes'] ) ? $row['fa_classes'] : '';
+		$out[]  = array(
+			'fa_classes' => theme_skema_sanitize_fontawesome_class_attr( $fa_raw ),
+			'texto'      => $texto,
+		);
+	}
+
+	return $out;
+}
+
+/**
  * Encola Font Awesome 6 (CSS completo) en single landings fase «landing».
  *
  * @return void

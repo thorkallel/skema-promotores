@@ -324,7 +324,7 @@
 @media (min-width: 768px) {
 	.site-main--landings.landing-phase--landing .skema-landing-project-details-sec {
 		padding-top: 3rem;
-		padding-bottom: 2rem;
+		padding-bottom: .5rem;
 	}
 }
 
@@ -433,7 +433,7 @@
 	position: relative;
 	z-index: 3;
 	max-width: 1340px;
-	margin: 60px auto;
+	margin: 60px auto 30px;
 	padding: 0 20px;
 }
 
@@ -443,7 +443,7 @@
 
 @media (min-width: 768px) {
 	.site-main--landings.landing-phase--landing .skema-landing-project-details-sec ~ .landing-main {
-		margin-top: 2rem;
+		margin-top: .5rem;
 	}
 }
 
@@ -583,6 +583,52 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-ficha-apto-item__text {
+	min-width: 0;
+}
+
+/* Zonas sociales — lista vertical con icono FA opcional (misma familia visual que ficha) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap ul.skema-zonas-sociales-list {
+	list-style: none;
+	margin: 0 0 2.5rem;
+	padding: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-zonas-sociales-item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	min-width: 0;
+	margin: 0 0 0.875rem;
+	padding: 0;
+	font-size: 0.9375rem;
+	line-height: 1.35;
+	color: #1c1c25;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-zonas-sociales-item:last-child {
+	margin-bottom: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-zonas-sociales-item__icon {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 1px solid rgba(28, 28, 37, 0.12);
+	border-radius: 6px;
+	line-height: 1;
+	color: var(--nara, #fc7416);
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-zonas-sociales-item__icon i {
+	font-size: 1.125rem;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-zonas-sociales-item__text {
 	min-width: 0;
 }
 
@@ -1072,7 +1118,13 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 0 0.5rem 0.25rem;
+	padding: 0 1rem 0.25rem;
+}
+
+@media (min-width: 768px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .renvia-client-item {
+		padding: 0 1.35rem 0.25rem;
+	}
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-slider-item-title {
@@ -1084,7 +1136,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	opacity: 0.8;
 	margin: 0 0 0.5rem;
 	text-align: center;
-	max-width: 10rem;
+	max-width: 15.6rem;
 	line-height: 1.25;
 }
 
@@ -1092,7 +1144,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 3.5rem;
+	min-height: 5.1rem;
 	width: 100%;
 }
 
@@ -1100,7 +1152,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	display: block;
 	max-width: 100%;
 	width: auto;
-	max-height: 52px;
+	max-height: 86px;
 	height: auto;
 	object-fit: contain;
 }
@@ -1110,13 +1162,17 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 @media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .renvia-client-item {
+		padding: 0 1.5rem 0.25rem;
+	}
+
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-slider-item-title {
 		font-size: 0.75rem;
-		max-width: 8rem;
+		max-width: 13.2rem;
 	}
 
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .clients-wrapper .client-img img {
-		max-height: 56px;
+		max-height: 101px;
 	}
 }
 
@@ -1179,6 +1235,36 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-brochure-btn.theme-btn {
 		padding: 1.1rem 1.85rem;
 		font-size: 0.9375rem;
+	}
+}
+
+/* Mapa Google Maps (embed responsive) */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-mapa-wrap {
+	overflow: hidden;
+	border-radius: 6px;
+	background: #e8eaed;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-mapa-ratio {
+	position: relative;
+	width: 100%;
+	padding-bottom: 56.25%;
+	height: 0;
+	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-mapa-ratio iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+@media (min-width: 992px) {
+	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-mapa-ratio {
+		padding-bottom: 50%;
 	}
 }
 

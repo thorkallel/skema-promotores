@@ -264,6 +264,15 @@
 	text-align: left;
 }
 
+.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__intro.entry-content > p {
+	margin-top: 0;
+	margin-bottom: 0.85em;
+}
+
+.site-main--landings.landing-phase--prelanding .prelanding-copy .prelanding-copy__intro.entry-content > p:last-child {
+	margin-bottom: 0;
+}
+
 .site-main--landings.landing-phase--prelanding .prelanding-points {
 	list-style: none;
 	padding: 0;

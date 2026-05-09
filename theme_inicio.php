@@ -104,7 +104,7 @@ if ($tipo_banner === 'Video') : ?>
 			foreach ( $slides_yt as $idx => $slide_yt ) {
 				$autoplay = 0 === $idx ? '1' : '0';
 				$embed_src = sprintf(
-					'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&autoplay=%s',
+					'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&enablejsapi=1&autoplay=%s',
 					rawurlencode( $slide_yt['id'] ),
 					$autoplay
 				);

@@ -17,7 +17,9 @@ if ( ! isset( $skema_respaldo_items ) || ! is_array( $skema_respaldo_items ) || 
 <div class="clients-slider skema-landing-aliados-slider skema-landing-slot skema-landing-slot--aliados-slider">
 	<?php foreach ( $skema_respaldo_items as $skema_respaldo_row ) : ?>
 	<div class="renvia-client-item">
+		<?php if ( isset( $skema_respaldo_row['texto'] ) && $skema_respaldo_row['texto'] !== '' ) : ?>
 		<p class="client-slider-item-title"><?php echo esc_html( $skema_respaldo_row['texto'] ); ?></p>
+		<?php endif; ?>
 		<div class="client-img renvia-image">
 			<img
 				src="<?php echo esc_url( $skema_respaldo_row['src'] ); ?>"

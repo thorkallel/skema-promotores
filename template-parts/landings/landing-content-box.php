@@ -25,10 +25,18 @@ if ( function_exists( 'get_field' ) && function_exists( 'theme_skema_sanitize_cf
 
 $skema_lland_show_lead_sidebar = ( $skema_lland_cf7 !== '' );
 
+// Títulos de bloque: campo texto opcional en ACF o texto por defecto (traducible).
+$skema_section_title = function ( $acf_field, $fallback ) use ( $post_id ) {
+	if ( ! function_exists( 'theme_skema_landing_get_section_title_or_default' ) ) {
+		return $fallback;
+	}
+
+	return theme_skema_landing_get_section_title_or_default( $post_id, $acf_field, $fallback );
+};
+
 $skema_desc_proyecto_raw = '';
 $skema_desc_inmueble_raw = '';
-$skema_zonas_intro_raw    = '';
-$skema_zonas_items_textos = array();
+$skema_zonas_intro_raw = '';
 
 if ( function_exists( 'get_field' ) ) {
 	$skema_desc_proyecto_raw = get_field( 'skema_lland_desc_proyecto', $post_id, false );
@@ -37,26 +45,21 @@ if ( function_exists( 'get_field' ) ) {
 	$skema_desc_inmueble_raw = is_string( $skema_desc_inmueble_raw ) ? $skema_desc_inmueble_raw : '';
 	$skema_zonas_intro_raw   = get_field( 'skema_lland_zonas_intro', $post_id, false );
 	$skema_zonas_intro_raw   = is_string( $skema_zonas_intro_raw ) ? $skema_zonas_intro_raw : '';
-	$skema_zonas_rows         = get_field( 'skema_lland_zonas_items', $post_id );
-	if ( is_array( $skema_zonas_rows ) ) {
-		foreach ( $skema_zonas_rows as $skema_zonas_row ) {
-			if ( ! is_array( $skema_zonas_row ) ) {
-				continue;
-			}
-			$skema_zona_txt = isset( $skema_zonas_row['texto'] ) ? trim( (string) $skema_zonas_row['texto'] ) : '';
-			if ( $skema_zona_txt !== '' ) {
-				$skema_zonas_items_textos[] = $skema_zona_txt;
-			}
-		}
-	}
 }
+
+/*
+ * Zonas sociales — lista: texto + opcional FA (inc/landings-ficha-apartamento-fa.php).
+ */
+$skema_zonas_items = function_exists( 'theme_skema_landing_get_zonas_sociales_items_for_display' )
+	? theme_skema_landing_get_zonas_sociales_items_for_display( $post_id )
+	: array();
 
 $skema_has_wysiwyg = function_exists( 'theme_skema_landing_acf_wysiwyg_has_content' );
 
 $skema_show_desc_proyecto = $skema_has_wysiwyg && theme_skema_landing_acf_wysiwyg_has_content( $skema_desc_proyecto_raw );
 $skema_show_desc_inmueble = $skema_has_wysiwyg && theme_skema_landing_acf_wysiwyg_has_content( $skema_desc_inmueble_raw );
 $skema_show_zonas         = ( $skema_has_wysiwyg && theme_skema_landing_acf_wysiwyg_has_content( $skema_zonas_intro_raw ) )
-	|| count( $skema_zonas_items_textos ) > 0;
+	|| count( $skema_zonas_items ) > 0;
 
 /*
  * Ficha del apartamento: ACF repetidor anidado + Font Awesome (ver inc/landings-ficha-apartamento-fa.php).
@@ -103,13 +106,24 @@ $skema_brochure_cta = function_exists( 'theme_skema_landing_get_brochure_cta_dat
 	: null;
 $skema_show_respaldo_section = $skema_show_aliados || null !== $skema_brochure_cta;
 
+$skema_mapa_embed_html = function_exists( 'theme_skema_landing_get_google_maps_embed_html' )
+	? theme_skema_landing_get_google_maps_embed_html( $post_id )
+	: '';
+$skema_show_mapa = $skema_mapa_embed_html !== '';
+
+$skema_mapa_titulo = '';
+if ( $skema_show_mapa ) {
+	$skema_mapa_titulo = $skema_section_title( 'skema_lland_mapa_titulo', __( 'Ubicación', 'theme_skema' ) );
+}
+
 $skema_main_has_any = $skema_show_desc_proyecto
 	|| $skema_show_desc_inmueble
 	|| $skema_show_zonas
 	|| $skema_show_ficha
 	|| $skema_show_info
 	|| $skema_show_medios
-	|| $skema_show_respaldo_section;
+	|| $skema_show_respaldo_section
+	|| $skema_show_mapa;
 
 if ( ! $skema_main_has_any && ! $skema_lland_show_lead_sidebar ) {
 	return;
@@ -140,7 +154,7 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_desc_proyecto ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Descripción del proyecto', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_desc_proyecto', __( 'Descripción del proyecto', 'theme_skema' ) ) ); ?>
                 </h3>
                 <div class="skema-landing-slot skema-landing-slot--descripcion-proyecto entry-content">
                     <?php echo apply_filters( 'the_content', $skema_desc_proyecto_raw ); ?>
@@ -153,7 +167,7 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_desc_inmueble ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Descripción del inmueble (tipología)', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_desc_inmueble', __( 'Descripción del inmueble (tipología)', 'theme_skema' ) ) ); ?>
                 </h3>
                 <div class="skema-landing-slot skema-landing-slot--descripcion-inmueble entry-content">
                     <?php echo apply_filters( 'the_content', $skema_desc_inmueble_raw ); ?>
@@ -166,17 +180,26 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_zonas ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Zonas sociales', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_zonas_sociales', __( 'Zonas sociales', 'theme_skema' ) ) ); ?>
                 </h3>
                 <?php if ( $skema_has_wysiwyg && theme_skema_landing_acf_wysiwyg_has_content( $skema_zonas_intro_raw ) ) : ?>
                 <div class="skema-landing-slot skema-landing-slot--zonas-sociales-intro entry-content">
                     <?php echo apply_filters( 'the_content', $skema_zonas_intro_raw ); ?>
                 </div>
                 <?php endif; ?>
-                <?php if ( count( $skema_zonas_items_textos ) > 0 ) : ?>
-                <ul class="mb-40 skema-landing-slot skema-landing-slot--zonas-sociales-list">
-                    <?php foreach ( $skema_zonas_items_textos as $skema_zona_item ) : ?>
-                    <li><?php echo esc_html( $skema_zona_item ); ?></li>
+                <?php if ( count( $skema_zonas_items ) > 0 ) : ?>
+                <ul
+                    class="mb-40 skema-zonas-sociales-list skema-landing-slot skema-landing-slot--zonas-sociales-list">
+                    <?php foreach ( $skema_zonas_items as $skema_zona_item ) : ?>
+                    <li class="skema-zonas-sociales-item">
+                        <?php if ( $skema_zona_item['fa_classes'] !== '' ) : ?>
+                        <span class="skema-zonas-sociales-item__icon" aria-hidden="true">
+                            <i class="<?php echo esc_attr( $skema_zona_item['fa_classes'] ); ?>"></i>
+                        </span>
+                        <?php endif; ?>
+                        <span
+                            class="skema-zonas-sociales-item__text"><?php echo esc_html( $skema_zona_item['texto'] ); ?></span>
+                    </li>
                     <?php endforeach; ?>
                 </ul>
                 <?php endif; ?>
@@ -188,7 +211,7 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_ficha ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Ficha del apartamento', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_ficha_apartamento', __( 'Ficha del apartamento', 'theme_skema' ) ) ); ?>
                 </h3>
                 <div
                     class="features-amenities-list project-ficha-grid project-ficha-grid--fa-cats mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--ficha-apartamento">
@@ -218,7 +241,7 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_info ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Información del proyecto', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_info_proyecto', __( 'Información del proyecto', 'theme_skema' ) ) ); ?>
                 </h3>
                 <div class="project-info-box mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--info-proyecto">
                     <ul class="skema-lland-info-proyecto-list">
@@ -236,7 +259,7 @@ $skema_prior_content_block = false;
                 <?php if ( $skema_show_medios ) : ?>
                 <h3
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
-                    <?php esc_html_e( 'Medios del proyecto', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_medios', __( 'Medios del proyecto', 'theme_skema' ) ) ); ?>
                 </h3>
                 <div class="property-media-box mt-40 skema-landing-slot skema-landing-slot--medios">
                     <div class="row align-items-center">
@@ -355,7 +378,7 @@ $skema_prior_content_block = false;
 					$skema_aliados_h3_class = $skema_aliados_h3_class === '' ? 'mb-70' : $skema_aliados_h3_class . ' mb-70';
 					?>
                 <h3 class="<?php echo esc_attr( $skema_aliados_h3_class ); ?>">
-                    <?php esc_html_e( 'Con el respaldo de:', 'theme_skema' ); ?>
+                    <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_respaldo', __( 'Con el respaldo de:', 'theme_skema' ) ) ); ?>
                 </h3>
                 <?php endif; ?>
                 <div class="property-media-box mt-40 mb-60 skema-landing-slot skema-landing-slot--aliados">
@@ -383,6 +406,27 @@ $skema_prior_content_block = false;
                             </div>
                         </div>
                     </section>
+                </div>
+                <?php $skema_prior_content_block = true; ?>
+                <?php endif; ?>
+
+                <?php if ( $skema_show_mapa ) : ?>
+                <?php
+					$skema_mapa_h3_class = $skema_content_section_heading_class( $skema_prior_content_block );
+					$skema_mapa_h3_class = $skema_mapa_h3_class === '' ? 'mb-40' : $skema_mapa_h3_class . ' mb-40';
+					?>
+                <h3 class="<?php echo esc_attr( $skema_mapa_h3_class ); ?>">
+                    <?php echo esc_html( $skema_mapa_titulo ); ?>
+                </h3>
+                <div
+                    class="skema-landing-slot skema-landing-slot--mapa property-media-box mt-0 mb-60 skema-landing-mapa-wrap">
+                    <div class="skema-landing-mapa-ratio">
+                        <?php
+						if ( function_exists( 'theme_skema_landing_google_maps_iframe_allowed_html' ) ) {
+							echo wp_kses( $skema_mapa_embed_html, theme_skema_landing_google_maps_iframe_allowed_html() );
+						}
+						?>
+                    </div>
                 </div>
                 <?php $skema_prior_content_block = true; ?>
                 <?php endif; ?>

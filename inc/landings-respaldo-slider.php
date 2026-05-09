@@ -35,9 +35,6 @@ function theme_skema_landing_get_respaldo_slider_items( $post_id ) {
 		}
 
 		$texto = isset( $row['texto'] ) ? trim( (string) $row['texto'] ) : '';
-		if ( $texto === '' ) {
-			continue;
-		}
 
 		$logo = isset( $row['logo'] ) ? $row['logo'] : null;
 		$url  = theme_skema_landing_medios_resolve_image_url( $logo, 'medium' );
@@ -60,11 +57,17 @@ function theme_skema_landing_get_respaldo_slider_items( $post_id ) {
 		if ( function_exists( 'theme_skema_landing_medios_get_attachment_alt' ) && $att_id > 0 ) {
 			$alt_meta = theme_skema_landing_medios_get_attachment_alt( $att_id );
 		}
-		$alt = $alt_meta !== '' ? $alt_meta : sprintf(
-			/* translators: %s: short label above the logo (e.g. company role). */
-			__( 'Logo — %s', 'theme_skema' ),
-			$texto
-		);
+		if ( $alt_meta !== '' ) {
+			$alt = $alt_meta;
+		} elseif ( $texto !== '' ) {
+			$alt = sprintf(
+				/* translators: %s: short label above the logo (e.g. company role). */
+				__( 'Logo — %s', 'theme_skema' ),
+				$texto
+			);
+		} else {
+			$alt = __( 'Logo', 'theme_skema' );
+		}
 
 		$items[] = array(
 			'texto' => $texto,

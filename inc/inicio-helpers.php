@@ -383,7 +383,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 
                     <div class="service-ficha__spec-copy">
                         <i class="bi bi-rulers service-ficha__spec-icon" aria-hidden="true"></i>
-                        <span class="service-ficha__label"><?php esc_html_e( 'Superficie', 'theme_skema' ); ?></span>
+                        <span class="service-ficha__label"><?php esc_html_e( 'Area', 'theme_skema' ); ?></span>
 
                         <?php if ( $sup_strong ) : ?>
                         <strong class="service-ficha__sup-m2"
@@ -398,7 +398,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 
                     <div class="service-ficha__spec-copy">
                         <i class="bi bi-currency-dollar service-ficha__spec-icon" aria-hidden="true"></i>
-                        <span class="service-ficha__label"><?php esc_html_e( 'Desde', 'theme_skema' ); ?></span>
+                        <span class="service-ficha__label"><?php esc_html_e( 'Precio desde', 'theme_skema' ); ?></span>
                     </div>
                     <span class="service-ficha__amount"><?php echo esc_html( $precio !== '' ? $precio : '—' ); ?></span>
                 </div>

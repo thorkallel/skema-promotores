@@ -164,21 +164,11 @@ jQuery(document).ready(function($) {
     });
     var $ytBanners = $('.slick-slider-banner--youtube');
     if ($ytBanners.length) {
-        $ytBanners.on('init afterChange', function (event, slick, currentSlide) {
+        // Aplica el efecto de fondo del menú cuando hay vídeo de YouTube en el hero
+        $ytBanners.on('init afterChange', function () {
             $('#principal-menu').addClass('navbar-glass-youtube');
-            var idx = typeof currentSlide === 'number' ? currentSlide : (slick && typeof slick.currentSlide === 'number' ? slick.currentSlide : 0);
-            $(this).find('.hero-yt-slide').each(function () {
-                var $wrap = $(this);
-                var slideIndex = parseInt($wrap.attr('data-slide-index'), 10);
-                var vid = $wrap.attr('data-youtube-id');
-                if (!vid || isNaN(slideIndex)) {
-                    return;
-                }
-                var ap = slideIndex === idx ? '1' : '0';
-                var url = 'https://www.youtube-nocookie.com/embed/' + vid + '?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&autoplay=' + ap;
-                $wrap.find('iframe').attr('src', url);
-            });
         });
+
         $ytBanners.each(function () {
             var $slider = $(this);
             var $dotsContainer = $slider.closest('.slider-banner').find('.home-hero-dots').first();
@@ -187,7 +177,6 @@ jQuery(document).ready(function($) {
                 slidesToShow: 1,
                 slidesToScroll: 1,
                 autoplay: false,
-                autoplaySpeed: 5000,
                 infinite: false,
                 arrows: false,
                 adaptiveHeight: !isLandingFullYt,
@@ -197,6 +186,107 @@ jQuery(document).ready(function($) {
                 sliderConfig.appendDots = $dotsContainer;
             }
             $slider.slick(sliderConfig);
+            bindYouTubeAutoAdvance($slider);
+        });
+    }
+
+    /**
+     * Carga la IFrame API de YouTube una sola vez y resuelve cuando esté lista.
+     */
+    function loadYouTubeIframeApi() {
+        if (window.__skemaYtApiPromise) {
+            return window.__skemaYtApiPromise;
+        }
+        window.__skemaYtApiPromise = new Promise(function (resolve) {
+            if (window.YT && typeof window.YT.Player === 'function') {
+                resolve(window.YT);
+                return;
+            }
+            var previousReady = window.onYouTubeIframeAPIReady;
+            window.onYouTubeIframeAPIReady = function () {
+                if (typeof previousReady === 'function') {
+                    try { previousReady(); } catch (e) {}
+                }
+                resolve(window.YT);
+            };
+            if (!document.querySelector('script[data-skema-yt-api]')) {
+                var script = document.createElement('script');
+                script.src = 'https://www.youtube.com/iframe_api';
+                script.async = true;
+                script.setAttribute('data-skema-yt-api', '1');
+                (document.head || document.documentElement).appendChild(script);
+            }
+        });
+        return window.__skemaYtApiPromise;
+    }
+
+    /**
+     * Avanza automáticamente al siguiente slide cuando termina el vídeo activo.
+     * Si es el último, se detiene (no hay loop).
+     */
+    function bindYouTubeAutoAdvance($slider) {
+        var $slides = $slider.find('.hero-yt-slide');
+        if (!$slides.length) {
+            return;
+        }
+
+        loadYouTubeIframeApi().then(function (YT) {
+            if (!YT || typeof YT.Player !== 'function') {
+                return;
+            }
+
+            var totalSlides = $slides.length;
+            var players = new Array(totalSlides);
+
+            $slides.each(function () {
+                var $slide = $(this);
+                var iframeEl = $slide.find('iframe.hero-yt-iframe').get(0);
+                if (!iframeEl) {
+                    return;
+                }
+                var slideIndex = parseInt($slide.attr('data-slide-index'), 10);
+                if (isNaN(slideIndex)) {
+                    return;
+                }
+                players[slideIndex] = new YT.Player(iframeEl, {
+                    events: {
+                        onReady: function (event) {
+                            try { event.target.mute(); } catch (e) {}
+                        },
+                        onStateChange: function (event) {
+                            if (event.data !== YT.PlayerState.ENDED) {
+                                return;
+                            }
+                            var isLastSlide = slideIndex >= totalSlides - 1;
+                            if (isLastSlide) {
+                                return;
+                            }
+                            $slider.slick('slickNext');
+                        }
+                    }
+                });
+            });
+
+            $slider.on('beforeChange.skemaYt', function (event, slick, currentSlide) {
+                var previousPlayer = players[currentSlide];
+                if (!previousPlayer || typeof previousPlayer.pauseVideo !== 'function') {
+                    return;
+                }
+                try { previousPlayer.pauseVideo(); } catch (e) {}
+            });
+
+            $slider.on('afterChange.skemaYt', function (event, slick, currentSlide) {
+                var nextPlayer = players[currentSlide];
+                if (!nextPlayer || typeof nextPlayer.playVideo !== 'function') {
+                    return;
+                }
+                try {
+                    if (typeof nextPlayer.seekTo === 'function') {
+                        nextPlayer.seekTo(0, true);
+                    }
+                    nextPlayer.playVideo();
+                } catch (e) {}
+            });
         });
     }
 

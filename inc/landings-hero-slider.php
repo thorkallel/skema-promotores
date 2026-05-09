@@ -205,7 +205,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 		foreach ( $slides_yt as $idx => $slide_yt_id ) {
 			$autoplay  = 0 === $idx ? '1' : '0';
 			$embed_src = sprintf(
-				'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&autoplay=%s',
+				'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&enablejsapi=1&autoplay=%s',
 				rawurlencode( $slide_yt_id ),
 				$autoplay
 			);
@@ -256,7 +256,7 @@ function theme_skema_echo_prelanding_hero_copy_and_lead( $post_id ) {
 	$heading   = trim( (string) get_field( 'skema_lpre_hero_heading', $post_id ) );
 	$subtitle  = trim( (string) get_field( 'skema_lpre_hero_subtitle', $post_id ) );
 	$location  = trim( (string) get_field( 'skema_lpre_hero_location', $post_id ) );
-	$intro     = trim( (string) get_field( 'skema_lpre_hero_intro', $post_id ) );
+	$intro     = theme_skema_get_landing_shared_intro_raw( $post_id );
 	$lead_t    = trim( (string) get_field( 'skema_lpre_lead_title', $post_id ) );
 	$lead_txt  = trim( (string) get_field( 'skema_lpre_lead_text', $post_id ) );
 	$cf7_raw   = get_field( 'skema_lpre_lead_cf7', $post_id );
@@ -326,7 +326,7 @@ function theme_skema_echo_prelanding_hero_copy_and_lead( $post_id ) {
                     </div>
                     <?php endif; ?>
                     <?php if ( $intro !== '' ) : ?>
-                    <p class="prelanding-copy__intro"><?php echo esc_html( $intro ); ?></p>
+                    <div class="prelanding-copy__intro entry-content"><?php echo apply_filters( 'the_content', $intro ); ?></div>
                     <?php endif; ?>
                     <?php if ( ! empty( $points ) ) : ?>
                     <ul class="prelanding-points">
@@ -472,6 +472,123 @@ function theme_skema_get_landing_full_hero_copy_bundle( $post_id ) {
 }
 
 /**
+ * Diapositivas del hero landing completa con imagen + textos opcionales por fila del repetidor.
+ *
+ * @param int    $post_id ID de la landing.
+ * @param string $repeater_name Nombre del repetidor ACF (p. ej. skema_lland_slider_img).
+ * @return array<int, array{url: string, slide_tagline: string, slide_heading: string, slide_location: string}>
+ */
+function theme_skema_landing_full_hero_slides_from_image_repeater( $post_id, $repeater_name ) {
+	$post_id = absint( $post_id );
+	$out     = array();
+	if ( ! $post_id || ! function_exists( 'have_rows' ) || ! have_rows( $repeater_name, $post_id ) ) {
+		return $out;
+	}
+	while ( have_rows( $repeater_name, $post_id ) ) {
+		the_row();
+		$url = '';
+		if ( function_exists( 'theme_skema_acf_value_to_image_url' ) ) {
+			$url = theme_skema_acf_value_to_image_url( get_sub_field( 'img' ) );
+		}
+		if ( $url === '' ) {
+			continue;
+		}
+		$out[] = array(
+			'url'            => $url,
+			'slide_tagline'  => trim( (string) get_sub_field( 'slide_tagline' ) ),
+			'slide_heading'  => trim( (string) get_sub_field( 'slide_heading' ) ),
+			'slide_location' => trim( (string) get_sub_field( 'slide_location' ) ),
+		);
+	}
+	return $out;
+}
+
+/**
+ * Diapositivas YouTube del hero landing completa con textos opcionales por fila.
+ *
+ * @param int    $post_id ID de la landing.
+ * @param string $repeater_name Nombre del repetidor ACF.
+ * @return array<int, array{youtube_id: string, slide_tagline: string, slide_heading: string, slide_location: string}>
+ */
+function theme_skema_landing_full_hero_slides_from_youtube_repeater( $post_id, $repeater_name ) {
+	$post_id = absint( $post_id );
+	$out     = array();
+	if ( ! $post_id || ! function_exists( 'have_rows' ) || ! function_exists( 'theme_skema_youtube_id_from_url' ) ) {
+		return $out;
+	}
+	if ( ! have_rows( $repeater_name, $post_id ) ) {
+		return $out;
+	}
+	while ( have_rows( $repeater_name, $post_id ) ) {
+		the_row();
+		$url = get_sub_field( 'youtube_url' );
+		$url = is_string( $url ) ? trim( $url ) : '';
+		if ( $url === '' ) {
+			continue;
+		}
+		$id = theme_skema_youtube_id_from_url( $url );
+		if ( $id === '' ) {
+			continue;
+		}
+		$out[] = array(
+			'youtube_id'     => $id,
+			'slide_tagline'  => trim( (string) get_sub_field( 'slide_tagline' ) ),
+			'slide_heading'  => trim( (string) get_sub_field( 'slide_heading' ) ),
+			'slide_location' => trim( (string) get_sub_field( 'slide_location' ) ),
+		);
+	}
+	return $out;
+}
+
+/**
+ * Aplica textos por slide sobre el bundle global del hero (solo sustituye si el subcampo no está vacío).
+ *
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $global_bundle De theme_skema_get_landing_full_hero_copy_bundle.
+ * @param array{slide_tagline?: string, slide_heading?: string, slide_location?: string} $slide_row Fila del repetidor.
+ * @return array{tagline: string, h1: string, location: string, logo_url: string}
+ */
+function theme_skema_landing_full_hero_merge_slide_copy( array $global_bundle, array $slide_row ) {
+	$merged = $global_bundle;
+
+	$t = isset( $slide_row['slide_tagline'] ) ? trim( (string) $slide_row['slide_tagline'] ) : '';
+	if ( $t !== '' ) {
+		$merged['tagline'] = $t;
+	}
+
+	$h = isset( $slide_row['slide_heading'] ) ? trim( (string) $slide_row['slide_heading'] ) : '';
+	if ( $h !== '' ) {
+		$merged['h1'] = $h;
+	}
+
+	$l = isset( $slide_row['slide_location'] ) ? trim( (string) $slide_row['slide_location'] ) : '';
+	if ( $l !== '' ) {
+		$merged['location'] = $l;
+	}
+
+	return $merged;
+}
+
+/**
+ * Título accesible (H1 oculto): primera diapositiva visible con textos ya fusionados.
+ *
+ * @param array<int, array<string, string>> $slides Diapositivas con claves slide_*.
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $global_bundle Bundle global.
+ * @param string $landing_title Título de la entrada como último recurso.
+ * @return string
+ */
+function theme_skema_landing_full_hero_sr_heading_from_first_slide( array $slides, array $global_bundle, $landing_title ) {
+	if ( empty( $slides ) ) {
+		$h = isset( $global_bundle['h1'] ) ? trim( (string) $global_bundle['h1'] ) : '';
+		return $h !== '' ? $h : trim( (string) $landing_title );
+	}
+
+	$merged = theme_skema_landing_full_hero_merge_slide_copy( $global_bundle, $slides[0] );
+	$h      = isset( $merged['h1'] ) ? trim( (string) $merged['h1'] ) : '';
+
+	return $h !== '' ? $h : trim( (string) $landing_title );
+}
+
+/**
  * Bloque interior hero-content (referencia Renvia single-slider / project-page-hero).
  *
  * @param array{tagline: string, h1: string, location: string, logo_url: string} $bundle Datos de theme_skema_get_landing_full_hero_copy_bundle.
@@ -561,10 +678,25 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 
 	$landing_title = get_the_title( $post_id );
 	$copy_bundle   = theme_skema_get_landing_full_hero_copy_bundle( $post_id );
-	$copy_h1       = isset( $copy_bundle['h1'] ) ? trim( (string) $copy_bundle['h1'] ) : '';
-	if ( '' === $copy_h1 ) {
-		$copy_h1 = trim( (string) $landing_title );
+
+	$desk_slides = array();
+	$mob_slides  = array();
+	$slides_yt   = array();
+	$slides_for_sr = array();
+
+	if ( 'images' === $tipo ) {
+		$desk_slides = theme_skema_landing_full_hero_slides_from_image_repeater( $post_id, $rep_desk );
+		$mob_slides  = theme_skema_landing_full_hero_slides_from_image_repeater( $post_id, $rep_movil );
+		if ( empty( $mob_slides ) ) {
+			$mob_slides = $desk_slides;
+		}
+		$slides_for_sr = ! empty( $desk_slides ) ? $desk_slides : $mob_slides;
+	} elseif ( 'youtube' === $tipo ) {
+		$slides_yt     = theme_skema_landing_full_hero_slides_from_youtube_repeater( $post_id, $rep_youtube );
+		$slides_for_sr = $slides_yt;
 	}
+
+	$copy_h1 = theme_skema_landing_full_hero_sr_heading_from_first_slide( $slides_for_sr, $copy_bundle, $landing_title );
 
 	echo '<section class="landing-full-hero project-page-hero renvia-hero_one">';
 	if ( $copy_h1 !== '' ) {
@@ -573,23 +705,23 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 	echo '<div class="shape-one" aria-hidden="true"><span></span></div>';
 
 	if ( 'images' === $tipo ) {
-		$desk_urls = theme_skema_landing_hero_image_urls_from_repeater( $post_id, $rep_desk );
-		$mob_urls  = theme_skema_landing_hero_image_urls_from_repeater( $post_id, $rep_movil );
-		if ( empty( $mob_urls ) ) {
-			$mob_urls = $desk_urls;
-		}
-		if ( empty( $desk_urls ) && empty( $mob_urls ) ) {
+		if ( empty( $desk_slides ) && empty( $mob_slides ) ) {
 			echo '</section>';
 			return;
 		}
 
 		echo '<div class="landing-hero landing-hero--landing-full">';
-		if ( ! empty( $desk_urls ) ) {
+		if ( ! empty( $desk_slides ) ) {
 			echo '<div class="slider-banner d-none d-sm-block">';
 			echo '<div class="slick-slider-banner slick-slider-banner--landing-full">';
 			$slide_i = 1;
-			foreach ( $desk_urls as $img_url ) {
-				$slide_alt = sprintf(
+			foreach ( $desk_slides as $slide_row ) {
+				$img_url = isset( $slide_row['url'] ) ? $slide_row['url'] : '';
+				if ( $img_url === '' ) {
+					continue;
+				}
+				$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
+				$slide_alt    = sprintf(
 					/* translators: 1: slide number, 2: landing title */
 					__( 'Cabecera %1$d — %2$s', 'theme_skema' ),
 					$slide_i,
@@ -606,7 +738,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
 				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
+				theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
 				echo '</div></div>';
 				++$slide_i;
 			}
@@ -614,12 +746,17 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 			echo '<div class="home-hero-dots" aria-hidden="true"></div>';
 			echo '</div>';
 		}
-		if ( ! empty( $mob_urls ) ) {
+		if ( ! empty( $mob_slides ) ) {
 			echo '<div class="slider-banner d-sm-none d-block">';
 			echo '<div class="slick-slider-banner slick-slider-banner--landing-full">';
 			$slide_m = 1;
-			foreach ( $mob_urls as $img_url ) {
-				$slide_alt_m = sprintf(
+			foreach ( $mob_slides as $slide_row ) {
+				$img_url = isset( $slide_row['url'] ) ? $slide_row['url'] : '';
+				if ( $img_url === '' ) {
+					continue;
+				}
+				$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
+				$slide_alt_m  = sprintf(
 					/* translators: 1: slide number, 2: landing title */
 					__( 'Cabecera móvil %1$d — %2$s', 'theme_skema' ),
 					$slide_m,
@@ -636,7 +773,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
 				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
+				theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
 				echo '</div></div>';
 				++$slide_m;
 			}
@@ -653,7 +790,6 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		return;
 	}
 
-	$slides_yt = theme_skema_landing_hero_youtube_ids_from_repeater( $post_id, $rep_youtube );
 	if ( empty( $slides_yt ) ) {
 		echo '</section>';
 		return;
@@ -662,10 +798,15 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 	echo '<div class="landing-hero landing-hero--landing-full">';
 	echo '<div class="slider-banner slider-banner--youtube">';
 	echo '<div class="slick-slider-banner slick-slider-banner--youtube slick-slider-banner--landing-full">';
-	foreach ( $slides_yt as $idx => $slide_yt_id ) {
-		$autoplay  = 0 === $idx ? '1' : '0';
-		$embed_src = sprintf(
-			'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&autoplay=%s',
+	foreach ( $slides_yt as $idx => $slide_row ) {
+		$slide_yt_id = isset( $slide_row['youtube_id'] ) ? $slide_row['youtube_id'] : '';
+		if ( $slide_yt_id === '' ) {
+			continue;
+		}
+		$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
+		$autoplay     = 0 === $idx ? '1' : '0';
+		$embed_src    = sprintf(
+			'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&enablejsapi=1&autoplay=%s',
 			rawurlencode( $slide_yt_id ),
 			$autoplay
 		);
@@ -685,7 +826,7 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		echo '</div>';
 		echo '<div class="landing-full-slide__overlay landing-full-slide__overlay--youtube" aria-hidden="true"></div>';
 		echo '<div class="landing-full-slide__inner">';
-		theme_skema_echo_landing_full_hero_inner_markup( $copy_bundle, 'h2' );
+		theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
 		echo '</div></div>';
 	}
 	echo '</div>';

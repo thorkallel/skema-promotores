@@ -68,6 +68,31 @@ function theme_skema_landing_project_meta_icon_url_from_field( $icon ) {
 }
 
 /**
+ * Texto introductorio compartido entre prelanding y landing completa (un solo campo en CMS).
+ * Si existía contenido solo en el campo antiguo de landing, se sigue mostrando.
+ *
+ * @param int $post_id ID de la entrada landings.
+ * @return string HTML o texto guardado en bruto (según ACF); cadena vacía si no hay nada.
+ */
+function theme_skema_get_landing_shared_intro_raw( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || ! function_exists( 'get_field' ) ) {
+		return '';
+	}
+
+	$primary = get_field( 'skema_lpre_hero_intro', $post_id, false );
+	$primary = is_string( $primary ) ? trim( $primary ) : '';
+	if ( $primary !== '' ) {
+		return $primary;
+	}
+
+	$legacy = get_post_meta( $post_id, 'skema_lland_project_meta_intro', true );
+	$legacy = is_string( $legacy ) ? trim( $legacy ) : '';
+
+	return $legacy;
+}
+
+/**
  * Imprime la ficha resumen si aplica (CPT landings, fase landing, ACF activado).
  *
  * @param int|null $post_id ID de entrada; por defecto el actual en singular.
@@ -97,7 +122,7 @@ function theme_skema_render_landing_project_characteristics( $post_id = null ) {
 	}
 
 	$rows  = get_field( 'skema_lland_project_meta_items', $post_id );
-	$intro = get_field( 'skema_lland_project_meta_intro', $post_id, false );
+	$intro = theme_skema_get_landing_shared_intro_raw( $post_id );
 
 	$valid_rows = array();
 	if ( is_array( $rows ) ) {
