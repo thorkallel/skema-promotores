@@ -3,6 +3,95 @@
  * Template Name: Theme Proyectos
  */
 
+if ( ! function_exists( 'theme_skema_proyectos_read_url_param' ) ) {
+	/**
+	 * Valor crudo de un parámetro de query (GET o QUERY_STRING parseada).
+	 *
+	 * @param string[] $param_keys Claves a probar en orden.
+	 * @return string Vacío si no hay valor.
+	 */
+	function theme_skema_proyectos_read_url_param( $param_keys ) {
+		if ( ! is_array( $param_keys ) || empty( $param_keys ) ) {
+			return '';
+		}
+
+		foreach ( $param_keys as $param_key ) {
+			if ( isset( $_GET[ $param_key ] ) && (string) $_GET[ $param_key ] !== '' ) {
+				return trim( (string) wp_unslash( $_GET[ $param_key ] ) );
+			}
+		}
+
+		if ( empty( $_SERVER['QUERY_STRING'] ) ) {
+			return '';
+		}
+
+		parse_str( (string) wp_unslash( $_SERVER['QUERY_STRING'] ), $qs_parsed );
+		if ( ! is_array( $qs_parsed ) ) {
+			return '';
+		}
+
+		foreach ( $param_keys as $param_key ) {
+			if ( isset( $qs_parsed[ $param_key ] ) && (string) $qs_parsed[ $param_key ] !== '' ) {
+				return trim( (string) $qs_parsed[ $param_key ] );
+			}
+		}
+
+		return '';
+	}
+}
+
+if ( ! function_exists( 'theme_skema_proyectos_match_term' ) ) {
+	/**
+	 * Resuelve un término por ID, slug o nombre visible.
+	 *
+	 * @param WP_Term[] $terms      Lista de términos.
+	 * @param string    $raw_trim   Valor de URL ya recortado.
+	 * @return WP_Term|null
+	 */
+	function theme_skema_proyectos_match_term( $terms, $raw_trim ) {
+		if ( empty( $terms ) || $raw_trim === '' ) {
+			return null;
+		}
+
+		if ( ctype_digit( $raw_trim ) ) {
+			$want_id = (int) $raw_trim;
+			foreach ( $terms as $term ) {
+				if ( (int) $term->term_id === $want_id ) {
+					return $term;
+				}
+			}
+			return null;
+		}
+
+		$candidates   = array();
+		$candidates[] = sanitize_text_field( $raw_trim );
+		$candidates[] = sanitize_title( $raw_trim );
+		$candidates   = array_unique( array_filter( $candidates ) );
+
+		foreach ( $terms as $term ) {
+			foreach ( $candidates as $candidate ) {
+				if ( strcasecmp( $term->slug, $candidate ) === 0 ) {
+					return $term;
+				}
+			}
+		}
+
+		$name_compare = wp_strip_all_tags( $raw_trim );
+		$name_slug    = sanitize_title( $raw_trim );
+		foreach ( $terms as $term ) {
+			$term_name = wp_strip_all_tags( $term->name );
+			if ( strcasecmp( $term_name, $name_compare ) === 0 ) {
+				return $term;
+			}
+			if ( $name_slug !== '' && sanitize_title( $term->name ) === $name_slug ) {
+				return $term;
+			}
+		}
+
+		return null;
+	}
+}
+
 if ( ! function_exists( 'theme_skema_proyectos_resolve_active_tab' ) ) {
 	/**
 	 * Índice de la pestaña activa según URL (varios nombres de parámetro, slug o ID de término).
@@ -16,70 +105,92 @@ if ( ! function_exists( 'theme_skema_proyectos_resolve_active_tab' ) ) {
 		}
 
 		$param_keys = array( 'skema_tipo', 'tab', 'tipo', 'tipo_proyecto' );
-		$raw        = '';
-		foreach ( $param_keys as $param_key ) {
-			if ( isset( $_GET[ $param_key ] ) && (string) $_GET[ $param_key ] !== '' ) {
-				$raw = wp_unslash( $_GET[ $param_key ] );
-				break;
-			}
-		}
-		if ( $raw === '' && ! empty( $_SERVER['QUERY_STRING'] ) ) {
-			parse_str( (string) wp_unslash( $_SERVER['QUERY_STRING'] ), $qs_parsed );
-			if ( is_array( $qs_parsed ) ) {
-				foreach ( $param_keys as $param_key ) {
-					if ( isset( $qs_parsed[ $param_key ] ) && (string) $qs_parsed[ $param_key ] !== '' ) {
-						$raw = (string) $qs_parsed[ $param_key ];
-						break;
-					}
-				}
-			}
-		}
-
-		if ( $raw === '' ) {
-			return 0;
-		}
-
-		$raw_trim = trim( (string) $raw );
+		$raw_trim   = theme_skema_proyectos_read_url_param( $param_keys );
 		if ( $raw_trim === '' ) {
 			return 0;
 		}
 
-		if ( ctype_digit( $raw_trim ) ) {
-			$want_id = (int) $raw_trim;
-			foreach ( $terms as $i => $t ) {
-				if ( (int) $t->term_id === $want_id ) {
-					return (int) $i;
-				}
-			}
+		$matched = theme_skema_proyectos_match_term( $terms, $raw_trim );
+		if ( ! $matched instanceof WP_Term ) {
 			return 0;
 		}
 
-		$candidates   = array();
-		$candidates[] = sanitize_text_field( $raw_trim );
-		$candidates[] = sanitize_title( $raw_trim );
-		$candidates   = array_unique( array_filter( $candidates ) );
-
-		foreach ( $terms as $i => $t ) {
-			foreach ( $candidates as $c ) {
-				if ( strcasecmp( $t->slug, $c ) === 0 ) {
-					return (int) $i;
-				}
-			}
-		}
-
-		$name_compare = wp_strip_all_tags( $raw_trim );
-		$name_slug    = sanitize_title( $raw_trim );
-		foreach ( $terms as $i => $t ) {
-			$term_name = wp_strip_all_tags( $t->name );
-			if ( strcasecmp( $term_name, $name_compare ) === 0 ) {
-				return (int) $i;
-			}
-			if ( $name_slug !== '' && sanitize_title( $t->name ) === $name_slug ) {
-				return (int) $i;
+		foreach ( $terms as $index => $term ) {
+			if ( (int) $term->term_id === (int) $matched->term_id ) {
+				return (int) $index;
 			}
 		}
 
 		return 0;
+	}
+}
+
+if ( ! function_exists( 'theme_skema_proyectos_resolve_estado_slug' ) ) {
+	/**
+	 * Slug de estado_proyecto para filtrar el listado. Vacío = sin filtro (comportamiento normal).
+	 *
+	 * @return string
+	 */
+	function theme_skema_proyectos_resolve_estado_slug() {
+		$param_keys = array( 'skema_estado', 'estado', 'estado_proyecto' );
+		$raw_trim   = theme_skema_proyectos_read_url_param( $param_keys );
+		if ( $raw_trim === '' ) {
+			return '';
+		}
+
+		$estado_terms = get_terms(
+			array(
+				'taxonomy'   => 'estado_proyecto',
+				'hide_empty' => false,
+			)
+		);
+		if ( is_wp_error( $estado_terms ) || empty( $estado_terms ) ) {
+			return '';
+		}
+
+		$matched = theme_skema_proyectos_match_term( $estado_terms, $raw_trim );
+		if ( ! $matched instanceof WP_Term ) {
+			return '';
+		}
+
+		return $matched->slug;
+	}
+}
+
+if ( ! function_exists( 'theme_skema_proyectos_build_list_query_args' ) ) {
+	/**
+	 * Argumentos de WP_Query para la grilla de proyectos de un tab.
+	 *
+	 * @param string $tipo_slug   Slug de tipo_proyecto (obligatorio).
+	 * @param string $estado_slug Slug de estado_proyecto; vacío omite el filtro.
+	 * @return array<string, mixed>
+	 */
+	function theme_skema_proyectos_build_list_query_args( $tipo_slug, $estado_slug = '' ) {
+		$tax_query = array(
+			array(
+				'taxonomy' => 'tipo_proyecto',
+				'field'    => 'slug',
+				'terms'    => $tipo_slug,
+			),
+		);
+
+		if ( $estado_slug !== '' ) {
+			$tax_query = array(
+				'relation' => 'AND',
+				$tax_query[0],
+				array(
+					'taxonomy' => 'estado_proyecto',
+					'field'    => 'slug',
+					'terms'    => $estado_slug,
+				),
+			);
+		}
+
+		return array(
+			'post_type'      => 'proyectos',
+			'posts_per_page' => -1,
+			'tax_query'      => $tax_query,
+		);
 	}
 }
 
@@ -157,7 +268,8 @@ get_header(); ?>
                     if (is_wp_error($terms)) {
                         $terms = array();
                     }
-                    $active_tab_index = theme_skema_proyectos_resolve_active_tab( $terms );
+                    $active_tab_index   = theme_skema_proyectos_resolve_active_tab( $terms );
+                    $skema_estado_slug  = theme_skema_proyectos_resolve_estado_slug();
                     foreach ($terms as $index => $term) { ?>
                         <li class="col-sm-3 px-4 col-6 mb-4 mb-sm-0">
                             <a id="<?= $term->slug; ?>-tab" href="#<?= $term->slug; ?>"
@@ -174,29 +286,33 @@ get_header(); ?>
             </div>
             <div class="row mb-sm-4">
                 <div class="col-12 col-xl-12 col-md-12 col-sm-12 px-sm-5 px-4">
-                    <div class="tab-content" id="myTabContent">
+                    <div class="tab-content" id="myTabContent"
+                        <?php if ( $skema_estado_slug !== '' ) : ?>
+                        data-skema-proyectos-estado="<?php echo esc_attr( $skema_estado_slug ); ?>"
+                        <?php endif; ?>>
                         <?php foreach ($terms as $index => $term) : ?>
                         <div class="tab-pane fade <?= $index === $active_tab_index ? 'show active' : '' ?>"
                             id="<?= $term->slug ?>" role="tabpanel" aria-labelledby="<?= $term->slug ?>-tab">
                             <div class="row justify-content-center">
-                                <?php $args = array(
-                                    'post_type' => 'proyectos',
-                                    'posts_per_page' => -1,
-                                    'tax_query' => array(
-                                        array(
-                                            'taxonomy' => 'tipo_proyecto',
-                                            'field' => 'slug',
-                                            'terms' => $term->slug
-                                        )
-                                    )
-                                );
-                                $query = new WP_Query($args);
-                                if ($query->have_posts()) :  $cont = 1; 
-                                    $cuantos = $query->found_posts;
-                                    while ($query->have_posts()) : $query->the_post();
-                                        $estado = wp_get_post_terms(get_the_ID(), 'estado_proyecto')[0]->name ?? 'No especificado';
-                                        $tipo_proyecto = wp_get_post_terms(get_the_ID(), 'tipo_proyecto')[0]->name ?? 'No especificado';
-                                        $ciudad = wp_get_post_terms(get_the_ID(), 'ciudad_proyecto')[0]->name ?? 'No especificado'; ?>
+                                <?php
+                                $args  = theme_skema_proyectos_build_list_query_args( $term->slug, $skema_estado_slug );
+                                $query = new WP_Query( $args );
+                                if ( $query->have_posts() ) :
+                                    while ( $query->have_posts() ) :
+                                        $query->the_post();
+                                        $estado_terms = wp_get_post_terms( get_the_ID(), 'estado_proyecto' );
+                                        $tipo_terms   = wp_get_post_terms( get_the_ID(), 'tipo_proyecto' );
+                                        $ciudad_terms = wp_get_post_terms( get_the_ID(), 'ciudad_proyecto' );
+                                        $estado       = ( ! is_wp_error( $estado_terms ) && ! empty( $estado_terms ) )
+                                            ? $estado_terms[0]->name
+                                            : __( 'No especificado', 'theme_skema' );
+                                        $tipo_proyecto = ( ! is_wp_error( $tipo_terms ) && ! empty( $tipo_terms ) )
+                                            ? $tipo_terms[0]->name
+                                            : __( 'No especificado', 'theme_skema' );
+                                        $ciudad       = ( ! is_wp_error( $ciudad_terms ) && ! empty( $ciudad_terms ) )
+                                            ? $ciudad_terms[0]->name
+                                            : __( 'No especificado', 'theme_skema' );
+                                        ?>
                                 <div class="col-sm-3 px-sm-2 px-3 col-12 project-item mb-5">
                                     <div class="card h-100 pb-sm-4 mx-2">
                                         <div class="img-proyect">
@@ -214,9 +330,25 @@ get_header(); ?>
                                         </div>
                                     </div>
                                 </div>
-                                <?php $cont++;
-                                    endwhile; ?>
-                                <?php endif;  wp_reset_postdata(); ?>
+                                <?php
+                                    endwhile;
+                                else :
+                                    ?>
+                                <div class="col-12">
+                                    <p class="text-center mb-0">
+                                        <?php
+                                        if ( $skema_estado_slug !== '' ) {
+                                            esc_html_e( 'No hay proyectos con el estado seleccionado en esta categoría.', 'theme_skema' );
+                                        } else {
+                                            esc_html_e( 'No hay proyectos disponibles en esta categoría.', 'theme_skema' );
+                                        }
+                                        ?>
+                                    </p>
+                                </div>
+                                <?php
+                                endif;
+                                wp_reset_postdata();
+                                ?>
                             </div>
                         </div>
                         <?php endforeach; ?>
