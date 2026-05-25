@@ -32,8 +32,9 @@
 				            <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"
                                 aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>"><i class="bi bi-instagram"></i></a>
                         <?php endif; ?>
-                        <?php if(get_field('wp', 'option')): ?>
-				            <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"
+                        <?php $skema_wa_digits = theme_skema_get_whatsapp_wa_me_digits(); ?>
+                        <?php if ( '' !== $skema_wa_digits ) : ?>
+				            <a href="https://wa.me/<?php echo esc_attr( $skema_wa_digits ); ?>" target="_blank" rel="noopener noreferrer"
                                 aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
                         <?php endif; ?>
                         <?php if(get_field('tele', 'option')): ?>

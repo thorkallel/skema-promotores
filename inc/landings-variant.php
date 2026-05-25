@@ -301,17 +301,6 @@ function theme_skema_enqueue_landing_variant_styles() {
 		$parent = array( 'theme_skema-landings-shared' );
 	}
 
-	$header_renvia_path = $base_dir . '/skema-landings-header-renvia-desktop.css';
-	if ( is_readable( $header_renvia_path ) ) {
-		wp_enqueue_style(
-			'theme_skema-landings-header-renvia',
-			$base_uri . '/skema-landings-header-renvia-desktop.css',
-			$parent,
-			_S_VERSION
-		);
-		$parent = array( 'theme_skema-landings-header-renvia' );
-	}
-
 	$hero_css = $base_dir . '/skema-landing-hero.css';
 	if ( is_readable( $hero_css ) ) {
 		wp_enqueue_style(
@@ -432,7 +421,7 @@ function theme_skema_enqueue_landing_medios_gallery_script() {
 add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_medios_gallery_script', 26 );
 
 /**
- * Encola JS del slider «Plantas» (Slick + pestaña Bootstrap 4) en single landings fase «landing».
+ * Encola JS del slider «Plantas» y «Avance de obra» (Slick + pestaña Bootstrap 4) en single landings fase «landing».
  *
  * @return void
  */

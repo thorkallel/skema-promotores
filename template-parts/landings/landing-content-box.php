@@ -86,6 +86,9 @@ $skema_medios_renders_slides = function_exists( 'theme_skema_landing_medios_get_
 $skema_medios_plantas_slides = function_exists( 'theme_skema_landing_medios_get_plantas_slides' )
 	? theme_skema_landing_medios_get_plantas_slides( $post_id )
 	: array();
+$skema_medios_avance_slides = function_exists( 'theme_skema_landing_medios_get_avance_obra_slides' )
+	? theme_skema_landing_medios_get_avance_obra_slides( $post_id )
+	: array();
 $skema_medios_video = function_exists( 'theme_skema_landing_medios_get_video_for_display' )
 	? theme_skema_landing_medios_get_video_for_display( $post_id )
 	: null;
@@ -95,6 +98,9 @@ $skema_zonas_galeria_items = function_exists( 'theme_skema_landing_medios_get_zo
 $skema_zonas_galeria_nota  = function_exists( 'theme_skema_landing_medios_get_zonas_galeria_nota' )
 	? theme_skema_landing_medios_get_zonas_galeria_nota( $post_id )
 	: '';
+$skema_medios_maqueta = function_exists( 'theme_skema_landing_medios_get_maqueta_web_for_display' )
+	? theme_skema_landing_medios_get_maqueta_web_for_display( $post_id )
+	: null;
 $skema_show_medios       = function_exists( 'theme_skema_landing_medios_should_show_block' )
 	&& theme_skema_landing_medios_should_show_block( $post_id );
 $skema_respaldo_items = function_exists( 'theme_skema_landing_get_respaldo_slider_items' )
@@ -188,20 +194,24 @@ $skema_prior_content_block = false;
                 </div>
                 <?php endif; ?>
                 <?php if ( count( $skema_zonas_items ) > 0 ) : ?>
-                <ul
-                    class="mb-40 skema-zonas-sociales-list skema-landing-slot skema-landing-slot--zonas-sociales-list">
+                <div
+                    class="features-amenities-list project-ficha-grid project-ficha-grid--fa-cats mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--zonas-sociales-list"
+                    role="list">
                     <?php foreach ( $skema_zonas_items as $skema_zona_item ) : ?>
-                    <li class="skema-zonas-sociales-item">
-                        <?php if ( $skema_zona_item['fa_classes'] !== '' ) : ?>
-                        <span class="skema-zonas-sociales-item__icon" aria-hidden="true">
-                            <i class="<?php echo esc_attr( $skema_zona_item['fa_classes'] ); ?>"></i>
-                        </span>
-                        <?php endif; ?>
-                        <span
-                            class="skema-zonas-sociales-item__text"><?php echo esc_html( $skema_zona_item['texto'] ); ?></span>
-                    </li>
+                    <div class="skema-ficha-apto-category" role="listitem">
+                        <div class="skema-ficha-apto-category__items">
+                            <div class="skema-ficha-apto-item">
+                                <?php if ( $skema_zona_item['fa_classes'] !== '' ) : ?>
+                                <span class="skema-ficha-apto-item__icon" aria-hidden="true">
+                                    <i class="<?php echo esc_attr( $skema_zona_item['fa_classes'] ); ?>"></i>
+                                </span>
+                                <?php endif; ?>
+                                <span class="skema-ficha-apto-item__text"><?php echo esc_html( $skema_zona_item['texto'] ); ?></span>
+                            </div>
+                        </div>
+                    </div>
                     <?php endforeach; ?>
-                </ul>
+                </div>
                 <?php endif; ?>
                 <?php
 					$skema_prior_content_block = true;
@@ -289,6 +299,13 @@ $skema_prior_content_block = false;
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" type="button" data-toggle="tab"
+                                            data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra"
+                                            role="tab" aria-selected="false" tabindex="-1">
+                                            <?php esc_html_e( 'Avance de obra', 'theme_skema' ); ?>
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" type="button" data-toggle="tab"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos"
                                             role="tab" aria-selected="false" tabindex="-1">
                                             <?php esc_html_e( 'Video', 'theme_skema' ); ?>
@@ -301,6 +318,15 @@ $skema_prior_content_block = false;
                                             <?php esc_html_e( 'Zonas sociales', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php if ( null !== $skema_medios_maqueta ) : ?>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" type="button" data-toggle="tab"
+                                            data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta"
+                                            role="tab" aria-selected="false" tabindex="-1">
+                                            <?php esc_html_e( 'Maqueta web', 'theme_skema' ); ?>
+                                        </button>
+                                    </li>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                         </div>
@@ -347,6 +373,18 @@ $skema_prior_content_block = false;
 							?>
                         </div>
                         <div class="tab-pane fade skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra" role="tabpanel">
+                            <?php
+							$avance_obra_slides = $skema_medios_avance_slides;
+							$avance_id_prefix   = $skema_lland_tab;
+							$skema_avance_tpl   = locate_template( 'template-parts/landings/partials/medios-avance-obra-slider.php' );
+							if ( is_string( $skema_avance_tpl ) && $skema_avance_tpl !== '' ) {
+								require $skema_avance_tpl;
+							}
+							unset( $avance_obra_slides, $avance_id_prefix, $skema_avance_tpl );
+							?>
+                        </div>
+                        <div class="tab-pane fade skema-landing-tab-pane"
                             id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos" role="tabpanel">
                             <?php
 							$skema_medios_video_tpl = locate_template( 'template-parts/landings/partials/medios-tab-video.php' );
@@ -366,7 +404,26 @@ $skema_prior_content_block = false;
 							unset( $skema_zonas_galeria_tpl, $skema_zonas_galeria_items, $skema_zonas_galeria_nota );
 							?>
                         </div>
+                        <?php if ( null !== $skema_medios_maqueta ) : ?>
+                        <div class="tab-pane fade skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta" role="tabpanel">
+                            <?php
+							$skema_maqueta_tpl = locate_template( 'template-parts/landings/partials/medios-tab-maqueta-web.php' );
+							if ( is_string( $skema_maqueta_tpl ) && $skema_maqueta_tpl !== '' ) {
+								require $skema_maqueta_tpl;
+							}
+							unset( $skema_maqueta_tpl );
+							?>
+                        </div>
+                        <?php endif; ?>
                     </div>
+                    <p class="skema-landing-medios-legal-disclaimer" role="note">
+                        <?php
+						echo esc_html(
+							__( '*Los apartamentos se entregan en obra gris. Precios sujetos a cambio sin previo aviso. Las imágenes, diseños, áreas y precios son únicamente de referencia, están sujetos a modificaciones en el proceso de coordinación técnica y el desarrollo arquitectónico y constructivo. Inventario sujeto a disponibilidad.', 'theme_skema' )
+						);
+						?>
+                    </p>
                 </div>
                 <?php $skema_prior_content_block = true; ?>
                 <?php endif; ?>

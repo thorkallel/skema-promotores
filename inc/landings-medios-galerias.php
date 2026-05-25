@@ -210,6 +210,226 @@ function theme_skema_landing_medios_resolve_video_mp4_url( $acf_file ) {
 }
 
 /**
+ * Normaliza fecha ACF del repetidor «Avance de obra» para mostrar y ordenar.
+ *
+ * @param mixed $raw Valor del campo fecha (típ. Y-m-d desde ACF).
+ * @return array{iso: string, label: string} iso en Y-m-d o cadenas vacías si no aplica.
+ */
+function theme_skema_landing_medios_parse_avance_fecha_row( $raw ) {
+	$out = array(
+		'iso'   => '',
+		'label' => '',
+	);
+
+	if ( ! is_string( $raw ) ) {
+		return $out;
+	}
+
+	$s = trim( $raw );
+	if ( $s === '' || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $s ) ) {
+		return $out;
+	}
+
+	if ( ! function_exists( 'wp_timezone' ) ) {
+		return $out;
+	}
+
+	try {
+		$d = new \DateTimeImmutable( $s . ' 12:00:00', wp_timezone() );
+	} catch ( \Exception $e ) {
+		return $out;
+	}
+
+	$ts = $d->getTimestamp();
+	if ( $ts <= 0 ) {
+		return $out;
+	}
+
+	if ( function_exists( 'wp_date' ) ) {
+		$out['iso']   = wp_date( 'Y-m-d', $ts );
+		$out['label'] = wp_date( get_option( 'date_format' ), $ts );
+	} else {
+		$out['iso']   = date_i18n( 'Y-m-d', $ts );
+		$out['label'] = date_i18n( get_option( 'date_format' ), $ts );
+	}
+
+	return $out;
+}
+
+/**
+ * Slides pestaña «Avance de obra» (imagen, vídeo MP4 o YouTube por fila; fecha opcional para histórico).
+ *
+ * @param int $post_id ID landings.
+ * @return array<int, array<string, string>>
+ */
+function theme_skema_landing_medios_get_avance_obra_slides( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || ! function_exists( 'get_field' ) ) {
+		return array();
+	}
+
+	$rows = get_field( 'skema_lland_medios_avance', $post_id );
+	if ( ! is_array( $rows ) ) {
+		return array();
+	}
+
+	$slides = array();
+	foreach ( $rows as $row ) {
+		if ( ! is_array( $row ) ) {
+			continue;
+		}
+
+		$tipo = isset( $row['tipo'] ) ? (string) $row['tipo'] : '';
+		if ( $tipo !== 'imagen' && $tipo !== 'video' && $tipo !== 'youtube' ) {
+			$tipo = 'imagen';
+		}
+
+		$leyenda = isset( $row['leyenda'] ) ? trim( (string) $row['leyenda'] ) : '';
+		$fecha_raw = isset( $row['fecha'] ) ? $row['fecha'] : '';
+		$fecha_raw = is_string( $fecha_raw ) ? $fecha_raw : '';
+		$fecha_info = theme_skema_landing_medios_parse_avance_fecha_row( $fecha_raw );
+
+		if ( $tipo === 'imagen' ) {
+			$img = isset( $row['imagen'] ) ? $row['imagen'] : null;
+			$url = theme_skema_landing_medios_resolve_image_url( $img, 'large' );
+			if ( $url === '' ) {
+				continue;
+			}
+
+			$att_id = 0;
+			if ( is_array( $img ) ) {
+				if ( ! empty( $img['ID'] ) ) {
+					$att_id = (int) $img['ID'];
+				} elseif ( ! empty( $img['id'] ) ) {
+					$att_id = (int) $img['id'];
+				}
+			} elseif ( is_numeric( $img ) ) {
+				$att_id = (int) $img;
+			}
+
+			$alt_meta = $att_id > 0 ? theme_skema_landing_medios_get_attachment_alt( $att_id ) : '';
+			$alt      = $leyenda !== '' ? $leyenda : $alt_meta;
+			if ( $alt === '' ) {
+				$alt = __( 'Avance de obra del proyecto', 'theme_skema' );
+			}
+
+			$caption = $leyenda !== '' ? $leyenda : $alt;
+			$thumb   = theme_skema_landing_medios_resolve_image_url( $img, 'medium' );
+
+			$slides[] = array(
+				'media'       => 'image',
+				'src'         => $url,
+				'iframe_src'  => '',
+				'youtube_id'  => '',
+				'poster'      => '',
+				'alt'         => $alt,
+				'caption'     => $caption,
+				'leyenda'     => $leyenda,
+				'thumb'       => ( $thumb !== '' ) ? $thumb : $url,
+				'fecha_iso'   => $fecha_info['iso'],
+				'fecha_texto' => $fecha_info['label'],
+			);
+			continue;
+		}
+
+		if ( $tipo === 'youtube' ) {
+			if ( ! function_exists( 'theme_skema_youtube_id_from_url' ) ) {
+				continue;
+			}
+
+			$url_raw = isset( $row['youtube_url'] ) ? $row['youtube_url'] : '';
+			$url     = is_string( $url_raw ) ? trim( $url_raw ) : '';
+			if ( $url === '' ) {
+				continue;
+			}
+
+			$yt_id = theme_skema_youtube_id_from_url( $url );
+			if ( $yt_id === '' ) {
+				continue;
+			}
+
+			$iframe_src = sprintf(
+				'https://www.youtube-nocookie.com/embed/%s?rel=0&modestbranding=1',
+				rawurlencode( $yt_id )
+			);
+
+			$thumb_yt = sprintf(
+				'https://i.ytimg.com/vi/%s/mqdefault.jpg',
+				rawurlencode( $yt_id )
+			);
+
+			$alt_yt = $leyenda !== '' ? $leyenda : __( 'Vídeo de avance de obra en YouTube', 'theme_skema' );
+
+			$slides[] = array(
+				'media'       => 'youtube',
+				'src'         => '',
+				'iframe_src'  => $iframe_src,
+				'youtube_id'  => $yt_id,
+				'poster'      => '',
+				'alt'         => $alt_yt,
+				'caption'     => $alt_yt,
+				'leyenda'     => $leyenda,
+				'thumb'       => $thumb_yt,
+				'fecha_iso'   => $fecha_info['iso'],
+				'fecha_texto' => $fecha_info['label'],
+			);
+			continue;
+		}
+
+		$file = isset( $row['video'] ) ? $row['video'] : null;
+		$mp4  = theme_skema_landing_medios_resolve_video_mp4_url( $file );
+		if ( $mp4 === '' ) {
+			continue;
+		}
+
+		$poster_raw = isset( $row['poster'] ) ? $row['poster'] : null;
+		$poster_lg  = theme_skema_landing_medios_resolve_image_url( $poster_raw, 'large' );
+		$poster_md  = theme_skema_landing_medios_resolve_image_url( $poster_raw, 'medium' );
+
+		$alt_video = $leyenda !== '' ? $leyenda : __( 'Vídeo de avance de obra', 'theme_skema' );
+
+		$slides[] = array(
+			'media'       => 'video',
+			'src'         => $mp4,
+			'iframe_src'  => '',
+			'youtube_id'  => '',
+			'poster'      => $poster_lg,
+			'alt'         => $alt_video,
+			'caption'     => $alt_video,
+			'leyenda'     => $leyenda,
+			'thumb'       => ( $poster_md !== '' ) ? $poster_md : '',
+			'fecha_iso'   => $fecha_info['iso'],
+			'fecha_texto' => $fecha_info['label'],
+		);
+	}
+
+	$dated   = array();
+	$undated = array();
+	foreach ( $slides as $slide ) {
+		if ( ! is_array( $slide ) ) {
+			continue;
+		}
+		$iso = isset( $slide['fecha_iso'] ) ? (string) $slide['fecha_iso'] : '';
+		if ( $iso !== '' ) {
+			$dated[] = $slide;
+			continue;
+		}
+		$undated[] = $slide;
+	}
+
+	usort(
+		$dated,
+		static function ( $a, $b ) {
+			$ia = isset( $a['fecha_iso'] ) ? (string) $a['fecha_iso'] : '';
+			$ib = isset( $b['fecha_iso'] ) ? (string) $b['fecha_iso'] : '';
+			return strcmp( $ia, $ib );
+		}
+	);
+
+	return array_merge( $dated, $undated );
+}
+
+/**
  * Datos del vídeo de la pestaña «Videos» (YouTube o MP4 de medios).
  *
  * @param int $post_id ID landings.
@@ -281,6 +501,49 @@ function theme_skema_landing_medios_get_video_for_display( $post_id ) {
 	}
 
 	return null;
+}
+
+/**
+ * Datos para iframe «Maqueta web» (recorrido virtual u otro embed por URL).
+ *
+ * @param int $post_id ID landings.
+ * @return array{iframe_src: string, title: string}|null
+ */
+function theme_skema_landing_medios_get_maqueta_web_for_display( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( $post_id <= 0 || ! function_exists( 'get_field' ) ) {
+		return null;
+	}
+
+	$url_raw = get_field( 'skema_lland_medios_maqueta_url', $post_id );
+	$url     = is_string( $url_raw ) ? trim( $url_raw ) : '';
+	if ( $url === '' ) {
+		return null;
+	}
+
+	if ( ! function_exists( 'wp_http_validate_url' ) ) {
+		return null;
+	}
+
+	$validated = wp_http_validate_url( $url );
+	if ( ! is_string( $validated ) || $validated === '' ) {
+		return null;
+	}
+
+	$parsed = wp_parse_url( $validated );
+	$scheme = isset( $parsed['scheme'] ) ? strtolower( (string) $parsed['scheme'] ) : '';
+	if ( $scheme !== 'http' && $scheme !== 'https' ) {
+		return null;
+	}
+
+	$titulo_raw = get_field( 'skema_lland_medios_maqueta_titulo', $post_id );
+	$titulo_opt = is_string( $titulo_raw ) ? trim( $titulo_raw ) : '';
+	$title      = $titulo_opt !== '' ? $titulo_opt : __( 'Recorrido virtual del proyecto', 'theme_skema' );
+
+	return array(
+		'iframe_src' => $validated,
+		'title'      => $title,
+	);
 }
 
 /**
@@ -379,7 +642,15 @@ function theme_skema_landing_medios_should_show_block( $post_id ) {
 		return true;
 	}
 
+	if ( count( theme_skema_landing_medios_get_avance_obra_slides( $post_id ) ) > 0 ) {
+		return true;
+	}
+
 	if ( null !== theme_skema_landing_medios_get_video_for_display( $post_id ) ) {
+		return true;
+	}
+
+	if ( null !== theme_skema_landing_medios_get_maqueta_web_for_display( $post_id ) ) {
 		return true;
 	}
 

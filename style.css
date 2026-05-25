@@ -1147,6 +1147,34 @@ select#selectMapas option {
 .div-border {
     border-right: solid 1px white;
 }
+.skema-mapa-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.skema-mapa-stat__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 70px;
+    width: 100%;
+}
+.skema-mapa-stat__icon img {
+    max-width: 100%;
+    height: auto;
+}
+.skema-mapa-stat__content {
+    width: 100%;
+}
+.skema-mapa-stat:not(:last-child) {
+    border-right: 1px solid #fff;
+}
+@media (min-width: 576px) {
+    .skema-mapa-stat__icon {
+        min-height: 100px;
+    }
+}
 .card.info img{
     border-radius: 20px;
 }

@@ -294,13 +294,12 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 			$tipo_terms = wp_get_post_terms( $post_id, 'tipo_proyecto' );
 			$tipo_label = ( ! is_wp_error( $tipo_terms ) && ! empty( $tipo_terms ) ) ? $tipo_terms[0]->name : '';
 		}
-		$ciu_terms = wp_get_post_terms( $post_id, 'ciudad_proyecto' );
-		$ciudad    = ( ! is_wp_error( $ciu_terms ) && ! empty( $ciu_terms ) ) ? $ciu_terms[0]->name : '';
-		if ( $ciudad === '' ) {
-			$ciudad_cf = get_field( 'ciudad_texto', $post_id );
-			if ( is_string( $ciudad_cf ) && trim( $ciudad_cf ) !== '' ) {
-				$ciudad = trim( $ciudad_cf );
-			}
+		$ciudad_cf = get_field( 'ciudad_texto', $post_id );
+		if ( is_string( $ciudad_cf ) && trim( $ciudad_cf ) !== '' ) {
+			$ciudad = trim( $ciudad_cf );
+		} else {
+			$ciu_terms = wp_get_post_terms( $post_id, 'ciudad_proyecto' );
+			$ciudad    = ( ! is_wp_error( $ciu_terms ) && ! empty( $ciu_terms ) ) ? $ciu_terms[0]->name : '';
 		}
 	} else {
 		$tipo_txt = get_field( 'tipo_proyecto_text', $post_id );
@@ -368,7 +367,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
             <i class="bi bi-geo-alt" aria-hidden="true"></i><?php echo esc_html( $ciudad ); ?>
         </p>
         <?php endif; ?>
-        <div class="row align-items-center service-ficha__specs">
+        <div class="row align-items-start service-ficha__specs">
             <?php if ( $logo_url !== '' ) : ?>
             <div
                 class="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
@@ -383,7 +382,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 
                     <div class="service-ficha__spec-copy">
                         <i class="bi bi-rulers service-ficha__spec-icon" aria-hidden="true"></i>
-                        <span class="service-ficha__label"><?php esc_html_e( 'Area', 'theme_skema' ); ?></span>
+                        <span class="service-ficha__label"><?php esc_html_e( 'Área', 'theme_skema' ); ?></span>
 
                         <?php if ( $sup_strong ) : ?>
                         <strong class="service-ficha__sup-m2"
@@ -393,7 +392,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 
                 </div>
             </div>
-            <div class="col-12 col-md-4 d-flex align-items-center">
+            <div class="col-12 col-md-4 d-flex align-items-center p-0">
                 <div class="service-ficha__precio w-100">
 
                     <div class="service-ficha__spec-copy">

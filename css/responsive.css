@@ -5,6 +5,41 @@
     --gris-c: #D9D9D9;
     --blanco: #ffffff;
 	--negro: #000000;
+
+	/*
+	 * Primer desplegable bajo cada ítem de la barra: color del enlace por orden (1.º / 2.º / 3.º hijo <li>).
+	 * Profundidades siguientes (.skema-submenu-depth-1+): variables --skema-nav-submenu-depth-*.
+	 */
+	--skema-nav-submenu-primer-hijo: #00347a;
+	--skema-nav-submenu-segundo-hijo: #fc7416;
+	--skema-nav-submenu-tercer-hijo: #a2c3e0;
+	--skema-nav-submenu-primer-hijo-bg-hover: rgba(0, 52, 122, 0.08);
+	--skema-nav-submenu-segundo-hijo-bg-hover: rgba(252, 116, 22, 0.12);
+	--skema-nav-submenu-tercer-hijo-bg-hover: rgba(162, 195, 224, 0.35);
+
+	/* Drawer móvil (fondo azul): texto blanco en todos los niveles del submenú. */
+	--skema-nav-submenu-movil-primer-hijo: var(--blanco);
+	--skema-nav-submenu-movil-segundo-hijo: var(--blanco);
+	--skema-nav-submenu-movil-tercer-hijo: var(--blanco);
+
+	/* Sangría izquierda de cada <ul> anidado para alinear con el texto del ítem padre (.dropdown-item). */
+	--skema-nav-submenu-hijo-lista-inset: 1.5rem;
+
+	--skema-nav-submenu-depth-1-text: var(--azul);
+	--skema-nav-submenu-depth-1-text-hover: var(--azul);
+	--skema-nav-submenu-depth-1-bg-hover: rgba(0, 52, 122, 0.08);
+
+	--skema-nav-submenu-depth-2-text: var(--nara);
+	--skema-nav-submenu-depth-2-text-hover: #d96514;
+	--skema-nav-submenu-depth-2-bg-hover: rgba(252, 116, 22, 0.12);
+
+	/* Drawer móvil: 4.º+ hijo y submenús anidados (depth-1 / depth-2). */
+	--skema-nav-submenu-movil-primer-panel-resto: var(--blanco);
+	--skema-nav-submenu-movil-depth-1-text: var(--blanco);
+	--skema-nav-submenu-movil-depth-2-text: var(--blanco);
+
+	/* Ítem activo en el menú drawer (< 720px). */
+	--skema-nav-movil-item-activo: var(--skema-nav-submenu-tercer-hijo);
 }
 
 @layer skema-theme-base, skema-theme-landings;
@@ -36,35 +71,80 @@
         margin-top: 0.25rem;
         margin-bottom: 0.35rem;
         margin-left: 0;
-        padding: 0.35rem 0;
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+        padding-right: 0;
+        padding-left: var(--skema-nav-submenu-hijo-lista-inset);
         border: 0;
         box-shadow: none;
+        box-sizing: border-box;
     }
     #menuPrincipal .navbar-nav .dropdown-item.dropdown-toggle {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    /* Padres de 2.º nivel (y más): texto en azul corporativo sobre panel claro. */
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle,
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle span {
-        color: var(--azul);
+    /* Primer panel: 1.º / 2.º / 3.º hijo directo (mismo criterio en cada desplegable de la barra). */
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-primer-hijo);
     }
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-primer-hijo);
+        background-color: var(--skema-nav-submenu-primer-hijo-bg-hover);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-segundo-hijo);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-segundo-hijo);
+        background-color: var(--skema-nav-submenu-segundo-hijo-bg-hover);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-tercer-hijo);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-tercer-hijo);
+        background-color: var(--skema-nav-submenu-tercer-hijo-bg-hover);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item span {
+        color: var(--gris-o);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:focus {
         color: var(--azul);
         background-color: rgba(0, 52, 122, 0.06);
     }
-    /* Enlaces hoja bajo padres con submenú: naranja corporativo + sangría 20px. */
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
-        color: var(--nara);
-        padding-left: 20px;
+    /* Paneles anidados (depth 1+): por profundidad de <ul>. El inset del <ul> alinea con el padre; el enlace conserva padding estándar. */
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item span {
+        color: var(--skema-nav-submenu-depth-1-text);
     }
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
-        color: var(--nara);
-        background-color: rgba(252, 116, 22, 0.1);
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item {
+        padding-left: 1rem;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-depth-1-text-hover);
+        background-color: var(--skema-nav-submenu-depth-1-bg-hover);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item span {
+        color: var(--skema-nav-submenu-depth-2-text);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item {
+        padding-left: 1rem;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-depth-2-text-hover);
+        background-color: var(--skema-nav-submenu-depth-2-bg-hover);
     }
 }
 @media (max-width: 719px){
@@ -133,43 +213,103 @@
         box-shadow: none;
         background-color: transparent;
     }
-    /* Niveles 2+: sangría respecto al primer panel; sin fondo (drawer ya es azul). */
+    /* Listas anidadas: mismo criterio de alineación que en desktop (variable). */
     #menuPrincipal .navbar-nav .dropdown-menu .dropdown-menu {
-        margin-left: 0.75rem;
-        width: calc(100% - 0.75rem);
+        margin-left: 0;
+        margin-top: 0.25rem;
+        margin-bottom: 0.35rem;
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+        padding-right: 0;
+        padding-left: var(--skema-nav-submenu-hijo-lista-inset);
+        width: 100%;
+        box-sizing: border-box;
         background-color: transparent;
     }
-    /* Drawer: categorías y subcategorías — texto blanco, sin fondo, tipografía 1.15rem. */
+    /* Drawer: tipografía base; texto blanco (fondo azul del collapse). */
     #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item,
     #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item span {
         font-size: 1.15rem;
-        color: var(--blanco);
         background-color: transparent;
+        color: var(--blanco);
     }
     #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item:hover,
     #menuPrincipal .navbar-nav .dropdown-menu .dropdown-item:focus {
         color: var(--blanco);
         background-color: transparent;
     }
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle,
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle span {
-        color: var(--blanco);
-        background-color: transparent;
-        border-radius: 0;
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-primer-hijo);
     }
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:hover,
-    #menuPrincipal .navbar-nav .dropdown-menu a.dropdown-item.dropdown-toggle:focus {
-        color: var(--blanco);
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-primer-hijo);
         background-color: transparent;
     }
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle),
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle) span {
-        color: var(--blanco);
-        padding-left: 20px;
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-segundo-hijo);
     }
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):hover,
-    #menuPrincipal .navbar-nav .dropdown-menu li.dropdown ul.dropdown-menu > li > a.dropdown-item:not(.dropdown-toggle):focus {
-        color: var(--blanco);
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-segundo-hijo);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-tercer-hijo);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-tercer-hijo);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-primer-panel-resto);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-primer-panel-resto);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-depth-1-text);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item {
+        padding-left: 1rem;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-depth-1-text);
+        background-color: transparent;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item span {
+        color: var(--skema-nav-submenu-movil-depth-2-text);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item {
+        padding-left: 1rem;
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:focus {
+        color: var(--skema-nav-submenu-movil-depth-2-text);
+        background-color: transparent;
+    }
+    /* Ítem activo en submenús: prioridad sobre colores por posición (nth-child). */
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.current-menu-item > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.current-menu-item > a.dropdown-item span,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.active > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.active > a.dropdown-item span {
+        color: var(--skema-nav-movil-item-activo);
+    }
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.current-menu-item > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.current-menu-item > a.dropdown-item:focus,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.active > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li.active > a.dropdown-item:focus {
+        color: var(--skema-nav-movil-item-activo);
         background-color: transparent;
     }
     .redes {
@@ -238,6 +378,11 @@
         color: var(--blanco);
         background-color: transparent;
     }
+    #menuPrincipal .navbar-nav > .current-menu-item > .nav-link,
+    #menuPrincipal .navbar-nav > .nav-item.active > .nav-link,
+    ul#menu-menupricipal > .current-menu-item > .nav-link {
+        color: var(--skema-nav-movil-item-activo);
+    }
     
     button.btn-cerrar {
         border: none;
@@ -251,7 +396,17 @@
         left: 0;
     }
     nav#principal-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1030;
         padding: 1rem;
+    }
+    nav#principal-menu.menu-scrolled {
+        background-color: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     }
     ul#menu-menupricipal > *:not(:first-child) {
         border: none !important;
@@ -379,6 +534,15 @@
     }
     .divMapa hr {
         display: none;
+    }
+    .skema-mapa-stat:not(:last-child) {
+        border-right: none;
+    }
+    .skema-mapa-stat__icon {
+        min-height: 50px;
+    }
+    .skema-mapa-stat__content p {
+        font-size: 1rem;
     }
     .divMapa h5 {
         font-size: 0.8em;
@@ -547,9 +711,11 @@
     .ico-merc{
     	width: 63px;
     }
-    .navbar-nav .current-menu-item .nav-link {
-    font-weight: bold !important;
-    font-size: 22px !important;
+    #menuPrincipal .navbar-nav .current-menu-item > .nav-link,
+    #menuPrincipal .navbar-nav .nav-item.active > .nav-link {
+        color: var(--skema-nav-movil-item-activo);
+        font-weight: bold !important;
+        font-size: 22px !important;
     }
 }
 @media only screen and (max-width: 500px) and (min-width: 426px) {

@@ -625,31 +625,6 @@ $(document).on('blur change', '#selectMapas', function() {
         $('.btn-cerrar').attr('aria-expanded', 'false');
     });
 
-
-    var lastScrollTop = 0;
-    var navbar = $('#principal-menu');
-
-    $(window).scroll(function() {
-        // Solo ejecuta el código si el ancho de la pantalla es menor o igual a 992px
-        if ($(window).width() <= 500) {
-            var scrollTop = $(this).scrollTop();
-
-            if (scrollTop > lastScrollTop) {
-                // Desplazamiento hacia abajo
-                
-                navbar.css('top', '-100px'); // Ajusta esto según la altura de tu navbar
-            } else {
-                // Desplazamiento hacia arriba
-                navbar.css('top', '0');
-               // $("#menuPrincipal").removeClass("show");
-            }
-            lastScrollTop = scrollTop;
-        } else {
-            // Asegura que el menú esté visible cuando la pantalla sea más grande
-            navbar.css('top', '0');
-        }
-    });
-    
     $(window).on('resize', function() {
         var width = $(window).width();
         if (width < 700) {

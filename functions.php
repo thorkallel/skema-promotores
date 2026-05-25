@@ -13,6 +13,8 @@ if ( ! defined( '_S_VERSION' ) ) {
 }
 
 require_once get_template_directory() . '/inc/inicio-helpers.php';
+require_once get_template_directory() . '/inc/inicio-renvia-proyectos.php';
+require_once get_template_directory() . '/inc/sobrenosotros-trayectoria.php';
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -116,6 +118,31 @@ function theme_skema_setup() {
 	}
 }
 add_action( 'after_setup_theme', 'theme_skema_setup' );
+
+/**
+ * Añade una clase por profundidad a cada lista de submenú para poder dar estilos distintos al 1.º, 2.º y 3.º nivel.
+ *
+ * WordPress pasa $depth en start_lvl: 0 = primer desplegable bajo la barra, 1 = anidado, 2 = tercer nivel, etc.
+ *
+ * @param string[]         $classes Clases del `<ul>` del submenú.
+ * @param stdClass|null    $args    Argumentos de wp_nav_menu (objeto en runtime).
+ * @param int              $depth   Profundidad del submenú.
+ * @return string[]
+ */
+function theme_skema_nav_submenu_depth_classes( $classes, $args, $depth ) {
+	if ( ! is_array( $classes ) ) {
+		return $classes;
+	}
+
+	if ( is_object( $args ) && isset( $args->theme_location ) && 'menu-pincipal' !== $args->theme_location ) {
+		return $classes;
+	}
+
+	$classes[] = 'skema-submenu-depth-' . (int) $depth;
+
+	return $classes;
+}
+add_filter( 'nav_menu_submenu_css_class', 'theme_skema_nav_submenu_depth_classes', 10, 3 );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.
@@ -312,6 +339,11 @@ require get_template_directory() . '/inc/landings-variant.php';
  * ACF: ficha común (precio, tipología, superficie, imagen) en proyectos y landings.
  */
 require get_template_directory() . '/inc/acf-cpt-ficha-comun.php';
+
+/**
+ * ACF: WhatsApp opcional por página / proyecto / landing (fallback a opciones).
+ */
+require get_template_directory() . '/inc/acf-whatsapp-contextual.php';
 
 /**
  * Inicio: campos ACF locales (helpers en inc/inicio-helpers.php, cargado al inicio del tema).
@@ -572,3 +604,38 @@ function ocultar_opciones_para_admin_contenidos() {
     }
 }
 add_action('admin_head', 'ocultar_opciones_para_admin_contenidos');
+
+/**
+ * Corrige el layout del metabox Publicar (botón Actualizar) con el flex de WP 7.
+ * El div .clear legacy y margin-auto en #publishing-action desplazan el botón fuera del sidebar (~280px).
+ */
+function skema_fix_submit_metabox_publish_button() {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || ! in_array( $screen->base, array( 'post', 'post-new' ), true ) ) {
+		return;
+	}
+	echo '<style id="skema-submit-metabox-fix">
+		#major-publishing-actions {
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			gap: 10px;
+		}
+		#major-publishing-actions > .clear {
+			display: none;
+			width: 0;
+			height: 0;
+			overflow: hidden;
+			flex: 0 0 0;
+		}
+		#submitdiv #delete-action,
+		#submitdiv #publishing-action {
+			margin-left: 0;
+			margin-right: 0;
+			flex: 0 0 auto;
+			width: 100%;
+			text-align: left;
+		}
+	</style>';
+}
+add_action( 'admin_head', 'skema_fix_submit_metabox_publish_button' );

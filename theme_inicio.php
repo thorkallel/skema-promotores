@@ -233,78 +233,7 @@ if ($tipo_banner === 'Video') : ?>
             </div>
         </div>
     </section> -->
-    <?php
-$renvia_slider_ids = get_field( 'inicio_renvia_relacion' );
-if ( ! is_array( $renvia_slider_ids ) ) {
-	$renvia_slider_ids = array();
-}
-$renvia_slider_validos = array();
-foreach ( $renvia_slider_ids as $rid ) {
-	if ( is_object( $rid ) && isset( $rid->ID ) ) {
-		$rid = (int) $rid->ID;
-	} elseif ( is_array( $rid ) && isset( $rid['ID'] ) ) {
-		$rid = (int) $rid['ID'];
-	} else {
-		$rid = absint( $rid );
-	}
-	if ( ! $rid || 'publish' !== get_post_status( $rid ) ) {
-		continue;
-	}
-	$pt_r = get_post_type( $rid );
-	if ( ! in_array( $pt_r, array( 'proyectos', 'landings' ), true ) ) {
-		continue;
-	}
-	if ( ! theme_skema_inicio_renvia_incluir_en_slider( $rid ) ) {
-		continue;
-	}
-	$renvia_slider_validos[] = $rid;
-}
-$n_renvia = count( $renvia_slider_validos );
-if ( $n_renvia > 0 ) :
-	$tit_renvia = get_field( 'inicio_renvia_titulo' );
-	if ( ! is_string( $tit_renvia ) || $tit_renvia === '' ) {
-		$tit_renvia = sprintf(
-			/* translators: %s: «PROYECTOS» en <strong>, salto de línea y «en construcción y ventas» en <span>. */
-			__( 'CONOCE NUESTROS %s', 'theme_skema' ),
-			'<strong>' . esc_html__( 'PROYECTOS', 'theme_skema' ) . '</strong><br /> <span class="skema-proyectos__h2-subline">' . esc_html__( 'en construcción y ventas', 'theme_skema' ) . '</span>'
-		);
-	}
-	$sub_renvia = get_field( 'inicio_renvia_subtitulo' );
-	$tit_renvia_safe = wp_kses_post( $tit_renvia );
-	?>
-    <section class="skema-proyectos" id="proyectos"
-        aria-label="<?php echo esc_attr( wp_strip_all_tags( $tit_renvia ) ); ?>">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-11 col-12 px-sm-0 px-3 py-sm-4 py-1 item text-right">
-                    <p class="text-right"><b>02</b><?php echo esc_html( __( 'PROYECTOS', 'theme_skema' ) ); ?></p>
-                </div>
-                <div class="col-sm-1 px-0"></div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-sm-1 px-0"></div>
-                <div class="col-sm-11 col-12 px-sm-0 px-3 py-sm-4 py-1 item">
-                    <div class="skema-proyectos__head">
-                        <?php if ( is_string( $sub_renvia ) && $sub_renvia !== '' ) : ?>
-                        <span class="skema-proyectos__subtitle"><?php echo esc_html( $sub_renvia ); ?></span>
-                        <?php endif; ?>
-                        <h2><?php echo $tit_renvia_safe; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-                        </h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container-fluid skema-proyectos__fluid">
-            <div class="skema-proyectos__slider" data-slides-count="<?php echo esc_attr( (string) $n_renvia ); ?>">
-                <?php
-			foreach ( $renvia_slider_validos as $pid_renv ) {
-				theme_skema_render_inicio_renvia_ficha_card( $pid_renv );
-			}
-			?>
-            </div>
-        </div>
-    </section>
-    <?php endif; ?>
+    <?php theme_skema_render_inicio_renvia_proyectos_section(); ?>
     <section class="mapa pt-sm-5">
         <div class="container-fluid">
             <div class="row">
@@ -339,76 +268,74 @@ if ( $n_renvia > 0 ) :
                     <img class="img-fluid pl-sm-5 w-100 img-mapa" src="<?php the_sub_field('img_mapa'); ?>"
                         alt="<?php echo esc_attr( sprintf( __( 'Mapa de proyecto %d', 'theme_skema' ), ( $c + 1 ) ) ); ?>">
                 </div>
-                <div class="col-sm-7 col-12 pt-sm-5 pr-sm-5 order-0 order-sm-1 py-4">
-                    <div class="row pt-sm-4 pr-sm-3">
-                        <div
-                            class="col-sm-6 col-12 py-4 pl-5 d-flex flex-sm-column justify-content-start flex-row align-items-center">
-                            <?php $ico_txt1 = get_field('ico_txt1'); 
-                                if ($ico_txt1) :
-                                    $ico = $ico_txt1['ico'];
-                                    $ico_txt1_text = isset( $ico_txt1['text'] ) ? trim( (string) $ico_txt1['text'] ) : ''; ?>
-                            <?php if ($ico) : ?>
-                            <img class="ico-cons" src="<?= esc_url($ico); ?>"
-                                alt="<?php echo esc_attr( $ico_txt1_text !== '' ? $ico_txt1_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
-                            <?php endif; ?>
-                            <?php endif; ?>
-                            <div class="ml-3 d-flex flex-column align-items-start align-items-sm-center">
-                                <?php if ($ico_txt1) :
-                                        $text = $ico_txt1['text']; 
-                                        if ($text) : ?>
-                                <h5 class="mb-0 mt-sm-3"><?= esc_html($text); ?></h5>
-                                <?php endif;                                       
-                                     endif; ?>
-                                <hr class="d-none d-sm-block">
-                                <p class="mb-0"><?php the_sub_field('const'); ?> m²</p>
+                <div
+                    class="col-sm-7 col-12 pt-sm-5 pr-sm-5 order-0 order-sm-1 py-4 d-flex align-items-center justify-content-center">
+                    <div class="row skema-mapa-stats pt-sm-4 pr-sm-3 pl-3 pl-sm-0">
+                        <div class="col-4 col-sm-4 py-4 skema-mapa-stat">
+                            <?php
+                            $ico_txt1 = get_field( 'ico_txt1' );
+                            $ico_txt1_text = '';
+                            if ( is_array( $ico_txt1 ) && isset( $ico_txt1['text'] ) ) {
+                                $ico_txt1_text = trim( (string) $ico_txt1['text'] );
+                            }
+                            ?>
+                            <div class="skema-mapa-stat__icon">
+                                <?php if ( is_array( $ico_txt1 ) && ! empty( $ico_txt1['ico'] ) ) : ?>
+                                <img class="ico-cons" src="<?php echo esc_url( $ico_txt1['ico'] ); ?>"
+                                    alt="<?php echo esc_attr( $ico_txt1_text !== '' ? $ico_txt1_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
+                                <?php endif; ?>
                             </div>
-                        </div>
-                        <div
-                            class="col-sm-6 col-12 py-4 pl-5 d-flex flex-sm-column justify-content-start flex-row align-items-center">
-                            <?php $ico_txt2 = get_field('ico_txt2'); 
-                                if ($ico_txt2) :
-                                    $ico = $ico_txt2['ico'];
-                                    $ico_txt2_text = isset( $ico_txt2['text'] ) ? trim( (string) $ico_txt2['text'] ) : ''; ?>
-                            <?php if ($ico) : ?>
-                            <img class="ico-proye" src="<?= esc_url($ico); ?>"
-                                alt="<?php echo esc_attr( $ico_txt2_text !== '' ? $ico_txt2_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
-                            <?php endif; ?>
-                            <?php endif; ?>
-                            <div class="ml-3 d-flex flex-column align-items-start align-items-sm-center">
-                                <?php if ($ico_txt2) :
-                                        $text = $ico_txt2['text']; 
-                                        if ($text) : ?>
-                                <h5 class="mb-0 mt-sm-3"><?= esc_html($text); ?></h5>
-                                <?php endif;                                       
-                                     endif; ?>
+                            <div class="skema-mapa-stat__content">
+                                <?php if ( $ico_txt1_text !== '' ) : ?>
+                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt1_text ); ?></h5>
+                                <?php endif; ?>
                                 <hr>
-                                <p class="mb-0"><?php the_sub_field('ejec'); ?></p>
+                                <p class="mb-0"><?php the_sub_field( 'const' ); ?> m²</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row  pl-5 pl-sm-0 py-4 pt-sm-4 pt-3 mt-sm-4">
-                        <div
-                            class="col-sm-6 col-2 py-4 px-0 px-sm-3 d-flex flex-column align-items-sm-end justify-content-sm-center div-border">
-                            <div class="d-flex flex-column justify-content-center">
-                            <?php $ico_txt3 = get_field('ico_txt3'); 
-                                if ($ico_txt3) :
-                                    $ico = $ico_txt3['ico'];
-                                    $ico_txt3_text = isset( $ico_txt3['text'] ) ? trim( (string) $ico_txt3['text'] ) : ''; ?>
-                                <?php if ($ico) : ?>
-                                <img class="ico-merc mx-auto" src="<?= esc_url($ico); ?>"
+                        <div class="col-4 col-sm-4 py-4 skema-mapa-stat">
+                            <?php
+                            $ico_txt2 = get_field( 'ico_txt2' );
+                            $ico_txt2_text = '';
+                            if ( is_array( $ico_txt2 ) && isset( $ico_txt2['text'] ) ) {
+                                $ico_txt2_text = trim( (string) $ico_txt2['text'] );
+                            }
+                            ?>
+                            <div class="skema-mapa-stat__icon">
+                                <?php if ( is_array( $ico_txt2 ) && ! empty( $ico_txt2['ico'] ) ) : ?>
+                                <img class="ico-proye" src="<?php echo esc_url( $ico_txt2['ico'] ); ?>"
+                                    alt="<?php echo esc_attr( $ico_txt2_text !== '' ? $ico_txt2_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
+                                <?php endif; ?>
+                            </div>
+                            <div class="skema-mapa-stat__content">
+                                <?php if ( $ico_txt2_text !== '' ) : ?>
+                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt2_text ); ?></h5>
+                                <?php endif; ?>
+                                <hr>
+                                <p class="mb-0"><?php the_sub_field( 'ejec' ); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-4 col-sm-4 py-4 skema-mapa-stat">
+                            <?php
+                            $ico_txt3 = get_field( 'ico_txt3' );
+                            $ico_txt3_text = '';
+                            if ( is_array( $ico_txt3 ) && isset( $ico_txt3['text'] ) ) {
+                                $ico_txt3_text = trim( (string) $ico_txt3['text'] );
+                            }
+                            ?>
+                            <div class="skema-mapa-stat__icon">
+                                <?php if ( is_array( $ico_txt3 ) && ! empty( $ico_txt3['ico'] ) ) : ?>
+                                <img class="ico-merc" src="<?php echo esc_url( $ico_txt3['ico'] ); ?>"
                                     alt="<?php echo esc_attr( $ico_txt3_text !== '' ? $ico_txt3_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
                                 <?php endif; ?>
-                                <?php endif; ?>
-                                <?php if ($ico_txt3) :
-                                   $text = $ico_txt3['text']; 
-                                   if ($text) : ?>
-                                <h5 class="mb-0 mt-3 d-none d-sm-block"><?= esc_html($text); ?></h5>
-                                <?php endif;                                       
-                                endif; ?>
                             </div>
-                        </div>
-                        <div class="col-sm-6 col-8 d-flex flex-column justify-content-center">
-                            <p class="mb-0"><?php the_sub_field('mer'); ?></p>
+                            <div class="skema-mapa-stat__content">
+                                <?php if ( $ico_txt3_text !== '' ) : ?>
+                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt3_text ); ?></h5>
+                                <?php endif; ?>
+                                <hr>
+                                <p class="mb-0"><?php the_sub_field( 'mer' ); ?></p>
+                            </div>
                         </div>
                     </div>
                 </div>

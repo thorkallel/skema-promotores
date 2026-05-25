@@ -73,11 +73,11 @@
 	color: #00347a;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .property-tabs .nav-link {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .property-tabs .nav-link {
 	color: #00347a;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box .property-tabs .nav-link.active {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .property-media-box.skema-landing-slot--medios .property-tabs .nav-link.active {
 	color: #fff;
 }
 

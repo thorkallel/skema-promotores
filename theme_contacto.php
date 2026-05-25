@@ -47,8 +47,11 @@ get_header(); ?>
                             aria-label="<?php echo esc_attr__( 'Facebook', 'theme_skema' ); ?>"><i class="bi bi-facebook"></i></a>
 				        <a href="<?php the_field('inst', 'option') ?>" target="_blank" rel="noopener noreferrer"
                             aria-label="<?php echo esc_attr__( 'Instagram', 'theme_skema' ); ?>"><i class="bi bi-instagram"></i></a>
-				        <a href="https://wa.me/<?php the_field('wp', 'option') ?>" target="_blank" rel="noopener noreferrer"
+				        <?php $skema_wa_digits = theme_skema_get_whatsapp_wa_me_digits(); ?>
+						<?php if ( '' !== $skema_wa_digits ) : ?>
+				        <a href="https://wa.me/<?php echo esc_attr( $skema_wa_digits ); ?>" target="_blank" rel="noopener noreferrer"
                             aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
+						<?php endif; ?>
                         <a href="tel:<?php the_field('tele', 'option') ?>"
                             aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone"></i></a>
                     </div>

@@ -1,5 +1,5 @@
 /**
- * Landings: Slick en pestaña Plantas (slider + miniaturas sincronizadas).
+ * Landings: Slick en pestañas Plantas y Avance de obra (slider + miniaturas sincronizadas).
  * Bootstrap 4: shown.bs.tab al mostrar el panel.
  */
 (function ($) {
@@ -126,10 +126,17 @@
 		$wrap.data('plantasSlickReady', true);
 	}
 
+	function isPlantasOrAvanceTabTarget(target) {
+		if (!target) {
+			return false;
+		}
+		return target.indexOf('-tab-plantas') !== -1 || target.indexOf('-tab-avance-obra') !== -1;
+	}
+
 	function onTabShown(e) {
 		var $trigger = $(e.target);
 		var target = $trigger.attr('data-target') || $trigger.attr('href');
-		if (!target || target.indexOf('-tab-plantas') === -1) {
+		if (!isPlantasOrAvanceTabTarget(target)) {
 			return;
 		}
 
@@ -147,7 +154,7 @@
 	$(function () {
 		var $active = $('.tab-pane.active');
 		var id = $active.attr('id');
-		if (id && id.indexOf('-tab-plantas') !== -1) {
+		if (id && isPlantasOrAvanceTabTarget(id)) {
 			initPlantas($active.find('.skema-landing-plantas-wrap').first());
 		}
 	});

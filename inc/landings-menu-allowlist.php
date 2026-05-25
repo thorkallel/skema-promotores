@@ -21,6 +21,7 @@ defined( 'ABSPATH' ) || exit;
 function theme_skema_landings_menu_get_ids_from_theme_config() {
 	return array(
 		1,
+		6,
 		// 12,
 		// 34,
 	);
