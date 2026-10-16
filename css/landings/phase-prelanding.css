@@ -397,7 +397,8 @@
 	margin-top: 24px;
 }
 
-.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead h5 {
+.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead h5,
+.site-main--landings.landing-phase--prelanding .project-info-box.project-info-box--lead .project-info-box__heading {
 	margin-bottom: 8px;
 	color: var(--azul, #00347a);
 }
@@ -471,12 +472,12 @@
 	color: #5b6b84;
 }
 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input:focus,
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea:focus,
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select:focus {
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input:focus-visible,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea:focus-visible,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select:focus-visible {
 	border-color: var(--nara, #fc7416);
-	outline: none;
-	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2);
+	outline: 2px solid #0b1f42;
+	outline-offset: 2px;
 }
 
 .site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.wpcf7-submit {
@@ -538,14 +539,15 @@
 	color: #5b6b84 !important;
 }
 
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.form-control:focus,
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea.form-control:focus,
-.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select.form-control:focus {
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap input.form-control:focus-visible,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap textarea.form-control:focus-visible,
+.site-main--landings.landing-phase--prelanding .prelanding-cf7-wrap select.form-control:focus-visible {
 	background-color: #fff !important;
 	color: #0b1f42 !important;
 	border-color: var(--nara, #fc7416) !important;
-	outline: none !important;
-	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2) !important;
+	outline: 2px solid #0b1f42 !important;
+	outline-offset: 2px !important;
+	box-shadow: none !important;
 }
 
 /* Checkbox nativo visible y alineado (vence estilos .contacto del tema si aplican por herencia) */

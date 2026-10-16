@@ -311,6 +311,9 @@ function theme_skema_robots_txt_sitemap( $output, $public ) {
 	if ( ! $public ) {
 		return $output;
 	}
+	if ( theme_skema_seo_plugin_active() ) {
+		return $output;
+	}
 	$sitemap = home_url( '/wp-sitemap.xml' );
 	// WordPress core ya suele añadir esta línea desde 5.5.
 	if ( strpos( $output, 'wp-sitemap.xml' ) !== false ) {
@@ -319,6 +322,73 @@ function theme_skema_robots_txt_sitemap( $output, $public ) {
 	return trim( (string) $output ) . "\n\nSitemap: " . esc_url( $sitemap ) . "\n";
 }
 add_filter( 'robots_txt', 'theme_skema_robots_txt_sitemap', 20, 2 );
+
+/**
+ * La búsqueda interna no se indexa: es contenido fino y duplica fichas.
+ *
+ * @param array<string, bool|string> $robots Directivas de WordPress.
+ * @return array<string, bool|string>
+ */
+function theme_skema_search_wp_robots( $robots ) {
+	if ( ! is_search() ) {
+		return $robots;
+	}
+
+	$robots['noindex'] = true;
+	$robots['follow']  = true;
+	unset( $robots['index'] );
+
+	return $robots;
+}
+add_filter( 'wp_robots', 'theme_skema_search_wp_robots' );
+
+/**
+ * SEOPress arma «index, follow» en la búsqueda. Aquí pasa a noindex.
+ *
+ * @param array<int, string> $attrs Fragmentos del content de robots.
+ * @return array<int, string>
+ */
+function theme_skema_search_seopress_robots( $attrs ) {
+	if ( ! is_search() || ! is_array( $attrs ) ) {
+		return $attrs;
+	}
+
+	$next = array( 'noindex', 'follow' );
+	foreach ( $attrs as $attr ) {
+		if ( ! is_string( $attr ) ) {
+			continue;
+		}
+		if ( $attr === 'index' || $attr === 'follow' || $attr === 'index, follow' || $attr === 'noindex' ) {
+			continue;
+		}
+		if ( strpos( $attr, 'max-' ) === 0 ) {
+			continue;
+		}
+		$next[] = $attr;
+	}
+
+	return $next;
+}
+add_filter( 'seopress_titles_robots_attrs', 'theme_skema_search_seopress_robots' );
+
+/**
+ * Conserva el 301 de /sample-page/ hacia la portada después de renombrar su slug.
+ */
+function theme_skema_redirect_legacy_front_slug() {
+	if ( is_admin() ) {
+		return;
+	}
+	$request = '';
+	if ( isset( $GLOBALS['wp'] ) && is_object( $GLOBALS['wp'] ) ) {
+		$request = trim( (string) $GLOBALS['wp']->request, '/' );
+	}
+	if ( 'sample-page' !== $request ) {
+		return;
+	}
+	wp_safe_redirect( home_url( '/' ), 301 );
+	exit;
+}
+add_action( 'template_redirect', 'theme_skema_redirect_legacy_front_slug' );
 
 /**
  * Enlace de descubrimiento del sitemap en el head (complemento a robots.txt).

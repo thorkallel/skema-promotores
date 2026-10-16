@@ -49,14 +49,15 @@ function theme_skema_render_inicio_hero_video() {
 	<div class="video-content">
 		<div class="video-background">
 			<div class="video-foreground reveal">
-				<video id="video-banner" class="d-none d-sm-block" src="<?php the_field( 'video-banner' ); ?>" autoplay
-					playsinline loop muted>
-					Your browser does not support HTML5 video.
+				<video id="video-banner" class="skema-ambient-video d-none d-sm-block" src="<?php the_field( 'video-banner' ); ?>"
+					playsinline loop muted aria-hidden="true">
+					<?php esc_html_e( 'Tu navegador no reproduce vídeo HTML5.', 'theme_skema' ); ?>
 				</video>
-				<video id="video-banner-movil" class="d-sm-none d-block" src="<?php the_field( 'video-banner-movil' ); ?>"
-					autoplay playsinline loop muted>
-					Your browser does not support HTML5 video.
+				<video id="video-banner-movil" class="skema-ambient-video d-sm-none d-block" src="<?php the_field( 'video-banner-movil' ); ?>"
+					playsinline loop muted aria-hidden="true">
+					<?php esc_html_e( 'Tu navegador no reproduce vídeo HTML5.', 'theme_skema' ); ?>
 				</video>
+				<button type="button" class="skema-ambient-pause" aria-pressed="false"><?php esc_html_e( 'Pausar vídeo', 'theme_skema' ); ?></button>
 			</div>
 		</div>
 	</div>
@@ -74,7 +75,7 @@ function theme_skema_render_inicio_hero_image_sliders() {
 		<div class="slick-slider-banner">
 			<?php theme_skema_render_inicio_hero_image_slides( 'slider_img', 'cabecera' ); ?>
 		</div>
-		<div class="home-hero-dots" aria-hidden="true"></div>
+		<div class="home-hero-dots"></div>
 	</div>
 	<div class="slider-banner d-sm-none d-block">
 		<div class="slick-slider-banner">
@@ -196,6 +197,7 @@ function theme_skema_render_inicio_hero_youtube_slider() {
 				<div class="hero-yt-embed">
 					<iframe class="hero-yt-iframe" src="<?php echo esc_url( $embed_src ); ?>"
 						title="<?php echo esc_attr( $slide_title ); ?>" width="560" height="315"
+						tabindex="-1" aria-hidden="true"
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 						referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
 						loading="<?php echo 0 === $idx ? 'eager' : 'lazy'; ?>"></iframe>
@@ -205,7 +207,7 @@ function theme_skema_render_inicio_hero_youtube_slider() {
 			}
 			?>
 		</div>
-		<div class="home-hero-dots" aria-hidden="true"></div>
+		<div class="home-hero-dots"></div>
 	</div>
 	<?php
 }

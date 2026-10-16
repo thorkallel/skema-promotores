@@ -1,4 +1,7 @@
 jQuery(document).ready(function($) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
     // Inicialización del controlador de ScrollMagic
 var controller = new ScrollMagic.Controller();
 

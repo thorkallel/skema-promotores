@@ -36,6 +36,7 @@ $skema_bc_download = isset( $skema_brochure_cta['download'] ) && is_string( $ske
 		rel="noopener noreferrer"
 	>
 		<?php echo esc_html( $skema_bc_label ); ?>
+		<span class="screen-reader-text"><?php esc_html_e( '(PDF, abre en una nueva pestaña)', 'theme_skema' ); ?></span>
 		<i class="fa-regular fa-file-pdf" aria-hidden="true"></i>
 	</a>
 </div>

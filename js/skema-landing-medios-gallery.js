@@ -16,6 +16,42 @@
 		});
 	}
 
+	function preloadImageUrl(url) {
+		return new Promise(function (resolve) {
+			if (!url) {
+				resolve();
+				return;
+			}
+			var loader = new Image();
+			loader.onload = loader.onerror = function () {
+				resolve();
+			};
+			loader.src = url;
+		});
+	}
+
+	function setStageLoading(stageEl, isLoading) {
+		if (!stageEl) {
+			return;
+		}
+		if (isLoading) {
+			stageEl.classList.add('is-loading-media');
+			return;
+		}
+		stageEl.classList.remove('is-loading-media');
+	}
+
+	function setImageLoading(imgEl, isLoading) {
+		if (!imgEl) {
+			return;
+		}
+		if (isLoading) {
+			imgEl.classList.add('is-loading');
+			return;
+		}
+		imgEl.classList.remove('is-loading');
+	}
+
 	function initOneModal(modalEl) {
 		var scriptEl = modalEl.querySelector('script[type="application/json"].skema-landing-gallery-json');
 		if (!scriptEl || !scriptEl.textContent) {
@@ -38,31 +74,58 @@
 		var ctrEl = document.getElementById(prefix + '-counter');
 		var prevBtn = document.getElementById(prefix + '-prev');
 		var nextBtn = document.getElementById(prefix + '-next');
+		var stageEl = modalEl.querySelector('.modal-gallery-stage');
 		if (!imgEl || !capEl || !ctrEl || !prevBtn || !nextBtn) {
 			return;
 		}
 
 		var current = 0;
+		var renderToken = 0;
+		var lastTrigger = null;
 
 		ctrEl.setAttribute('aria-live', 'polite');
 		ctrEl.setAttribute('aria-atomic', 'true');
 		capEl.setAttribute('aria-live', 'polite');
 		capEl.setAttribute('aria-atomic', 'true');
 
+		function preloadAdjacentSlides(index) {
+			var indexes = [index - 1, index + 1];
+			indexes.forEach(function (idx) {
+				if (idx < 0 || idx >= slides.length) {
+					return;
+				}
+				preloadImageUrl(slides[idx].src);
+			});
+		}
+
 		function render() {
 			var item = slides[current];
 			if (!item) {
 				return;
 			}
-			imgEl.src = item.src;
-			imgEl.alt = item.alt || '';
+
+			var token = ++renderToken;
+			setStageLoading(stageEl, true);
+			setImageLoading(imgEl, true);
 			capEl.textContent = item.caption || item.alt || '';
 			ctrEl.textContent = current + 1 + ' / ' + slides.length;
 			prevBtn.disabled = current <= 0;
 			nextBtn.disabled = current >= slides.length - 1;
+
+			preloadImageUrl(item.src).then(function () {
+				if (token !== renderToken) {
+					return;
+				}
+				imgEl.src = item.src;
+				imgEl.alt = item.alt || '';
+				setImageLoading(imgEl, false);
+				setStageLoading(stageEl, false);
+				preloadAdjacentSlides(current);
+			});
 		}
 
 		function onShowModal(e) {
+			lastTrigger = (e && e.relatedTarget) || document.activeElement;
 			var t = e.relatedTarget;
 			if (t && t.getAttribute('data-gallery-index') !== null) {
 				var idx = parseInt(t.getAttribute('data-gallery-index'), 10);
@@ -76,6 +139,11 @@
 		/* Bootstrap 4 usa jQuery para disparar show.bs.modal; addEventListener nativo no siempre recibe el evento. */
 		if (typeof jQuery !== 'undefined') {
 			jQuery(modalEl).on('show.bs.modal', onShowModal);
+			jQuery(modalEl).on('hidden.bs.modal', function () {
+				if (lastTrigger && typeof lastTrigger.focus === 'function') {
+					lastTrigger.focus();
+				}
+			});
 		} else {
 			modalEl.addEventListener('show.bs.modal', onShowModal);
 		}

@@ -14,7 +14,7 @@ get_header(); ?>
                 <?php $banner_movil = get_field('banner_movil');
                 if ($banner_movil) : ?>
                     <img src="<?php echo esc_url($banner_movil); ?>"
-                        alt="<?php echo esc_attr( sprintf( __( 'Banner de %s', 'theme_skema' ), get_the_title() ) ); ?>"
+                        alt=""
                         class="img-fluid d-sm-none d-block w-100">
                 <?php endif; ?> 
                 <div class="card-img-overlay p-sm-5 px-0 d-sm-flex align-items-center justify-content-end w-100">
@@ -59,7 +59,7 @@ get_header(); ?>
 			</div>
             <div class="col-sm-6 col-12 pl-sm-5 pr-sm-4 mb-sm-0 mb-5">
                 <div class="card formu px-sm-3 pt-4 pt-sm-0">
-				    <h3 class="pl-sm-4 pt-sm-4 mb-sm-3 mb-4">Contacto</h3>
+				    <h2 class="h3 pl-sm-4 pt-sm-4 mb-sm-3 mb-4">Contacto</h2>
                     <?php echo do_shortcode('[contact-form-7 id="d3f6ebb" title="Formulario Contacto"]'); ?>
                 </div>
 			</div>

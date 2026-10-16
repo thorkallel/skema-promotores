@@ -194,6 +194,64 @@ if ( ! function_exists( 'theme_skema_proyectos_build_list_query_args' ) ) {
 	}
 }
 
+if ( ! function_exists( 'theme_skema_proyectos_term_has_projects' ) ) {
+	/**
+	 * Indica si hay al menos un proyecto para la categoría (y estado opcional).
+	 *
+	 * @param string $tipo_slug   Slug de tipo_proyecto.
+	 * @param string $estado_slug Slug de estado_proyecto; vacío = cualquier estado.
+	 * @return bool
+	 */
+	function theme_skema_proyectos_term_has_projects( $tipo_slug, $estado_slug = '' ) {
+		if ( $tipo_slug === '' ) {
+			return false;
+		}
+
+		$probe = new WP_Query(
+			array_merge(
+				theme_skema_proyectos_build_list_query_args( $tipo_slug, $estado_slug ),
+				array(
+					'posts_per_page' => 1,
+					'fields'         => 'ids',
+				)
+			)
+		);
+
+		$has_posts = (int) $probe->found_posts > 0;
+		wp_reset_postdata();
+
+		return $has_posts;
+	}
+}
+
+if ( ! function_exists( 'theme_skema_proyectos_filter_visible_terms' ) ) {
+	/**
+	 * Devuelve solo categorías con proyectos según el filtro de estado actual.
+	 *
+	 * @param WP_Term[] $terms       Términos de tipo_proyecto.
+	 * @param string    $estado_slug Slug de estado_proyecto; vacío = sin filtro de estado.
+	 * @return WP_Term[]
+	 */
+	function theme_skema_proyectos_filter_visible_terms( $terms, $estado_slug = '' ) {
+		if ( empty( $terms ) ) {
+			return array();
+		}
+
+		$visible_terms = array();
+		foreach ( $terms as $term ) {
+			if ( ! $term instanceof WP_Term ) {
+				continue;
+			}
+			if ( ! theme_skema_proyectos_term_has_projects( $term->slug, $estado_slug ) ) {
+				continue;
+			}
+			$visible_terms[] = $term;
+		}
+
+		return $visible_terms;
+	}
+}
+
 if ( ! function_exists( 'theme_skema_proyectos_tab_url_sync' ) ) {
 	/**
 	 * Refuerzo en el cliente: caché sin Vary por query o enlaces solo con hash.
@@ -243,7 +301,7 @@ get_header(); ?>
                     <?php $banner_movil = get_field('banner_movil');
                 if ($banner_movil) : ?>
                     <img src="<?php echo esc_url($banner_movil); ?>"
-                        alt="<?php echo esc_attr( sprintf( __( 'Banner de %s', 'theme_skema' ), get_the_title() ) ); ?>"
+                        alt=""
                         class="img-fluid d-sm-none d-block w-100">
                     <?php endif; ?>
                     <div
@@ -259,46 +317,70 @@ get_header(); ?>
     <section class="descubre mt-sm-4">
         <div class="container-fluid text-center px-sm-5">
             <div class="text-center py-4"><?php the_content(); ?> </div>
+            <h2 class="proyectos-hub__section-title"><?php esc_html_e( 'Proyectos residenciales, comerciales e institucionales', 'theme_skema' ); ?></h2>
+            <?php
+            $terms = get_terms( array( 'taxonomy' => 'tipo_proyecto', 'hide_empty' => false ) );
+            if ( is_wp_error( $terms ) ) {
+                $terms = array();
+            }
+            $skema_estado_slug = theme_skema_proyectos_resolve_estado_slug();
+            $visible_terms     = theme_skema_proyectos_filter_visible_terms( $terms, $skema_estado_slug );
+            $active_tab_index  = theme_skema_proyectos_resolve_active_tab( $visible_terms );
+            ?>
+            <?php if ( ! empty( $visible_terms ) ) : ?>
             <div class="row mb-sm-5">
                 <div class="col-sm"></div>
                 <div class="col-sm-10 col-12">
                     <ul class="nav text-center justify-content-center" id="myTab" role="tablist" data-skema-proyectos-tabs="1">
-                        <?php
-                    $terms = get_terms(array('taxonomy' => 'tipo_proyecto', 'hide_empty' => false));
-                    if (is_wp_error($terms)) {
-                        $terms = array();
-                    }
-                    $active_tab_index   = theme_skema_proyectos_resolve_active_tab( $terms );
-                    $skema_estado_slug  = theme_skema_proyectos_resolve_estado_slug();
-                    foreach ($terms as $index => $term) { ?>
+                        <?php foreach ( $visible_terms as $index => $term ) : ?>
                         <li class="col-sm-3 px-4 col-6 mb-4 mb-sm-0">
-                            <a id="<?= $term->slug; ?>-tab" href="#<?= $term->slug; ?>"
-                                class="nav-link btn-catego <?php echo ($index === $active_tab_index) ? 'active' : ''; ?>"
-                                data-toggle="tab" role="tab" aria-controls="<?= $term->slug ?>"
-                                aria-selected="<?= $index === $active_tab_index ? 'true' : 'false' ?>">
-                                <?= $term->name; ?>
+                            <a id="<?php echo esc_attr( $term->slug ); ?>-tab" href="#<?php echo esc_attr( $term->slug ); ?>"
+                                class="nav-link btn-catego <?php echo ( $index === $active_tab_index ) ? 'active' : ''; ?>"
+                                data-toggle="tab" role="tab" aria-controls="<?php echo esc_attr( $term->slug ); ?>"
+                                aria-selected="<?php echo $index === $active_tab_index ? 'true' : 'false'; ?>">
+                                <?php echo esc_html( $term->name ); ?>
                             </a>
                         </li>
-                        <?php } ?>
+                        <?php endforeach; ?>
                     </ul>
                 </div>
                 <div class="col"></div>
             </div>
+            <?php endif; ?>
             <div class="row mb-sm-4">
                 <div class="col-12 col-xl-12 col-md-12 col-sm-12 px-sm-5 px-4">
                     <div class="tab-content" id="myTabContent"
                         <?php if ( $skema_estado_slug !== '' ) : ?>
                         data-skema-proyectos-estado="<?php echo esc_attr( $skema_estado_slug ); ?>"
                         <?php endif; ?>>
-                        <?php foreach ($terms as $index => $term) : ?>
-                        <div class="tab-pane fade <?= $index === $active_tab_index ? 'show active' : '' ?>"
-                            id="<?= $term->slug ?>" role="tabpanel" aria-labelledby="<?= $term->slug ?>-tab">
+                        <?php
+                        if ( empty( $visible_terms ) ) :
+                            ?>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <p class="text-center mb-0">
+                                    <?php
+                                    if ( $skema_estado_slug !== '' ) {
+                                        esc_html_e( 'No hay proyectos con el estado seleccionado.', 'theme_skema' );
+                                    } else {
+                                        esc_html_e( 'No hay proyectos disponibles.', 'theme_skema' );
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php
+                        else :
+                            foreach ( $visible_terms as $index => $term ) :
+                                ?>
+                        <div class="tab-pane fade <?php echo $index === $active_tab_index ? 'show active' : ''; ?>"
+                            id="<?php echo esc_attr( $term->slug ); ?>" role="tabpanel"
+                            aria-labelledby="<?php echo esc_attr( $term->slug ); ?>-tab">
                             <div class="row justify-content-center">
                                 <?php
                                 $args  = theme_skema_proyectos_build_list_query_args( $term->slug, $skema_estado_slug );
                                 $query = new WP_Query( $args );
-                                if ( $query->have_posts() ) :
-                                    while ( $query->have_posts() ) :
+                                while ( $query->have_posts() ) :
                                         $query->the_post();
                                         $estado_terms = wp_get_post_terms( get_the_ID(), 'estado_proyecto' );
                                         $tipo_terms   = wp_get_post_terms( get_the_ID(), 'tipo_proyecto' );
@@ -331,27 +413,15 @@ get_header(); ?>
                                     </div>
                                 </div>
                                 <?php
-                                    endwhile;
-                                else :
-                                    ?>
-                                <div class="col-12">
-                                    <p class="text-center mb-0">
-                                        <?php
-                                        if ( $skema_estado_slug !== '' ) {
-                                            esc_html_e( 'No hay proyectos con el estado seleccionado en esta categoría.', 'theme_skema' );
-                                        } else {
-                                            esc_html_e( 'No hay proyectos disponibles en esta categoría.', 'theme_skema' );
-                                        }
-                                        ?>
-                                    </p>
-                                </div>
-                                <?php
-                                endif;
+                                endwhile;
                                 wp_reset_postdata();
                                 ?>
                             </div>
                         </div>
-                        <?php endforeach; ?>
+                        <?php
+                            endforeach;
+                        endif;
+                        ?>
                     </div>
                 </div>
             </div>

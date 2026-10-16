@@ -7,7 +7,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$landing_id    = get_queried_object_id();
+$landing_id = function_exists( 'theme_skema_viewing_landing_id' )
+	? theme_skema_viewing_landing_id()
+	: (int) get_queried_object_id();
 $landing_title = $landing_id ? get_the_title( $landing_id ) : '';
 $home_url      = home_url( '/' );
 $solicitar_href = $landing_id ? ( get_permalink( $landing_id ) . '#solicitar-informacion' ) : '#solicitar-informacion';

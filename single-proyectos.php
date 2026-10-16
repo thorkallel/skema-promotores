@@ -6,6 +6,14 @@
  *
  * @package skema
  */
+$skema_linked_landing_id = function_exists( 'theme_skema_linked_landing_id' )
+	? theme_skema_linked_landing_id( get_queried_object_id() )
+	: 0;
+if ( $skema_linked_landing_id && function_exists( 'theme_skema_render_linked_landing' ) ) {
+	theme_skema_render_linked_landing( $skema_linked_landing_id );
+	return;
+}
+
 get_header();
 $post_id         = get_queried_object_id();
 $titulo_proyecto = get_the_title( $post_id );
@@ -141,22 +149,22 @@ $banner_alt      = sprintf(
             <div class="row mb-sm-5 mb-4">
                 <div class="col-sm"></div>
                 <div class="col-sm-10 col-12">
-                    <ul class="nav text-center justify-content-between" id="myTab" role="tablist">
+                    <ul class="nav text-center justify-content-between" id="skema-proyecto-caracteristicas" role="tablist">
                         <?php if(get_field('area_const') || get_field('area_priv')): ?>
-                        <li class="col-sm-4 col-5 px-0 px-sm-3">
-                            <a id="caract-tab" href="#caract" class="nav-link btn-catego active" data-toggle="tab" role="tab"
+                        <li class="col-sm-4 col-5 px-0 px-sm-3" role="presentation">
+                            <button type="button" id="caract-tab" class="nav-link btn-catego active" data-toggle="tab" data-target="#caract" role="tab"
                                 aria-controls="caract" aria-selected="true">
-                                Caracteristicas
-                            </a>
+                                <?php esc_html_e( 'Características', 'theme_skema' ); ?>
+                            </button>
 
                         </li>
                         <?php endif; ?>
                         <?php if(get_field('imagenes')): ?>
-                        <li class="col-sm-4 col-5 px-0 px-sm-3">
-                            <a id="zonas-tab" href="#zonas" class="nav-link btn-catego" data-toggle="tab" role="tab"
+                        <li class="col-sm-4 col-5 px-0 px-sm-3" role="presentation">
+                            <button type="button" id="zonas-tab" class="nav-link btn-catego" data-toggle="tab" data-target="#zonas" role="tab"
                                 aria-controls="zonas" aria-selected="false">
-                                Zonas comunes
-                            </a>
+                                <?php esc_html_e( 'Zonas comunes', 'theme_skema' ); ?>
+                            </button>
                         </li>
                         <?php endif; ?>
                     </ul>
@@ -165,7 +173,7 @@ $banner_alt      = sprintf(
             </div>
             <div class="row justify-content-center">
                 <div class="col-sm-10 col-12">
-                    <div class="tab-content" id="myTabContent">
+                    <div class="tab-content" id="skema-proyecto-caracteristicas-paneles">
                         <div class="tab-pane fade show active" id="caract" role="tabpanel" aria-labelledby="caract-tab">
                             <div class="row justify-content-center">
                                 <?php if(get_field('area_const')): ?>
@@ -243,7 +251,7 @@ if ($query->have_posts()) :  $cont = 1;
     $cuantos = $query->found_posts;  ?>
     <section class="similares mt-5">
         <div class="container-fluid">
-            <h2 class="pb-sm-5 pb-4 text-center">PROYECTOS SIMILARES</h2>
+            <h2 class="pb-sm-5 pb-4 text-center"><?php esc_html_e( 'Proyectos similares', 'theme_skema' ); ?></h2>
             <div class="row justify-content-center">
                 <div class="col-sm-11 px-sm-5">
                     <div class="slider_project slider_project--similares row justify-content-center"
@@ -288,7 +296,7 @@ if ($query->have_posts()) :  $cont = 1;
     <?php if(have_rows('avance')): ?>
     <section class="avance px-sm-5 mt-4">
         <div class="container-fluid">
-            <h2 class="pb-sm-4 pb-3 text-center">AVANCE DE OBRA</h2>
+            <h2 class="pb-sm-4 pb-3 text-center"><?php esc_html_e( 'Avance de obra', 'theme_skema' ); ?></h2>
             <div class="row justify-content-center">
                 <div class="col-sm-7 px-sm-0 d-sm-flex align-items-sm-end justify-content-sm-around">
                     <p>Seleccione el mes que desea visualizar:</p>

@@ -19,8 +19,10 @@
 			arrows: false,
 			infinite: true,
 			speed: 800,
-			autoplay: true,
+			autoplay: !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches),
 			autoplaySpeed: 4200,
+			pauseOnHover: true,
+			pauseOnFocus: true,
 			slidesToShow: 5,
 			slidesToScroll: 1,
 			responsive: [

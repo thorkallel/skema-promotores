@@ -316,6 +316,11 @@ function custom_mimes( $mimes = array() ) {
 }
 add_filter( 'upload_mimes', 'custom_mimes' );
 /**
+ * CPT Proyectos (URL pública /proyectos/<slug>/). Debe cargarse antes que CPT UI en init.
+ */
+require get_template_directory() . '/inc/cpt-proyectos.php';
+
+/**
  * CPT Landings.
  */
 require get_template_directory() . '/inc/cpt-landings.php';
@@ -388,6 +393,11 @@ require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/seo.php';
 
 /**
+ * Antispam de Contact Form 7 (señuelo, tiempo, IP y heurísticas).
+ */
+require_once get_template_directory() . '/inc/cf7-antispam.php';
+
+/**
  * Load Jetpack compatibility file.
  */
 if ( defined( 'JETPACK__VERSION' ) ) {
@@ -418,6 +428,14 @@ function add_custom_js() {
     wp_enqueue_script('custom-js', get_template_directory_uri() . '/js/custom-animations.js', array('gsap', 'scrollmagic'), '1.0.0', true);
 }
 // add_action('wp_enqueue_scripts', 'add_custom_js');
+
+/**
+ * Marca el documento antes de pintar si el usuario pide menos movimiento.
+ */
+function theme_skema_print_reduced_motion_flag() {
+	echo "<script>if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('skema-reduced-motion');}</script>\n";
+}
+add_action( 'wp_head', 'theme_skema_print_reduced_motion_flag', 0 );
 
 
 function mi_custom_login_logo() {

@@ -29,13 +29,14 @@ $skema_plantas_nav_id  = $plantas_id_prefix . '-plantas-nav';
 	data-skema-plantas="1"
 >
 	<div id="<?php echo esc_attr( $skema_plantas_main_id ); ?>" class="plantas-slider-main renvia-image">
-		<?php foreach ( $plantas_slides as $skema_pl_slide ) : ?>
+		<?php foreach ( $plantas_slides as $skema_pl_idx => $skema_pl_slide ) : ?>
 		<div class="plantas-slide">
 			<div class="plantas-slide-inner">
 				<img
+					class="skema-landing-medios-img"
 					src="<?php echo esc_url( $skema_pl_slide['src'] ); ?>"
 					alt="<?php echo esc_attr( $skema_pl_slide['alt'] ); ?>"
-					loading="lazy"
+					<?php echo $skema_pl_idx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'; ?>
 					decoding="async"
 				>
 			</div>
@@ -43,21 +44,30 @@ $skema_plantas_nav_id  = $plantas_id_prefix . '-plantas-nav';
 		<?php endforeach; ?>
 	</div>
 	<div id="<?php echo esc_attr( $skema_plantas_nav_id ); ?>" class="plantas-slider-nav">
-		<?php foreach ( $plantas_slides as $skema_pl_slide ) : ?>
+		<?php foreach ( $plantas_slides as $skema_pl_idx => $skema_pl_slide ) : ?>
 			<?php
 			$skema_pl_thumb = isset( $skema_pl_slide['thumb'] ) && is_string( $skema_pl_slide['thumb'] ) && $skema_pl_slide['thumb'] !== ''
 				? $skema_pl_slide['thumb']
 				: $skema_pl_slide['src'];
+			$skema_pl_name = isset( $skema_pl_slide['alt'] ) ? trim( (string) $skema_pl_slide['alt'] ) : '';
+			if ( '' === $skema_pl_name ) {
+				$skema_pl_name = sprintf(
+					/* translators: %d: floor plan number */
+					__( 'Plano %d', 'theme_skema' ),
+					(int) $skema_pl_idx + 1
+				);
+			}
 			?>
 		<div class="plantas-nav-slide">
 			<div class="plantas-nav-inner">
-				<img
-					src="<?php echo esc_url( $skema_pl_thumb ); ?>"
-					alt=""
-					role="presentation"
-					decoding="async"
-					loading="lazy"
-				>
+				<button type="button" class="plantas-nav-thumb" aria-label="<?php echo esc_attr( sprintf( __( 'Ver plano: %s', 'theme_skema' ), $skema_pl_name ) ); ?>">
+					<img
+						src="<?php echo esc_url( $skema_pl_thumb ); ?>"
+						alt=""
+						decoding="async"
+						loading="lazy"
+					>
+				</button>
 			</div>
 		</div>
 		<?php endforeach; ?>

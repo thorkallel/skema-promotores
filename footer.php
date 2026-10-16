@@ -50,13 +50,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 col-12 pr-5">
-                        <h6 class="mb-1">Contacto en:</h6>
+                        <p class="h6 mb-1">Contacto en:</p>
                         <hr>
                         <div class="div-selectContact mb-2">
                             <label for="selectContact" class="screen-reader-text">
                                 <?php esc_html_e( 'Selecciona la ciudad de contacto', 'theme_skema' ); ?>
                             </label>
-                            <select id="selectContact">
+                            <select id="selectContact" aria-controls="contacto-telefonos contacto-direcciones">
                                 <?php if (have_rows('into_ofi', 'option')): $c = 0;
                 					while (have_rows('into_ofi', 'option')): the_row(); ?>
                                 <option value="ciu-<?php echo $c; ?>"><?php the_sub_field('ciudad'); ?></option>
@@ -65,22 +65,29 @@
             					endif; ?>
                             </select>
                         </div>
+                        <p id="contacto-anuncio" class="screen-reader-text" aria-live="polite"></p>
 
                         <p class="mb-0">Teléfono:</p>
+                        <div id="contacto-telefonos" aria-live="polite">
                         <?php if (have_rows('into_ofi', 'option')): $c = 0;
-                					while (have_rows('into_ofi', 'option')): the_row(); ?>
+                					while (have_rows('into_ofi', 'option')): the_row();
+									$skema_tel_raw  = (string) get_sub_field( 'tele' );
+									$skema_tel_href = preg_replace( '/[^0-9+]/', '', $skema_tel_raw );
+									?>
                         <div class="ciu-<?php echo $c; ?> divContact" style="display:none;">
-                            <p class="mb-0"><u><?php the_sub_field('tele'); ?></u></p>
+                            <p class="mb-0"><u><?php if ( '' !== $skema_tel_href ) : ?><a href="tel:<?php echo esc_attr( $skema_tel_href ); ?>"><?php echo esc_html( $skema_tel_raw ); ?></a><?php else : ?><?php echo esc_html( $skema_tel_raw ); ?><?php endif; ?></u></p>
                         </div>
                         <?php $c++; 
 									endwhile;
             					endif; ?>
+                        </div>
                         <p class="mb-0">Correo:</p>
-                        <p class="mb-3 mb-sm-0"><u>servicioalcliente@skema.co</u></p>
+                        <p class="mb-3 mb-sm-0"><u><a href="mailto:servicioalcliente@skema.co">servicioalcliente@skema.co</a></u></p>
                     </div>
                     <div class="col-sm-6 col-12 pl-sm-4 pr-sm-5 pb-5 pb-sm-0">
-                        <h6 class="mb-sm-1 mb-0">Dirección:</h6>
+                        <p class="h6 mb-sm-1 mb-0">Dirección:</p>
                         <hr>
+                        <div id="contacto-direcciones" aria-live="polite">
                         <?php if (have_rows('into_ofi', 'option')): $c = 0;
                 				while (have_rows('into_ofi', 'option')): the_row(); ?>
                         <div class="ciu-<?php echo $c; ?> divContact mb-sm-4" style="display:none;">
@@ -89,9 +96,17 @@
                         <?php $c++; 
 								endwhile;
             				endif; ?>
-                        <a class="text-white pdt" target="_blank" href="<?php the_field('url_enlace', 'option') ?>">
-                            <?php the_field('texto_enlace', 'option') ?>
+                        </div>
+                        <?php
+                        $skema_footer_enlace_url  = get_field( 'url_enlace', 'option' );
+                        $skema_footer_enlace_text = trim( wp_strip_all_tags( (string) get_field( 'texto_enlace', 'option' ) ) );
+                        if ( $skema_footer_enlace_url && '' !== $skema_footer_enlace_text ) :
+                        ?>
+                        <a class="text-white pdt" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $skema_footer_enlace_url ); ?>">
+                            <?php echo esc_html( $skema_footer_enlace_text ); ?>
+                            <span class="screen-reader-text"><?php esc_html_e( '(abre en una nueva pestaña)', 'theme_skema' ); ?></span>
                         </a>
+                        <?php endif; ?>
 
                     </div>
                     <div class="copyrights">

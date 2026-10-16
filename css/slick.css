@@ -32,6 +32,11 @@
 {
     outline: none;
 }
+.slick-list:focus-visible
+{
+    outline: 2px solid #0b1f42;
+    outline-offset: 2px;
+}
 .slick-list.dragging
 {
     cursor: pointer;

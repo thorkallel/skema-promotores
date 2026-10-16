@@ -11,7 +11,7 @@
 	 * Profundidades siguientes (.skema-submenu-depth-1+): variables --skema-nav-submenu-depth-*.
 	 */
 	--skema-nav-submenu-primer-hijo: #00347a;
-	--skema-nav-submenu-segundo-hijo: #fc7416;
+	--skema-nav-submenu-segundo-hijo: #B64900;
 	--skema-nav-submenu-tercer-hijo: #a2c3e0;
 	--skema-nav-submenu-primer-hijo-bg-hover: rgba(0, 52, 122, 0.08);
 	--skema-nav-submenu-segundo-hijo-bg-hover: rgba(252, 116, 22, 0.12);
@@ -25,13 +25,13 @@
 	/* Sangría izquierda de cada <ul> anidado para alinear con el texto del ítem padre (.dropdown-item). */
 	--skema-nav-submenu-hijo-lista-inset: 1.5rem;
 
-	--skema-nav-submenu-depth-1-text: var(--azul);
-	--skema-nav-submenu-depth-1-text-hover: var(--azul);
-	--skema-nav-submenu-depth-1-bg-hover: rgba(0, 52, 122, 0.08);
+	--skema-nav-submenu-depth-1-text: var(--skema-nav-submenu-primer-hijo);
+	--skema-nav-submenu-depth-1-text-hover: var(--skema-nav-submenu-primer-hijo);
+	--skema-nav-submenu-depth-1-bg-hover: var(--skema-nav-submenu-primer-hijo-bg-hover);
 
-	--skema-nav-submenu-depth-2-text: var(--nara);
-	--skema-nav-submenu-depth-2-text-hover: #d96514;
-	--skema-nav-submenu-depth-2-bg-hover: rgba(252, 116, 22, 0.12);
+	--skema-nav-submenu-depth-2-text: var(--skema-nav-submenu-primer-hijo);
+	--skema-nav-submenu-depth-2-text-hover: var(--skema-nav-submenu-primer-hijo);
+	--skema-nav-submenu-depth-2-bg-hover: var(--skema-nav-submenu-primer-hijo-bg-hover);
 
 	/* Drawer móvil: 4.º+ hijo y submenús anidados (depth-1 / depth-2). */
 	--skema-nav-submenu-movil-primer-panel-resto: var(--blanco);
@@ -84,67 +84,19 @@
         align-items: center;
         justify-content: space-between;
     }
-    /* Primer panel: 1.º / 2.º / 3.º hijo directo (mismo criterio en cada desplegable de la barra). */
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item span {
+    /* Submenú desktop: un solo color en categorías y subcategorías. */
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li > a.dropdown-item,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li > a.dropdown-item span {
         color: var(--skema-nav-submenu-primer-hijo);
     }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(1) > a.dropdown-item:focus {
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li > a.dropdown-item:hover,
+    #menuPrincipal .navbar-nav ul.dropdown-menu[class*="skema-submenu-depth"] > li > a.dropdown-item:focus {
         color: var(--skema-nav-submenu-primer-hijo);
         background-color: var(--skema-nav-submenu-primer-hijo-bg-hover);
     }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item span {
-        color: var(--skema-nav-submenu-segundo-hijo);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(2) > a.dropdown-item:focus {
-        color: var(--skema-nav-submenu-segundo-hijo);
-        background-color: var(--skema-nav-submenu-segundo-hijo-bg-hover);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item span {
-        color: var(--skema-nav-submenu-tercer-hijo);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(3) > a.dropdown-item:focus {
-        color: var(--skema-nav-submenu-tercer-hijo);
-        background-color: var(--skema-nav-submenu-tercer-hijo-bg-hover);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item span {
-        color: var(--gris-o);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-0 > li:nth-child(n+4) > a.dropdown-item:focus {
-        color: var(--azul);
-        background-color: rgba(0, 52, 122, 0.06);
-    }
-    /* Paneles anidados (depth 1+): por profundidad de <ul>. El inset del <ul> alinea con el padre; el enlace conserva padding estándar. */
     #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item span {
-        color: var(--skema-nav-submenu-depth-1-text);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item {
-        padding-left: 1rem;
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-1 > li > a.dropdown-item:focus {
-        color: var(--skema-nav-submenu-depth-1-text-hover);
-        background-color: var(--skema-nav-submenu-depth-1-bg-hover);
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item span {
-        color: var(--skema-nav-submenu-depth-2-text);
-    }
     #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item {
         padding-left: 1rem;
-    }
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:hover,
-    #menuPrincipal .navbar-nav ul.dropdown-menu.skema-submenu-depth-2 > li > a.dropdown-item:focus {
-        color: var(--skema-nav-submenu-depth-2-text-hover);
-        background-color: var(--skema-nav-submenu-depth-2-bg-hover);
     }
 }
 @media (max-width: 719px){
@@ -403,6 +355,8 @@
         width: 100%;
         z-index: 1030;
         padding: 1rem;
+        /* top lo mueve el chrome móvil; no animarlo o la barra se esconde al llegar arriba. */
+        transition: background-color 0.5s ease, box-shadow 0.5s ease;
     }
     nav#principal-menu.menu-scrolled {
         background-color: rgba(255, 255, 255, 0.92);
@@ -579,7 +533,8 @@
     .logo-footer img.custom-logo {
         width: 45%;
     }
-    .site-footer h6 {
+    .site-footer h6,
+    .site-footer p.h6 {
         font-size: 1rem;
     }
     .banner-nosotros img, .banner-proyectos img {
@@ -627,7 +582,8 @@
         font-size: 17px;
         text-align: center;
     }
-    .div_info_anos h4 {
+    .div_info_anos h4,
+    .div_info_anos .timeline-year {
        font-size: 15px;
     }
     .div_info_anos p, .div_info_anos span{

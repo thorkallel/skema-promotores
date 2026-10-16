@@ -27,7 +27,7 @@ $skema_logo_marca = function_exists( 'get_field' ) ? get_field( 'logo_marca', 'o
 <a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Saltar al contenido principal', 'theme_skema' ); ?></a>
 <div id="page" class="site">
 <header id="masthead" class="site-header">
-	<nav class="navbar fixed-top navbar-expand-lg navbar-light slide-in-top" role="navigation" id="principal-menu">
+	<nav class="navbar fixed-top navbar-expand-lg navbar-light slide-in-top" id="principal-menu" aria-label="<?php echo esc_attr__( 'Menú principal', 'theme_skema' ); ?>">
 		<button class="btn-abrir d-sm-none" type="button" aria-controls="menuPrincipal" aria-expanded="false"
 			aria-label="<?php echo esc_attr__( 'Abrir menú principal', 'theme_skema' ); ?>">
 			<?php echo file_get_contents( get_template_directory() . '/img/btn-abrir.svg' ); ?>
@@ -35,7 +35,7 @@ $skema_logo_marca = function_exists( 'get_field' ) ? get_field( 'logo_marca', 'o
 
 		<?php if ( $skema_logo_marca ) : ?>
 		<div class="logo-skema d-flex d-sm-none justify-content-center w-100">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home" aria-current="page">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home"<?php echo is_front_page() ? ' aria-current="page"' : ''; ?>>
 				<img width="472" height="91" src="<?php echo esc_url( $skema_logo_marca ); ?>" class="custom-logo" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" decoding="async" srcset="<?php echo esc_url( $skema_logo_marca ); ?> 472w,<?php echo esc_url( $skema_logo_marca ); ?> 300w" sizes="(max-width: 472px) 100vw, 472px">
 			</a>
 		</div>
@@ -43,14 +43,13 @@ $skema_logo_marca = function_exists( 'get_field' ) ? get_field( 'logo_marca', 'o
 
 		<div class="navbar-collapse justify-content-sm-between" id="menuPrincipal">
 			<button class="btn-cerrar d-sm-none" type="button"
-				aria-controls="menuPrincipal" aria-expanded="true"
 				aria-label="<?php echo esc_attr__( 'Cerrar menú principal', 'theme_skema' ); ?>">
 				<i class="bi bi-x"></i>
 			</button>
 
 			<?php if ( $skema_logo_marca ) : ?>
 			<div class="logo-skema position-absolute">
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home" aria-current="page">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home"<?php echo is_front_page() ? ' aria-current="page"' : ''; ?>>
 					<img width="472" height="91" src="<?php echo esc_url( $skema_logo_marca ); ?>" class="custom-logo" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" decoding="async" srcset="<?php echo esc_url( $skema_logo_marca ); ?> 472w,<?php echo esc_url( $skema_logo_marca ); ?> 300w" sizes="(max-width: 472px) 100vw, 472px">
 				</a>
 			</div>
@@ -91,13 +90,13 @@ $skema_logo_marca = function_exists( 'get_field' ) ? get_field( 'logo_marca', 'o
 	<?php if ( '' !== $skema_wa_digits ) : ?>
 		<div class="btn_wa">
 			<a href="https://wa.me/<?php echo esc_attr( $skema_wa_digits ); ?>" target="_blank" rel="noopener noreferrer"
-				aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp', 'theme_skema' ); ?>"><i class="bi bi-whatsapp"></i></a>
+				aria-label="<?php echo esc_attr__( 'Contactar por WhatsApp (abre en una nueva pestaña)', 'theme_skema' ); ?>"><i class="bi bi-whatsapp" aria-hidden="true"></i></a>
 		</div>
 	<?php endif; ?>
 	<?php if ( get_field( 'tele', 'option' ) ) : ?>
 		<div class="btn_tel d-flex d-sm-none">
 			<a href="tel:<?php echo esc_attr( get_field( 'tele', 'option' ) ); ?>"
-				aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone"></i></a>
+				aria-label="<?php echo esc_attr__( 'Llamar por teléfono', 'theme_skema' ); ?>"><i class="bi bi-phone" aria-hidden="true"></i></a>
 		</div>
 	<?php endif; ?>
 </div>

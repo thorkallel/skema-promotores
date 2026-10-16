@@ -9,6 +9,49 @@
  * @package skema
  */
 
+/*
+ * Móvil: el header es fixed. El contenido empieza justo debajo.
+ * --skema-home-header-offset lo escribe main.js con la altura real de #principal-menu.
+ * 72px es el alto medido de esa barra si el script aún no corrió.
+ */
+.site-main--inicio,
+.page-template-theme_inicio-php #primary {
+	padding-top: var(--skema-home-header-offset, 72px);
+}
+
+.page-template-theme_inicio-php nav#principal-menu,
+.page-template-theme_inicio-php nav#principal-menu.navbar-glass-youtube,
+.page-template-theme_inicio-php nav#principal-menu.navbar-glass-youtube.menu-scrolled {
+	background-color: #fff;
+}
+
+.page-template-theme_inicio-php .logo-skema.w-100 img {
+	filter: none;
+}
+
+.page-template-theme_inicio-php .btn-abrir .ico-menu {
+	fill: var(--azul);
+}
+
+@media (min-width: 720px) {
+	.site-main--inicio,
+	.page-template-theme_inicio-php #primary {
+		padding-top: 0;
+	}
+
+	.page-template-theme_inicio-php nav#principal-menu {
+		background-color: transparent;
+	}
+
+	.page-template-theme_inicio-php nav#principal-menu.navbar-glass-youtube {
+		background-color: rgba(255, 255, 255, 0.14);
+	}
+
+	.page-template-theme_inicio-php nav#principal-menu.navbar-glass-youtube.menu-scrolled {
+		background-color: rgba(255, 255, 255, 0.82);
+	}
+}
+
 /* Slider YouTube — ancho 100 %, 16:9 (el alto puede superar el viewport) */
 .slider-banner--youtube {
 	width: 100%;
@@ -135,5 +178,56 @@
 	.site-main--inicio .home-hero-dots,
 	.page-template-theme_inicio-php .home-hero-dots {
 		display: flex;
+	}
+}
+
+.home-hero {
+	position: relative;
+}
+
+.home-hero-title {
+	position: static;
+	z-index: 3;
+	left: 1.5rem;
+	right: auto;
+	bottom: 0;
+	max-width: calc(100% - 7.5rem);
+	margin: 0 auto 30px;
+	color: #fff;
+	font-size: 1rem;
+	line-height: 1.25;
+	padding: 0.55rem 0.85rem;
+	border-radius: 0.5rem;
+	background: rgba(11, 31, 66, 0.82);
+	text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+	text-align: center;
+}
+
+.home-hero:not(:has(.video-content)):not(:has(.slider-banner)) .home-hero-title {
+	position: static;
+	color: inherit;
+	background: transparent;
+	text-shadow: none;
+	padding: 1.5rem 1rem 0;
+}
+
+@media (min-width: 576px) {
+	.home-hero-title {
+		left: 4.5rem;
+		bottom: 3rem;
+		max-width: 28rem;
+		font-size: 1.75rem;
+		padding: 0.8rem 1.15rem;
+	}
+}
+
+@media (min-width: 992px) {
+	.home-hero-title {
+		position: absolute;
+		left: calc(7rem + 10px);
+		bottom: 3.5rem;
+		max-width: 32rem;
+		font-size: 2rem;
+		text-align: left;
 	}
 }

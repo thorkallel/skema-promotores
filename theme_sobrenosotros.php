@@ -19,7 +19,16 @@ get_header(); ?>
                     <div
                         class="card-img-overlay p-sm-5 d-flex align-items-sm-center align-items-end justify-content-start w-100">
                         <div class="text-content text-white pl-sm-5">
-                            <?php the_content(); ?>
+                            <?php
+                            $skema_sobre_content = get_the_content();
+                            $skema_sobre_has_h1  = (bool) preg_match( '/<h1[\s>]/i', $skema_sobre_content );
+                            if ( ! $skema_sobre_has_h1 ) :
+                                ?>
+                            <h1><?php the_title(); ?></h1>
+                                <?php
+                            endif;
+                            the_content();
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -115,8 +124,8 @@ get_header(); ?>
                                                             </div>
                                                         </div>
                                                         <div class="div_info_anos">
-                                                            <h4 class="font-weight-bold d-block ml-4 mb-0 pl-sm-2">
-                                                                <?php the_sub_field('ano'); ?></h4>
+                                                            <time class="h4 timeline-year font-weight-bold d-block ml-4 mb-0 pl-sm-2" datetime="<?php echo esc_attr( preg_replace( '/\D/', '', (string) get_sub_field( 'ano' ) ) ); ?>">
+                                                                <?php the_sub_field('ano'); ?></time>
                                                             <?php if ( have_rows( 'proyectos' ) ) :
                                                                         $c = 0;
                                                                         while ( have_rows( 'proyectos' ) ) :
@@ -177,7 +186,7 @@ get_header(); ?>
                                         ?>
                                         <div class="div_imgs" style="">
                                             <img src="<?= esc_url($img); ?>" class="img-fluid w-100 <?= $clase_borde ?>"
-                                                alt="Proyecto">
+                                                alt="<?php echo esc_attr( $term->name ); ?>">
                                         </div>
                                         <?php endforeach;
                                         endif; ?>

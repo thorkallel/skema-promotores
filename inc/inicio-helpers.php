@@ -142,16 +142,17 @@ function theme_skema_render_inicio_proyecto_card( $post_id, $cont, $cuantos ) {
     <div class="hover-infoproyecto px-sm-5 px-4 pt-sm-4 pb-sm-5">
         <div class="row">
             <div class="col-sm-7 col-12 py-3">
-                <h2><?php echo esc_html( $tipo_label ); ?></h2>
+                <p class="tipo-proyecto-meta"><?php echo esc_html( $tipo_label ); ?></p>
                 <h3><?php echo esc_html( $title ); ?></h3>
                 <?php if ( $ciudad ) : ?>
-                <h4><?php echo esc_html( $ciudad ); ?></h4>
+                <p class="ciudad-proyecto-meta"><?php echo esc_html( $ciudad ); ?></p>
                 <?php endif; ?>
                 <p><?php echo esc_html( wp_strip_all_tags( $excerpt ) ); ?></p>
             </div>
             <div class="col-sm-5 col-12 align-self-center py-sm-5 py-0">
                 <a class="btn-verproyecto mt-sm-3 mb-sm-5 mb-3"
-                    href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $btn_text ); ?></a>
+                    href="<?php echo esc_url( $permalink ); ?>"
+                    aria-label="<?php echo esc_attr( sprintf( __( 'Ver proyecto %s', 'theme_skema' ), $title ) ); ?>"><?php echo esc_html( $btn_text ); ?></a>
                 <img class="img-fluid w-75 mt-sm-4 mt-2 d-none d-sm-block rounded-0"
                     src="<?php echo esc_url( get_template_directory_uri() . '/img/logo-skema.png' ); ?>" alt=""
                     loading="lazy" width="200" height="60" />
@@ -352,8 +353,8 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
             <img src="<?php echo esc_url( $img_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" loading="lazy"
                 width="640" height="360" />
             <div class="service-ficha__caption">
-                <h4 class="service-ficha__nombre"><a
-                        href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a></h4>
+                <h3 class="service-ficha__nombre"><a
+                        href="<?php echo esc_url( $permalink ); ?>"><?php echo esc_html( $title ); ?></a></h3>
                 <?php if ( $tipo_label ) : ?>
                 <p class="service-ficha__tipo">
                     <strong><?php esc_html_e( 'Tipo de proyecto:', 'theme_skema' ); ?></strong>
@@ -372,12 +373,12 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
             <div
                 class="col-12 col-md-4 d-flex align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
                 <div class="service-ficha__logo">
-                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="" loading="lazy" />
+                    <img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( sprintf( __( 'Logo de %s', 'theme_skema' ), $title ) ); ?>" loading="lazy" />
                 </div>
             </div>
             <?php endif; ?>
 
-            <div class="col-12 col-md-4 d-flex align-items-center mb-3 mb-md-0">
+            <div class="col-6 col-md-4 d-flex align-items-center">
                 <div class="service-ficha__dims w-100">
 
                     <div class="service-ficha__spec-copy">
@@ -392,7 +393,7 @@ function theme_skema_render_inicio_renvia_ficha_card( $post_id ) {
 
                 </div>
             </div>
-            <div class="col-12 col-md-4 d-flex align-items-center p-0">
+            <div class="col-6 col-md-4 d-flex align-items-center p-md-0">
                 <div class="service-ficha__precio w-100">
 
                     <div class="service-ficha__spec-copy">

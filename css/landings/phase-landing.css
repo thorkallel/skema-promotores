@@ -131,6 +131,21 @@
 	pointer-events: none;
 }
 
+/* El H1 vive fuera de Slick: misma caja visual, pero no se clona ni se oculta al rotar. */
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-hero__copy.landing-full-slide__inner {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	height: auto;
+	min-height: 0;
+}
+
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-hero__slide-line.is-absent,
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-hero__tagline.is-absent,
+.site-main--landings.landing-phase--landing .landing-full-hero .landing-full-hero__location.is-absent {
+	display: none !important;
+}
+
 .site-main--landings.landing-phase--landing .landing-full-hero .landing-full-slide__inner .container {
 	pointer-events: auto;
 	max-width: 1340px;
@@ -400,15 +415,19 @@
 	filter: brightness(0) invert(0);
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span {
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span,
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info dt {
 	display: block;
 	font-size: 0.875rem;
+	font-weight: 400;
 	line-height: 1.35;
 	color: rgba(28, 28, 37, 0.65);
+	margin-top: 0;
 	margin-bottom: 0.2rem;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6 {
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6,
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info .skema-landing-meta-value {
 	margin: 0;
 	font-size: 1rem;
 	font-weight: 700;
@@ -496,6 +515,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	}
 }
 
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-content-box__main > h2,
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-content-box__main > h3 {
 	font-size: clamp(1.25rem, 4vw, 1.75rem);
 	margin-bottom: 1rem;
@@ -573,7 +593,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	border: 1px solid rgba(28, 28, 37, 0.12);
 	border-radius: 6px;
 	line-height: 1;
-	color: var(--nara, #fc7416);
+	color: var(--nara-contrast, #B64900);
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-ficha-apto-item__icon i {
@@ -619,12 +639,14 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	}
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5 {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box .project-info-box__heading {
 	font-size: 1.15rem;
 	margin-bottom: 0;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5::after {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5::after,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box .project-info-box__heading::after {
 	display: block;
 	content: "";
 	width: 140px;
@@ -667,7 +689,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.skema-landing-slot--info-proyecto .skema-lland-info-proyecto-list__valor a {
-	color: var(--nara, #fc7416);
+	color: var(--nara-contrast, #B64900);
 	font-weight: 600;
 	text-decoration: underline;
 }
@@ -920,6 +942,8 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 /* Plantas: Slick principal + miniaturas (referencia landing-static Renvia) */
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap {
 	--plantas-nav-h: 72px;
+	--plantas-main-max-h: min(50vh, 480px);
+	--plantas-main-min-h: calc(var(--plantas-main-max-h) + 24px);
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main {
@@ -927,21 +951,43 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	background: #f6f7f8;
 	border-radius: 5px;
 	overflow: hidden;
+	min-height: var(--plantas-main-min-h);
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner {
 	padding: 12px 48px;
 	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: var(--plantas-main-min-h);
+	box-sizing: border-box;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img {
 	display: inline-block;
 	max-width: 100%;
 	width: auto;
-	max-height: min(50vh, 480px);
+	max-height: var(--plantas-main-max-h);
 	height: auto;
 	object-fit: contain;
 	vertical-align: middle;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img.skema-landing-medios-img {
+	opacity: 1;
+	transition: opacity 0.25s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img.skema-landing-medios-img.is-loading {
+	opacity: 0;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner.is-loading-media {
+	background: linear-gradient(110deg, #f0f1f3 8%, #fafbfc 18%, #f0f1f3 33%);
+	background-size: 200% 100%;
+	animation: skema-landing-medios-shimmer 1.4s ease-in-out infinite;
 }
 
 /* Avance de obra: vídeo MP4 en el slide principal (mismas cotas que la imagen de plantas) */
@@ -949,7 +995,7 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	display: block;
 	width: 100%;
 	max-width: 100%;
-	max-height: min(50vh, 480px);
+	max-height: var(--plantas-main-max-h);
 	height: auto;
 	margin-left: auto;
 	margin-right: auto;
@@ -1053,6 +1099,22 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	border-color: var(--nara, #fc7416);
 }
 
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-thumb {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-thumb:focus-visible {
+	outline: 2px solid #0b1f42;
+	outline-offset: 2px;
+}
+
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav .plantas-nav-inner img {
 	width: 100%;
 	height: 100%;
@@ -1115,14 +1177,12 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 @media (min-width: 992px) {
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap {
 		--plantas-nav-h: 88px;
+		--plantas-main-max-h: min(56vh, 560px);
+		--plantas-main-min-h: calc(var(--plantas-main-max-h) + 32px);
 	}
 
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner {
 		padding: 16px 56px;
-	}
-
-	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-main .plantas-slide-inner img {
-		max-height: min(56vh, 560px);
 	}
 
 	.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-plantas-wrap .plantas-slider-nav {
@@ -1396,18 +1456,41 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-stage {
-	min-height: 200px;
+	min-height: min(50vh, 420px);
 	background: #111;
 	border-radius: 5px;
 	overflow: hidden;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-stage.is-loading-media {
+	background: linear-gradient(110deg, #1a1a1f 8%, #25252c 18%, #1a1a1f 33%);
+	background-size: 200% 100%;
+	animation: skema-landing-medios-shimmer 1.4s ease-in-out infinite;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-img {
 	max-height: min(78vh, 820px);
 	width: auto;
 	max-width: 100%;
+	min-height: 120px;
 	object-fit: contain;
 	border-radius: 5px;
+	opacity: 1;
+	transition: opacity 0.25s ease;
+}
+
+.site-main--landings.landing-phase--landing .skema-landing-gallery-modal .modal-gallery-img.is-loading {
+	opacity: 0;
+}
+
+@keyframes skema-landing-medios-shimmer {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-gallery-modal .gallery-nav-fab {
@@ -1475,7 +1558,8 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.project-info-box--lead h5 {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.project-info-box--lead h5,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box.project-info-box--lead .project-info-box__heading {
 	margin-bottom: 0;
 	color: var(--azul, #00347a);
 }
@@ -1519,12 +1603,12 @@ body.modal-open .site-main--landings.landing-phase--landing .skema-landing-conte
 	color: #5b6b84;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap input:focus,
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap textarea:focus,
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap select:focus {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap input:focus-visible,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap textarea:focus-visible,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap select:focus-visible {
 	border-color: var(--nara, #fc7416);
-	outline: none;
-	box-shadow: 0 0 0 2px rgba(252, 116, 22, 0.2);
+	outline: 2px solid #0b1f42;
+	outline-offset: 2px;
 }
 
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-cf7-wrap input.wpcf7-submit {

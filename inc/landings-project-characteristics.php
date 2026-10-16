@@ -103,16 +103,20 @@ function theme_skema_render_landing_project_characteristics( $post_id = null ) {
 		return;
 	}
 
-	if ( ! is_singular( 'landings' ) ) {
+	if ( null === $post_id && function_exists( 'theme_skema_viewing_landing_id' ) ) {
+		$post_id = theme_skema_viewing_landing_id();
+	}
+
+	$post_id = $post_id ? (int) $post_id : (int) get_queried_object_id();
+	if ( $post_id <= 0 || 'landings' !== get_post_type( $post_id ) ) {
+		return;
+	}
+
+	if ( ! is_singular( array( 'landings', 'proyectos' ) ) ) {
 		return;
 	}
 
 	if ( ! function_exists( 'theme_skema_get_landing_phase' ) || 'landing' !== theme_skema_get_landing_phase( $post_id ) ) {
-		return;
-	}
-
-	$post_id = $post_id ? (int) $post_id : (int) get_queried_object_id();
-	if ( $post_id <= 0 ) {
 		return;
 	}
 
@@ -146,7 +150,7 @@ function theme_skema_render_landing_project_characteristics( $post_id = null ) {
 	echo '<div class="project-content">';
 
 	if ( count( $valid_rows ) > 0 ) {
-		echo '<div class="project-meta-list" role="list">';
+		echo '<dl class="project-meta-list">';
 		foreach ( $valid_rows as $row ) {
 			$label = trim( (string) $row['label'] );
 			$value = trim( (string) $row['value'] );
@@ -156,19 +160,19 @@ function theme_skema_render_landing_project_characteristics( $post_id = null ) {
 				$src = $default_icon;
 			}
 
-			echo '<div class="renvia-info-item style-three skema-landing-meta-item mb-30" role="listitem">';
+			echo '<div class="renvia-info-item style-three skema-landing-meta-item mb-30">';
 			echo '<div class="icon">';
 			if ( $src !== '' ) {
 				echo '<img src="' . esc_url( $src ) . '" alt="" width="32" height="32" loading="lazy" decoding="async">';
 			}
 			echo '</div>';
 			echo '<div class="info">';
-			echo '<span>' . esc_html( $label ) . '</span>';
-			echo '<h6>' . esc_html( $value ) . '</h6>';
+			echo '<dt>' . esc_html( $label ) . '</dt>';
+			echo '<dd class="skema-landing-meta-value">' . esc_html( $value ) . '</dd>';
 			echo '</div>';
 			echo '</div>';
 		}
-		echo '</div>';
+		echo '</dl>';
 	}
 
 	if ( $intro_html !== '' ) {

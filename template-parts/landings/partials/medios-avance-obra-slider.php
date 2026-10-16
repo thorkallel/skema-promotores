@@ -27,7 +27,10 @@ $skema_avance_nav_id  = $avance_id_prefix . '-avance-nav';
 	data-skema-plantas="1"
 >
 	<div id="<?php echo esc_attr( $skema_avance_main_id ); ?>" class="plantas-slider-main renvia-image">
-		<?php foreach ( $avance_obra_slides as $skema_av_slide ) : ?>
+		<?php
+		$skema_av_is_first_slide = true;
+		foreach ( $avance_obra_slides as $skema_av_slide ) :
+			?>
 			<?php
 			$skema_av_media   = isset( $skema_av_slide['media'] ) ? (string) $skema_av_slide['media'] : 'image';
 			$skema_av_src     = isset( $skema_av_slide['src'] ) ? trim( (string) $skema_av_slide['src'] ) : '';
@@ -77,9 +80,10 @@ $skema_avance_nav_id  = $avance_id_prefix . '-avance-nav';
 				</video>
 				<?php else : ?>
 				<img
+					class="skema-landing-medios-img"
 					src="<?php echo esc_url( $skema_av_src ); ?>"
 					alt="<?php echo esc_attr( $skema_av_alt ); ?>"
-					loading="lazy"
+					<?php echo $skema_av_is_first_slide ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"'; ?>
 					decoding="async"
 				>
 				<?php endif; ?>
@@ -100,7 +104,10 @@ $skema_avance_nav_id  = $avance_id_prefix . '-avance-nav';
 				<?php endif; ?>
 			</div>
 		</div>
-		<?php endforeach; ?>
+			<?php
+			$skema_av_is_first_slide = false;
+		endforeach;
+		?>
 	</div>
 	<div id="<?php echo esc_attr( $skema_avance_nav_id ); ?>" class="plantas-slider-nav">
 		<?php foreach ( $avance_obra_slides as $skema_av_slide ) : ?>

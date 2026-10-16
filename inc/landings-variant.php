@@ -99,7 +99,12 @@ function theme_skema_get_landing_variant( $post_id = null ) {
 	$default = 'default';
 
 	if ( null === $post_id ) {
-		$post_id = get_queried_object_id();
+		$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+			? theme_skema_viewing_landing_id()
+			: 0;
+		if ( ! $post_id ) {
+			$post_id = get_queried_object_id();
+		}
 	}
 	if ( ! $post_id || 'landings' !== get_post_type( $post_id ) ) {
 		return $default;
@@ -167,7 +172,12 @@ function theme_skema_get_landing_phase( $post_id = null ) {
 	$default = 'prelanding';
 
 	if ( null === $post_id ) {
-		$post_id = get_queried_object_id();
+		$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+			? theme_skema_viewing_landing_id()
+			: 0;
+		if ( ! $post_id ) {
+			$post_id = get_queried_object_id();
+		}
 	}
 	if ( ! $post_id || 'landings' !== get_post_type( $post_id ) ) {
 		return $default;
@@ -271,11 +281,9 @@ add_action( 'acf/init', 'theme_skema_acf_register_landing_variant' );
  * Encola CSS compartido de landings + skin de la variante (solo en single landings).
  */
 function theme_skema_enqueue_landing_variant_styles() {
-	if ( ! is_singular( 'landings' ) ) {
-		return;
-	}
-
-	$post_id = get_queried_object_id();
+	$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+		? theme_skema_viewing_landing_id()
+		: 0;
 	if ( ! $post_id ) {
 		return;
 	}
@@ -392,11 +400,9 @@ add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_variant_styles', 
  * @return void
  */
 function theme_skema_enqueue_landing_medios_gallery_script() {
-	if ( ! is_singular( 'landings' ) ) {
-		return;
-	}
-
-	$post_id = (int) get_queried_object_id();
+	$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+		? theme_skema_viewing_landing_id()
+		: 0;
 	if ( $post_id <= 0 ) {
 		return;
 	}
@@ -426,11 +432,9 @@ add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_medios_gallery_sc
  * @return void
  */
 function theme_skema_enqueue_landing_plantas_slider_script() {
-	if ( ! is_singular( 'landings' ) ) {
-		return;
-	}
-
-	$post_id = (int) get_queried_object_id();
+	$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+		? theme_skema_viewing_landing_id()
+		: 0;
 	if ( $post_id <= 0 ) {
 		return;
 	}
@@ -471,11 +475,9 @@ add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_plantas_slider_sc
  * @return void
  */
 function theme_skema_enqueue_landing_respaldo_slider_script() {
-	if ( ! is_singular( 'landings' ) ) {
-		return;
-	}
-
-	$post_id = (int) get_queried_object_id();
+	$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+		? theme_skema_viewing_landing_id()
+		: 0;
 	if ( $post_id <= 0 ) {
 		return;
 	}
@@ -506,11 +508,16 @@ add_action( 'wp_enqueue_scripts', 'theme_skema_enqueue_landing_respaldo_slider_s
  * @return array<int, string>
  */
 function theme_skema_body_class_landing_variant( $classes ) {
-	if ( is_singular( 'landings' ) ) {
-		$classes[] = 'skema-landing-shell';
-		$classes[] = 'landing-variant--' . theme_skema_get_landing_variant();
-		$classes[] = 'landing-phase--' . theme_skema_get_landing_phase();
+	$landing_id = function_exists( 'theme_skema_viewing_landing_id' )
+		? theme_skema_viewing_landing_id()
+		: 0;
+	if ( ! $landing_id ) {
+		return $classes;
 	}
+
+	$classes[] = 'skema-landing-shell';
+	$classes[] = 'landing-variant--' . theme_skema_get_landing_variant( $landing_id );
+	$classes[] = 'landing-phase--' . theme_skema_get_landing_phase( $landing_id );
 	return $classes;
 }
 add_filter( 'body_class', 'theme_skema_body_class_landing_variant' );

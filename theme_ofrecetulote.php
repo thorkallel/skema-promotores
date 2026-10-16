@@ -30,7 +30,7 @@ get_header(); ?>
         <div class="row px-sm-3">					    
             <div class="col-sm-12 col-12 pl-sm-5 pr-sm-4">
                 <div class="card formu px-sm-3 pt-4 pt-sm-0">
-				    <h3 class="pl-sm-4 pt-sm-4 mb-sm-3 mb-4">Contacto</h3>
+				    <h2 class="h3 pl-sm-4 pt-sm-4 mb-sm-3 mb-4">Contacto</h2>
                     <?php echo do_shortcode('[contact-form-7 id="c091d98" title="Formulario Ofrece tu lote"]'); ?>
                 </div>
 			</div>

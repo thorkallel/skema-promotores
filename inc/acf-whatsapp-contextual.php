@@ -56,6 +56,13 @@ function theme_skema_resolve_whatsapp_context_post_id() {
 		return 0;
 	}
 
+	if ( 'proyectos' === $post->post_type && function_exists( 'theme_skema_linked_landing_id' ) ) {
+		$landing_id = theme_skema_linked_landing_id( $post->ID );
+		if ( $landing_id > 0 ) {
+			return $landing_id;
+		}
+	}
+
 	return (int) $post->ID;
 }
 

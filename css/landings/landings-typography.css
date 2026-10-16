@@ -36,7 +36,7 @@
 /* Enlaces en contenido editorial (pestañas y botones mantienen sus reglas) */
 .site-main--landings .landing-main a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link),
 .site-main--landings .skema-landing-content-box-wrap a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):not(.page-link):not(.close) {
-	color: var(--nara, #fc7416);
+	color: var(--nara-contrast, #B64900);
 }
 
 .site-main--landings .landing-main a:not(.theme-btn):not(.btn):not(.nav-link):not(.dropdown-item):hover,
@@ -45,11 +45,13 @@
 }
 
 /* --- Landing completa: ajustes sobre reglas de phase-landing.css --- */
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-content-box__main > h2,
 .site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .skema-landing-content-box__main > h3 {
 	color: #00347a;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5 {
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box h5,
+.site-main--landings.landing-phase--landing .skema-landing-content-box-wrap .project-info-box .project-info-box__heading {
 	color: #00347a;
 }
 
@@ -81,11 +83,13 @@
 	color: #fff;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span {
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info span,
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info dt {
 	color: #797e88;
 }
 
-.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6 {
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info h6,
+.site-main--landings.landing-phase--landing .skema-landing-meta-item .info .skema-landing-meta-value {
 	color: #00347a;
 }
 

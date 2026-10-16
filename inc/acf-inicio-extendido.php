@@ -44,6 +44,13 @@ function theme_skema_acf_register_inicio_extendido() {
 			'title'                 => __( 'Inicio — YouTube y proyectos', 'theme_skema' ),
 			'fields'                => array(
 				array(
+					'key'          => 'field_skema_home_h1',
+					'label'        => __( 'H1 de la portada', 'theme_skema' ),
+					'name'         => 'home_h1',
+					'type'         => 'text',
+					'instructions' => __( 'Encabezado visible del hero. Si está vacío se usa «Constructora y promotora inmobiliaria en Cali».', 'theme_skema' ),
+				),
+				array(
 					'key'          => 'field_skema_slider_youtube',
 					'label'        => __( 'Slides YouTube (cabecera)', 'theme_skema' ),
 					'name'         => 'slider_youtube',

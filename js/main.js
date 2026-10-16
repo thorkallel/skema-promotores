@@ -1,4 +1,75 @@
 jQuery(document).ready(function($) {
+    /**
+     * En móvil el chrome del navegador (y la barra de admin) tapa un header
+     * fixed en top: 0 justo cuando el scroll vuelve al tope.
+     */
+    function readMobileHeaderTopInset() {
+        var isMobile = window.matchMedia('(max-width: 719px)').matches;
+        if (!isMobile) {
+            return 0;
+        }
+        var inset = 0;
+        if (window.visualViewport && window.visualViewport.offsetTop > 0) {
+            inset = window.visualViewport.offsetTop;
+        }
+        var adminBar = document.getElementById('wpadminbar');
+        var adminCoversHeader = adminBar && document.body.classList.contains('admin-bar') && window.matchMedia('(max-width: 782px)').matches;
+        if (adminCoversHeader) {
+            inset += adminBar.offsetHeight;
+        }
+        return inset;
+    }
+
+    function pinMobileHeaderToVisibleTop() {
+        var nav = document.getElementById('principal-menu');
+        if (!nav) {
+            return;
+        }
+        var isMobile = window.matchMedia('(max-width: 719px)').matches;
+        if (!isMobile) {
+            nav.style.top = '';
+            return;
+        }
+        nav.style.top = readMobileHeaderTopInset() + 'px';
+    }
+
+    /**
+     * Inicio en móvil: deja el slider y el resto del contenido debajo del header fijo.
+     */
+    function syncInicioHeaderOffset() {
+        var main = document.querySelector('.site-main--inicio');
+        var nav = document.getElementById('principal-menu');
+        if (!main || !nav) {
+            return;
+        }
+        var isMobile = window.matchMedia('(max-width: 719px)').matches;
+        var offset = isMobile ? readMobileHeaderTopInset() + nav.offsetHeight : 0;
+        document.documentElement.style.setProperty('--skema-home-header-offset', offset + 'px');
+    }
+    pinMobileHeaderToVisibleTop();
+    syncInicioHeaderOffset();
+    $(window).on('resize.skemaHomeHeaderOffset load.skemaHomeHeaderOffset scroll.skemaHomeHeaderOffset', function () {
+        pinMobileHeaderToVisibleTop();
+        syncInicioHeaderOffset();
+    });
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', function () {
+            pinMobileHeaderToVisibleTop();
+            syncInicioHeaderOffset();
+        });
+        window.visualViewport.addEventListener('scroll', function () {
+            pinMobileHeaderToVisibleTop();
+            syncInicioHeaderOffset();
+        });
+    }
+    if (window.ResizeObserver) {
+        var inicioNav = document.getElementById('principal-menu');
+        if (inicioNav && document.querySelector('.site-main--inicio')) {
+            var inicioNavObserver = new ResizeObserver(syncInicioHeaderOffset);
+            inicioNavObserver.observe(inicioNav);
+        }
+    }
+
     // Si Slick no está cargado en esta vista, evitamos errores y mantenemos funcional el resto del JS.
     if (typeof $.fn.slick !== 'function') {
         $.fn.slick = function() {
@@ -17,7 +88,7 @@ jQuery(document).ready(function($) {
         if ($region.length) {
             return $region;
         }
-        $region = $('<span class="screen-reader-text sr-only slick-live-region" aria-live="polite" aria-atomic="true"></span>');
+        $region = $('<span class="screen-reader-text sr-only slick-live-region" aria-live="off" aria-atomic="true"></span>');
         $slider.after($region);
         return $region;
     }
@@ -38,7 +109,12 @@ jQuery(document).ready(function($) {
         if (!$region || !$region.length) {
             return;
         }
-        var $current = $slider.find('.slick-slide[data-slick-index="' + index + '"]').first();
+        if ($slider.data('skemaUserSlide') !== true) {
+            $region.attr('aria-live', 'off');
+            return;
+        }
+        $slider.data('skemaUserSlide', false);
+        var $current = $slider.find('.slick-slide[data-slick-index="' + index + '"]').not('.slick-cloned').first();
         var contextualTitle = '';
         if ($current.length) {
             contextualTitle = $.trim(
@@ -50,8 +126,287 @@ jQuery(document).ready(function($) {
         }
 
         var baseMessage = 'Diapositiva ' + (index + 1) + ' de ' + total;
-        $region.text(contextualTitle ? (baseMessage + ': ' + contextualTitle) : baseMessage);
+        var message = contextualTitle ? (baseMessage + ': ' + contextualTitle) : baseMessage;
+        $region.attr('aria-live', 'off').text('');
+        window.setTimeout(function () {
+            $region.attr('aria-live', 'polite').text(message);
+        }, 40);
     }
+
+    function skemaPrefersReducedMotion() {
+        return document.documentElement.classList.contains('skema-reduced-motion')
+            || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
+    function skemaMarkUserSlide(slider) {
+        if (!slider) {
+            return;
+        }
+        var $slider = $(slider);
+        var token = Date.now();
+        $slider.data('skemaUserSlide', true);
+        $slider.data('skemaUserSlideToken', token);
+        window.setTimeout(function () {
+            if ($slider.data('skemaUserSlideToken') === token) {
+                $slider.data('skemaUserSlide', false);
+            }
+        }, 800);
+    }
+
+    function skemaCarouselName(slider) {
+        if (slider.getAttribute('aria-label')) {
+            return slider.getAttribute('aria-label');
+        }
+        var names = {
+            'slick-slider-banner': 'Cabecera',
+            'project-slider--destacados-inicio': 'Proyectos destacados',
+            'skema-proyectos__slider': 'Proyectos',
+            'slider_project--similares': 'Proyectos similares',
+            'slider-avance': 'Avance de obra',
+            'slider-zonas': 'Zonas comunes',
+            'slider-oportu': 'Oportunidades',
+            'slider-equipo': 'Equipo',
+            'slider-necesitas': 'Lo que necesitas',
+            'skema-landing-aliados-slider': 'Aliados',
+            'plantas-slider-main': 'Planos del proyecto',
+            'plantas-slider-nav': 'Miniaturas de planos'
+        };
+        var className;
+        for (className in names) {
+            if (slider.classList.contains(className)) {
+                return names[className];
+            }
+        }
+        return 'Carrusel';
+    }
+
+    function skemaSetSlideFocusable(slide, isFocusable) {
+        var controls = slide.querySelectorAll('a, button, input, select, textarea');
+        var i;
+        for (i = 0; i < controls.length; i++) {
+            var control = controls[i];
+            if (control.classList.contains('slick-arrow')) {
+                continue;
+            }
+            if (isFocusable) {
+                if (control.getAttribute('data-skema-tab-locked') === '1') {
+                    control.removeAttribute('tabindex');
+                    control.removeAttribute('data-skema-tab-locked');
+                }
+                continue;
+            }
+            if (control.getAttribute('tabindex') !== '-1') {
+                control.setAttribute('data-skema-tab-locked', '1');
+            }
+            control.setAttribute('tabindex', '-1');
+        }
+    }
+
+    function skemaLabelCarouselSlides($slider, slick) {
+        if (!slick) {
+            return;
+        }
+        var total = slick.slideCount || 0;
+        var visibleCount = slick.options && slick.options.slidesToShow ? slick.options.slidesToShow : 1;
+        var current = typeof slick.currentSlide === 'number' ? slick.currentSlide : 0;
+        $slider.find('.slick-slide').each(function () {
+            var index = parseInt(this.getAttribute('data-slick-index'), 10);
+            var isClone = this.classList.contains('slick-cloned') || isNaN(index) || index < 0;
+            if (isClone) {
+                this.setAttribute('aria-hidden', 'true');
+                skemaSetSlideFocusable(this, false);
+                return;
+            }
+            var isVisible = index >= current && index < current + visibleCount;
+            this.setAttribute('role', 'group');
+            this.setAttribute('aria-roledescription', 'diapositiva');
+            this.setAttribute('aria-label', (index + 1) + ' de ' + total);
+            if (isVisible) {
+                this.removeAttribute('aria-hidden');
+                skemaSetSlideFocusable(this, true);
+                return;
+            }
+            this.setAttribute('aria-hidden', 'true');
+            skemaSetSlideFocusable(this, false);
+        });
+    }
+
+    function skemaAttachCarouselPause($slider, slick) {
+        if (!$slider || !$slider.length || $slider.data('skemaPauseBound')) {
+            return;
+        }
+        if (!slick || !slick.options || !slick.options.autoplay || skemaPrefersReducedMotion()) {
+            return;
+        }
+        var parent = $slider.parent().get(0);
+        if (!parent) {
+            return;
+        }
+        $slider.data('skemaPauseBound', true);
+        parent.classList.add('skema-has-pause');
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'skema-carousel-pause';
+        button.setAttribute('aria-pressed', 'false');
+        button.textContent = 'Pausar';
+        parent.appendChild(button);
+        button.addEventListener('click', function () {
+            var isPaused = button.getAttribute('aria-pressed') === 'true';
+            if (isPaused) {
+                $slider.slick('slickPlay');
+                button.setAttribute('aria-pressed', 'false');
+                button.textContent = 'Pausar';
+                return;
+            }
+            $slider.slick('slickPause');
+            button.setAttribute('aria-pressed', 'true');
+            button.textContent = 'Reproducir';
+        });
+    }
+
+    function skemaDecorateCarousel($slider, slick) {
+        var slider = $slider.get(0);
+        if (!slider) {
+            return;
+        }
+        slider.setAttribute('role', 'region');
+        slider.setAttribute('aria-roledescription', 'carrusel');
+        if (!slider.getAttribute('aria-label')) {
+            slider.setAttribute('aria-label', skemaCarouselName(slider));
+        }
+        if (skemaPrefersReducedMotion() && slick && slick.options && slick.options.autoplay) {
+            window.setTimeout(function () {
+                if ($slider.hasClass('slick-initialized')) {
+                    $slider.slick('slickPause');
+                }
+            }, 0);
+        }
+        skemaLabelCarouselSlides($slider, slick);
+        skemaAttachCarouselPause($slider, slick);
+        skemaSyncLandingHeroCopy($slider, slick);
+        // Slick llama a initADA() después del evento init/afterChange y pisa el aria-label.
+        window.setTimeout(function () {
+            skemaLabelHeroDots($slider);
+        }, 0);
+    }
+
+    function skemaHeroDotLabel(index, total) {
+        return 'Ir a la diapositiva ' + (index + 1) + ' de ' + total;
+    }
+
+    function skemaHeroDotPaging(slider, index) {
+        var total = slider.slideCount || 0;
+        return '<button type="button" aria-label="' + skemaHeroDotLabel(index, total) + '"></button>';
+    }
+
+    function skemaLabelHeroDots($slider) {
+        var $items = $slider.closest('.slider-banner').find('.home-hero-dots .slick-dots > li');
+        if (!$items.length) {
+            $items = $slider.siblings('.home-hero-dots').find('.slick-dots > li');
+        }
+        if (!$items.length) {
+            $items = $slider.find('.slick-dots > li');
+        }
+        var total = $items.length;
+        $items.each(function (index) {
+            var button = this.querySelector('button');
+            if (!button) {
+                return;
+            }
+            button.setAttribute('aria-label', skemaHeroDotLabel(index, total));
+            if (this.classList.contains('slick-active')) {
+                button.setAttribute('aria-current', 'true');
+                return;
+            }
+            button.removeAttribute('aria-current');
+        });
+    }
+
+    function skemaWriteLandingHeroField(group, field, value) {
+        var node = group.querySelector('[data-hero-field="' + field + '"]');
+        if (!node) {
+            return;
+        }
+        if (field === 'location') {
+            var text = node.querySelector('.landing-full-hero__location-text');
+            if (text) {
+                text.textContent = value;
+            }
+        } else {
+            node.textContent = value;
+        }
+        if (value === '') {
+            node.classList.add('is-absent');
+            return;
+        }
+        node.classList.remove('is-absent');
+    }
+
+    function skemaSyncLandingHeroCopy($slider, slick) {
+        if (!$slider.hasClass('slick-slider-banner--landing-full') || !slick) {
+            return;
+        }
+        var hero = $slider.closest('.landing-hero--landing-full').get(0);
+        if (!hero) {
+            return;
+        }
+        var banner = $slider.closest('.slider-banner').get(0);
+        var slot = 'shared';
+        if (banner && banner.classList.contains('d-sm-none')) {
+            slot = 'mob';
+        } else if (banner && banner.classList.contains('d-none')) {
+            slot = 'desk';
+        }
+        var group = hero.querySelector('[data-hero-slot="' + slot + '"]');
+        if (!group) {
+            return;
+        }
+        var index = typeof slick.currentSlide === 'number' ? slick.currentSlide : 0;
+        var slide = $slider.find('.slick-slide').filter(function () {
+            return !this.classList.contains('slick-cloned') && this.getAttribute('data-slick-index') === String(index);
+        }).get(0);
+        if (slide && !slide.hasAttribute('data-slide-line')) {
+            slide = slide.querySelector('.landing-full-slide');
+        }
+        if (!slide) {
+            return;
+        }
+        skemaWriteLandingHeroField(group, 'line', slide.getAttribute('data-slide-line') || '');
+        skemaWriteLandingHeroField(group, 'tagline', slide.getAttribute('data-slide-tagline') || '');
+        skemaWriteLandingHeroField(group, 'location', slide.getAttribute('data-slide-location') || '');
+    }
+
+    $(document).on('init reInit afterChange', '.slick-slider', function (event, slick) {
+        skemaDecorateCarousel($(this), slick);
+    });
+
+    document.addEventListener('pointerdown', function (event) {
+        if (!event.target || !event.target.closest) {
+            return;
+        }
+        if (event.target.closest('.skema-carousel-pause, .skema-ambient-pause')) {
+            return;
+        }
+        var slider = event.target.closest('.slick-slider');
+        if (!slider) {
+            return;
+        }
+        skemaMarkUserSlide(slider);
+    }, true);
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') {
+            return;
+        }
+        if (!event.target || !event.target.closest) {
+            return;
+        }
+        var slider = event.target.closest('.slick-slider');
+        if (!slider) {
+            return;
+        }
+        skemaMarkUserSlide(slider);
+    }, true);
 
     function bindSlickLiveAnnouncements(selector) {
         if (typeof $.fn.slick !== 'function') {
@@ -136,14 +491,17 @@ jQuery(document).ready(function($) {
         };
     })();
 
-    $(window).scroll(function() {
+    function syncMenuScrolledState() {
         var scroll = $(window).scrollTop();
-        if (scroll >= 50) { // Ajusta este valor según la altura deseada para iniciar el cambio
+        var keepBarOnMobile = window.matchMedia('(max-width: 719px)').matches;
+        if (keepBarOnMobile || scroll >= 50) {
             $("#principal-menu").addClass("menu-scrolled");
-        } else {
-            $("#principal-menu").removeClass("menu-scrolled");
+            return;
         }
-    });
+        $("#principal-menu").removeClass("menu-scrolled");
+    }
+    $(window).on('scroll.skemaMenuBar resize.skemaMenuBar', syncMenuScrolledState);
+    syncMenuScrolledState();
     $('.slick-slider-banner:not(.slick-slider-banner--youtube)').each(function () {
         var $slider = $(this);
         var $dotsContainer = $slider.closest('.slider-banner').find('.home-hero-dots').first();
@@ -151,11 +509,14 @@ jQuery(document).ready(function($) {
         var sliderConfig = {
             slidesToShow: 1,
             slidesToScroll: 1,
-            autoplay: true,
+            autoplay: !skemaPrefersReducedMotion(),
             autoplaySpeed: 3000,
+            pauseOnHover: true,
+            pauseOnFocus: true,
             arrows: false,
             adaptiveHeight: !isLandingFull,
-            dots: $dotsContainer.length > 0
+            dots: $dotsContainer.length > 0,
+            customPaging: skemaHeroDotPaging
         };
         if ($dotsContainer.length) {
             sliderConfig.appendDots = $dotsContainer;
@@ -180,7 +541,8 @@ jQuery(document).ready(function($) {
                 infinite: false,
                 arrows: false,
                 adaptiveHeight: !isLandingFullYt,
-                dots: $dotsContainer.length > 0
+                dots: $dotsContainer.length > 0,
+                customPaging: skemaHeroDotPaging
             };
             if ($dotsContainer.length) {
                 sliderConfig.appendDots = $dotsContainer;
@@ -220,9 +582,129 @@ jQuery(document).ready(function($) {
         return window.__skemaYtApiPromise;
     }
 
+    function skemaAttachYouTubePause($slider, players) {
+        var banner = $slider.closest('.slider-banner').get(0);
+        if (!banner || banner.querySelector('.skema-ambient-pause')) {
+            return;
+        }
+        banner.classList.add('skema-has-pause');
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'skema-ambient-pause';
+        var startPaused = skemaPrefersReducedMotion();
+        $slider.data('skemaYtPaused', startPaused);
+        button.setAttribute('aria-pressed', startPaused ? 'true' : 'false');
+        button.textContent = startPaused ? 'Reproducir vídeo' : 'Pausar vídeo';
+        banner.appendChild(button);
+        button.addEventListener('click', function () {
+            var isPaused = $slider.data('skemaYtPaused') === true;
+            var current = $slider.hasClass('slick-initialized') ? $slider.slick('slickCurrentSlide') : 0;
+            var player = players[current];
+            if (isPaused) {
+                $slider.data('skemaYtPaused', false);
+                if (player && typeof player.playVideo === 'function') {
+                    try { player.playVideo(); } catch (e) {}
+                }
+                button.setAttribute('aria-pressed', 'false');
+                button.textContent = 'Pausar vídeo';
+                return;
+            }
+            $slider.data('skemaYtPaused', true);
+            if (player && typeof player.pauseVideo === 'function') {
+                try { player.pauseVideo(); } catch (e2) {}
+            }
+            button.setAttribute('aria-pressed', 'true');
+            button.textContent = 'Reproducir vídeo';
+        });
+    }
+
+    function skemaBindAmbientVideos() {
+        var groups = document.querySelectorAll('.video-content, .skema-ambient-host');
+        var i;
+        for (i = 0; i < groups.length; i++) {
+            skemaBindAmbientGroup(groups[i]);
+        }
+    }
+
+    function skemaBindAmbientGroup(container) {
+        var videos = container.querySelectorAll('video.skema-ambient-video');
+        if (!videos.length) {
+            return;
+        }
+        var button = container.querySelector('.skema-ambient-pause');
+        if (!button) {
+            button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'skema-ambient-pause';
+            container.classList.add('skema-has-pause');
+            container.appendChild(button);
+        }
+        function setPlaying(isPlaying) {
+            var n;
+            for (n = 0; n < videos.length; n++) {
+                var isHidden = window.getComputedStyle(videos[n]).display === 'none';
+                if (isPlaying && !isHidden) {
+                    var playPromise = videos[n].play();
+                    if (playPromise && typeof playPromise.catch === 'function') {
+                        playPromise.catch(function () {});
+                    }
+                    continue;
+                }
+                videos[n].pause();
+            }
+            button.setAttribute('aria-pressed', isPlaying ? 'false' : 'true');
+            button.textContent = isPlaying ? 'Pausar vídeo' : 'Reproducir vídeo';
+        }
+        setPlaying(!skemaPrefersReducedMotion());
+        if (button.getAttribute('data-skema-bound') === '1') {
+            return;
+        }
+        button.setAttribute('data-skema-bound', '1');
+        button.addEventListener('click', function () {
+            var isPaused = button.getAttribute('aria-pressed') === 'true';
+            setPlaying(isPaused);
+        });
+    }
+
+    /**
+     * Reinicia un reproductor de YouTube desde el segundo 0.
+     */
+    function restartYouTubePlayer(player) {
+        if (!player || typeof player.playVideo !== 'function') {
+            return;
+        }
+        try {
+            if (typeof player.seekTo === 'function') {
+                player.seekTo(0, true);
+            }
+            player.playVideo();
+        } catch (e) {}
+    }
+
+    /**
+     * Pasa al siguiente vídeo. En el último vuelve al primero (bucle).
+     * Un solo vídeo se reinicia en el mismo reproductor.
+     * Slick sigue con infinite:false para no clonar iframes.
+     */
+    function advanceYouTubeSlider($slider, player, slideIndex, totalSlides) {
+        if (skemaPrefersReducedMotion() || $slider.data('skemaYtPaused') === true) {
+            return;
+        }
+        var hasNextSlide = slideIndex < totalSlides - 1;
+        if (hasNextSlide) {
+            $slider.slick('slickNext');
+            return;
+        }
+        if (totalSlides <= 1) {
+            restartYouTubePlayer(player);
+            return;
+        }
+        $slider.slick('slickGoTo', 0);
+    }
+
     /**
      * Avanza automáticamente al siguiente slide cuando termina el vídeo activo.
-     * Si es el último, se detiene (no hay loop).
+     * Al llegar al último, el recorrido vuelve al primero y sigue en bucle.
      */
     function bindYouTubeAutoAdvance($slider) {
         var $slides = $slider.find('.hero-yt-slide');
@@ -252,20 +734,20 @@ jQuery(document).ready(function($) {
                     events: {
                         onReady: function (event) {
                             try { event.target.mute(); } catch (e) {}
+                            if (skemaPrefersReducedMotion() || $slider.data('skemaYtPaused') === true) {
+                                try { event.target.pauseVideo(); } catch (e2) {}
+                            }
                         },
                         onStateChange: function (event) {
                             if (event.data !== YT.PlayerState.ENDED) {
                                 return;
                             }
-                            var isLastSlide = slideIndex >= totalSlides - 1;
-                            if (isLastSlide) {
-                                return;
-                            }
-                            $slider.slick('slickNext');
+                            advanceYouTubeSlider($slider, event.target, slideIndex, totalSlides);
                         }
                     }
                 });
             });
+            skemaAttachYouTubePause($slider, players);
 
             $slider.on('beforeChange.skemaYt', function (event, slick, currentSlide) {
                 var previousPlayer = players[currentSlide];
@@ -278,6 +760,10 @@ jQuery(document).ready(function($) {
             $slider.on('afterChange.skemaYt', function (event, slick, currentSlide) {
                 var nextPlayer = players[currentSlide];
                 if (!nextPlayer || typeof nextPlayer.playVideo !== 'function') {
+                    return;
+                }
+                if (skemaPrefersReducedMotion() || $slider.data('skemaYtPaused') === true) {
+                    try { nextPlayer.pauseVideo(); } catch (e) {}
                     return;
                 }
                 try {
@@ -349,6 +835,7 @@ jQuery(document).ready(function($) {
         });
     }
     bindSkemaHomeHeroDotsVisibility();
+    skemaBindAmbientVideos();
 
     function initInicioDestacadosSlick(width) {
         var $d = $('.project-slider--destacados-inicio');
@@ -520,8 +1007,10 @@ jQuery(document).ready(function($) {
     $('.slider-oportu').slick({
         dots: false,
         infinite: true,
-       autoplay: true,
+       autoplay: !skemaPrefersReducedMotion(),
        autoplaySpeed: 2000,
+       pauseOnHover: true,
+       pauseOnFocus: true,
         slidesToShow: 1,
         arrows: true,
         slidesToScroll: 1,
@@ -531,8 +1020,10 @@ jQuery(document).ready(function($) {
     $('.slider-equipo').slick({
         dots: false,
         infinite: true,
-        autoplay: true,
+        autoplay: !skemaPrefersReducedMotion(),
         autoplaySpeed: 2000,
+        pauseOnHover: true,
+        pauseOnFocus: true,
         slidesToShow: 5,
         arrows: true,
         slidesToScroll: 1,
@@ -562,8 +1053,10 @@ $('#selectMapas').on('change', function() {
 
     // Mostrar el div seleccionado con fade
     const selected = $(this).val();
+    var mapLabel = $(this).find('option:selected').text();
     setTimeout(function() {
         $('#' + selected).fadeIn(100);
+        $('#mapas-anuncio').text('Mostrando: ' + mapLabel);
     }, 100); // Espera a que se desvanezcan antes de mostrar el nuevo
 });
 
@@ -583,24 +1076,86 @@ $(document).on('blur change', '#selectMapas', function() {
   $('.' + $('#selectContact').val()).fadeIn(300);
 
   $('#selectContact').on('change', function() {
+    var contactLabel = $(this).find('option:selected').text();
     // Ocultar todos con fade
     $('.divContact').fadeOut(300);
 
     // Mostrar el div seleccionado con fade
     $('.' + $(this).val()).fadeIn(300);
+    $('#contacto-anuncio').text('Mostrando: ' + contactLabel);
   }); 
 
+    function skemaMenuIsOffCanvas() {
+        var width = $(window).width();
+        var isLandingsShell = $('body').hasClass('skema-landing-shell');
+        if (isLandingsShell) {
+            return width < 1200;
+        }
+        return width <= 719;
+    }
+
+    function skemaSetMobileMenuOpen(isOpen, returnFocus) {
+        var menu = document.getElementById('menuPrincipal');
+        var openButton = document.querySelector('.btn-abrir');
+        if (!menu) {
+            return;
+        }
+        if (!skemaMenuIsOffCanvas()) {
+            menu.inert = false;
+            menu.style.right = '';
+            if (openButton) {
+                openButton.setAttribute('aria-expanded', 'false');
+            }
+            return;
+        }
+        if (isOpen) {
+            menu.style.right = '0';
+            menu.inert = false;
+            if (openButton) {
+                openButton.setAttribute('aria-expanded', 'true');
+            }
+            var closeButton = menu.querySelector('.btn-cerrar');
+            if (closeButton) {
+                closeButton.focus();
+            }
+            return;
+        }
+        menu.style.right = '-100%';
+        menu.inert = true;
+        if (openButton) {
+            openButton.setAttribute('aria-expanded', 'false');
+            if (returnFocus) {
+                openButton.focus();
+            }
+        }
+    }
+
+    skemaSetMobileMenuOpen(false, false);
+
     $('.btn-cerrar').click(function() {
-        $('.navbar-collapse').css({'right':'-100%'});
-        $('.btn-abrir').attr('aria-expanded', 'false');
-        $(this).attr('aria-expanded', 'false');
+        skemaSetMobileMenuOpen(false, true);
     });
     $('.btn-abrir').click(function(){
-		$('.navbar-collapse').css({'right':'0'});
-        $(this).attr('aria-expanded', 'true');
-        $('.btn-cerrar').attr('aria-expanded', 'true');
-        
+        skemaSetMobileMenuOpen(true, false);
 	});
+    $(document).on('keydown', function(event) {
+        if (event.key !== 'Escape') {
+            return;
+        }
+        if (!skemaMenuIsOffCanvas()) {
+            return;
+        }
+        var openButton = document.querySelector('.btn-abrir');
+        if (!openButton || openButton.getAttribute('aria-expanded') !== 'true') {
+            return;
+        }
+        skemaSetMobileMenuOpen(false, true);
+    });
+    $(window).on('resize.skemaMenu', function() {
+        var openButton = document.querySelector('.btn-abrir');
+        var isOpen = openButton && openButton.getAttribute('aria-expanded') === 'true';
+        skemaSetMobileMenuOpen(!!isOpen, false);
+    });
     // $('.navbar-toggler').click(function() {
     //       // Toggle menu visibility
     //     $('#menuPrincipal').collapse('toggle');
@@ -620,16 +1175,14 @@ $(document).on('blur change', '#selectMapas', function() {
         if (!isLandingsShell && w > 719) {
             return;
         }
-        $('.navbar-collapse').css({'right':'-100%'});
-        $('.btn-abrir').attr('aria-expanded', 'false');
-        $('.btn-cerrar').attr('aria-expanded', 'false');
+        skemaSetMobileMenuOpen(false, true);
     });
 
     $(window).on('resize', function() {
         var width = $(window).width();
         if (width < 700) {
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                var target = $(e.target).attr("href"); // Activated tab
+            $('[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr('href') || $(e.target).attr('data-target');
                 var $slider = $(target).find('.project-slider');
                 var projectCount = $slider.data('projects-count');
         
@@ -686,8 +1239,8 @@ $(document).on('blur change', '#selectMapas', function() {
     
             // $('#id_slider_proyectos').removeClass('slide-proyectos');
             //$('#recetas_result').removeClass('slide-recetas');
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                var target = $(e.target).attr("href"); // Activated tab
+            $('[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr('href') || $(e.target).attr('data-target');
                 var $slider = $(target).find('.project-slider');
                 var projectCount = $slider.data('projects-count');
         
@@ -835,8 +1388,8 @@ jQuery(document).ready(function($) {
 });
 
 jQuery(document).ready(function($) {
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        var target = $(e.target).attr("href"); // ID del tab activado
+    $('[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr('href') || $(e.target).attr('data-target');
 
         if (target === '#zonas') {
             var $slider = $(target).find('.slider-zonas');
@@ -848,8 +1401,10 @@ jQuery(document).ready(function($) {
                     slidesToScroll: 1,
                     arrows: false,
                     dots: false,
-                    autoplay: true,
-                    autoplaySpeed: 3000
+                    autoplay: !skemaPrefersReducedMotion(),
+                    autoplaySpeed: 3000,
+                    pauseOnHover: true,
+                    pauseOnFocus: true
                 });
             } else {
                 // Si ya está inicializado, forzar su actualización
@@ -857,4 +1412,35 @@ jQuery(document).ready(function($) {
             }
         }
     });
+});
+
+jQuery(document).on('keydown', '[role="tab"]', function (event) {
+    var key = event.key;
+    if (key !== 'ArrowRight' && key !== 'ArrowLeft' && key !== 'Home' && key !== 'End') {
+        return;
+    }
+    var $tabs = jQuery(this).closest('[role="tablist"]').find('[role="tab"]');
+    if (!$tabs.length) {
+        return;
+    }
+    var index = $tabs.index(this);
+    var nextIndex = index;
+    if (key === 'ArrowRight') {
+        nextIndex = (index + 1) % $tabs.length;
+    }
+    if (key === 'ArrowLeft') {
+        nextIndex = (index - 1 + $tabs.length) % $tabs.length;
+    }
+    if (key === 'Home') {
+        nextIndex = 0;
+    }
+    if (key === 'End') {
+        nextIndex = $tabs.length - 1;
+    }
+    event.preventDefault();
+    var nextTab = $tabs.get(nextIndex);
+    if (!nextTab) {
+        return;
+    }
+    jQuery(nextTab).tab('show').trigger('focus');
 });

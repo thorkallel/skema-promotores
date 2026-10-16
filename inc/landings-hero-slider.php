@@ -161,7 +161,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 				++$slide_i;
 			}
 			echo '</div>';
-			echo '<div class="home-hero-dots" aria-hidden="true"></div>';
+			echo '<div class="home-hero-dots"></div>';
 			echo '</div>';
 		}
 		if ( ! empty( $mob_urls ) ) {
@@ -186,7 +186,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 				++$slide_m;
 			}
 			echo '</div>';
-			echo '<div class="home-hero-dots" aria-hidden="true"></div>';
+			echo '<div class="home-hero-dots"></div>';
 			echo '</div>';
 		}
 		echo '</div>';
@@ -217,7 +217,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 			echo '<div class="hero-yt-slide prelanding-slide" data-slide-index="' . esc_attr( (string) $idx ) . '" data-youtube-id="' . esc_attr( $slide_yt_id ) . '">';
 			echo '<div class="hero-yt-embed">';
 			printf(
-				'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
+				'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" tabindex="-1" aria-hidden="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
 				esc_url( $embed_src ),
 				esc_attr( $slide_title ),
 				esc_attr( 0 === $idx ? 'eager' : 'lazy' )
@@ -225,7 +225,7 @@ function theme_skema_echo_prelanding_hero_media( $post_id, $tipo, $landing_title
 			echo '</div></div>';
 		}
 		echo '</div>';
-		echo '<div class="home-hero-dots" aria-hidden="true"></div>';
+		echo '<div class="home-hero-dots"></div>';
 		echo '</div></div>';
 		return;
 	}
@@ -303,7 +303,7 @@ function theme_skema_echo_prelanding_hero_copy_and_lead( $post_id ) {
                         <?php if ( $logo_url !== '' ) : ?>
                         <div class="project-hero-logo">
                             <img src="<?php echo esc_url( $logo_url ); ?>"
-                                alt="<?php echo esc_attr( sprintf( __( 'Logo — %s', 'theme_skema' ), $h1 ) ); ?>"
+                                alt=""
                                 loading="lazy" decoding="async" />
                         </div>
                         <?php endif; ?>
@@ -344,7 +344,7 @@ function theme_skema_echo_prelanding_hero_copy_and_lead( $post_id ) {
             <div class="col-xl-5 col-lg-5 ms-xl-auto">
                 <div class="project-info-box project-info-box--lead" id="<?php echo esc_attr( $anchor_id ); ?>">
                     <?php if ( $lead_heading !== '' ) : ?>
-                    <h5><?php echo esc_html( $lead_heading ); ?></h5>
+                    <h2 class="h5 project-info-box__heading"><?php echo esc_html( $lead_heading ); ?></h2>
                     <?php endif; ?>
                     <?php if ( $lead_txt !== '' ) : ?>
                     <p class="small text-muted mb-3 prelanding-lead-intro"><?php echo esc_html( $lead_txt ); ?></p>
@@ -422,7 +422,9 @@ function theme_skema_should_render_landing_standalone_project_logo( $post_id = n
 	}
 
 	if ( null === $post_id ) {
-		$post_id = get_queried_object_id();
+		$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+			? theme_skema_viewing_landing_id()
+			: get_queried_object_id();
 	}
 	$post_id = absint( $post_id );
 	if ( ! $post_id || 'landings' !== get_post_type( $post_id ) ) {
@@ -589,17 +591,160 @@ function theme_skema_landing_full_hero_sr_heading_from_first_slide( array $slide
 }
 
 /**
- * Bloque interior hero-content (referencia Renvia single-slider / project-page-hero).
+ * Textos que rotan con el slide. La línea se omite si repite el H1 de la página.
  *
- * @param array{tagline: string, h1: string, location: string, logo_url: string} $bundle Datos de theme_skema_get_landing_full_hero_copy_bundle.
- * @param string                                                           $heading_tag Etiqueta de encabezado permitida (h1 o h2).
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $global_bundle Bundle global.
+ * @param array{slide_tagline?: string, slide_heading?: string, slide_location?: string} $slide_row Fila del repetidor.
+ * @return array{line: string, tagline: string, location: string}
+ */
+function theme_skema_landing_hero_variable_from_slide( array $global_bundle, array $slide_row ) {
+	$merged = theme_skema_landing_full_hero_merge_slide_copy( $global_bundle, $slide_row );
+	$page   = isset( $global_bundle['h1'] ) ? trim( (string) $global_bundle['h1'] ) : '';
+	$line   = isset( $merged['h1'] ) ? trim( (string) $merged['h1'] ) : '';
+	if ( $line === $page ) {
+		$line = '';
+	}
+
+	return array(
+		'line'     => $line,
+		'tagline'  => isset( $merged['tagline'] ) ? trim( (string) $merged['tagline'] ) : '',
+		'location' => isset( $merged['location'] ) ? trim( (string) $merged['location'] ) : '',
+	);
+}
+
+/**
+ * Primer slide con medio usable, para pintar el copy antes de que arranque Slick.
+ *
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $global_bundle Bundle global.
+ * @param array<int, array<string, string>> $slides Filas del repetidor.
+ * @param string $media_key Clave que indica que el slide tiene medio (`url` o `youtube_id`).
+ * @return array{line: string, tagline: string, location: string}
+ */
+function theme_skema_landing_hero_first_variable( array $global_bundle, array $slides, $media_key = 'url' ) {
+	foreach ( $slides as $slide_row ) {
+		if ( ! is_array( $slide_row ) ) {
+			continue;
+		}
+		$media = isset( $slide_row[ $media_key ] ) ? trim( (string) $slide_row[ $media_key ] ) : '';
+		if ( $media === '' ) {
+			continue;
+		}
+		return theme_skema_landing_hero_variable_from_slide( $global_bundle, $slide_row );
+	}
+
+	return theme_skema_landing_hero_variable_from_slide( $global_bundle, array() );
+}
+
+/**
+ * Atributos de copy en el slide, para que el JS actualice el párrafo fuera del carrusel.
+ *
+ * @param array{line: string, tagline: string, location: string} $variable Textos del slide.
+ */
+function theme_skema_echo_landing_hero_slide_open( array $variable, $extra_class = '' ) {
+	$class = 'landing-full-slide';
+	if ( $extra_class !== '' ) {
+		$class .= ' ' . $extra_class;
+	}
+	printf(
+		'<div class="%1$s" data-slide-line="%2$s" data-slide-tagline="%3$s" data-slide-location="%4$s">',
+		esc_attr( $class ),
+		esc_attr( $variable['line'] ),
+		esc_attr( $variable['tagline'] ),
+		esc_attr( $variable['location'] )
+	);
+}
+
+/**
+ * Párrafo, bajada y ubicación de un grupo de slides (escritorio, móvil o único).
+ *
+ * @param array{line: string, tagline: string, location: string} $variable Textos iniciales.
+ * @param string $slot Identificador que el JS empareja con el slider (`desk`, `mob` o `shared`).
+ * @param string $visibility_class Clases de Bootstrap para mostrar el grupo en un solo punto de corte.
+ */
+function theme_skema_echo_landing_hero_variable_group( array $variable, $slot, $visibility_class = '' ) {
+	$line     = isset( $variable['line'] ) ? $variable['line'] : '';
+	$tagline  = isset( $variable['tagline'] ) ? $variable['tagline'] : '';
+	$location = isset( $variable['location'] ) ? $variable['location'] : '';
+	$class    = 'landing-full-hero__variable';
+	if ( $visibility_class !== '' ) {
+		$class .= ' ' . $visibility_class;
+	}
+	?>
+<div class="<?php echo esc_attr( $class ); ?>" data-hero-slot="<?php echo esc_attr( $slot ); ?>">
+    <p class="project-hero-title landing-full-hero__slide-line<?php echo $line === '' ? ' is-absent' : ''; ?>" data-hero-field="line"><?php echo esc_html( $line ); ?></p>
+    <span class="tag-line landing-full-hero__tagline<?php echo $tagline === '' ? ' is-absent' : ''; ?>" data-hero-field="tagline"><?php echo esc_html( $tagline ); ?></span>
+    <p class="landing-full-hero__location<?php echo $location === '' ? ' is-absent' : ''; ?>" data-hero-field="location">
+        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+        <span class="landing-full-hero__location-text"><?php echo esc_html( $location ); ?></span>
+    </p>
+</div>
+	<?php
+}
+
+/**
+ * H1 único, fuera del carrusel, y los textos que cambian por slide en párrafos.
+ *
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $page_bundle Bundle global. Su `h1` es el título de la página.
+ * @param array<int, array{slot: string, class: string, variable: array{line: string, tagline: string, location: string}}> $groups Grupos de copy.
+ */
+function theme_skema_echo_landing_full_hero_stable_copy( array $page_bundle, array $groups ) {
+	$heading  = isset( $page_bundle['h1'] ) ? trim( (string) $page_bundle['h1'] ) : '';
+	$logo_url = isset( $page_bundle['logo_url'] ) ? $page_bundle['logo_url'] : '';
+	if ( $heading === '' && $logo_url === '' && empty( $groups ) ) {
+		return;
+	}
+	?>
+<div class="landing-full-hero__copy landing-full-slide__inner">
+    <div class="container">
+        <div class="row justify-content-start">
+            <div class="col-lg-10">
+                <div class="hero-content text-start">
+                    <?php if ( $logo_url !== '' ) : ?>
+                    <div class="project-hero-branding">
+                        <div class="project-hero-logo">
+                            <img src="<?php echo esc_url( $logo_url ); ?>" alt="" loading="lazy" decoding="async" />
+                        </div>
+                        <div class="project-hero-text">
+                            <?php if ( $heading !== '' ) : ?>
+                            <h1 class="project-hero-title"><?php echo esc_html( $heading ); ?></h1>
+                            <?php endif; ?>
+                            <?php foreach ( $groups as $group ) : ?>
+                            <?php theme_skema_echo_landing_hero_variable_group( $group['variable'], $group['slot'], $group['class'] ); ?>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <?php else : ?>
+                    <div class="project-hero-text project-hero-text--solo">
+                        <?php if ( $heading !== '' ) : ?>
+                        <h1 class="project-hero-title"><?php echo esc_html( $heading ); ?></h1>
+                        <?php endif; ?>
+                        <?php foreach ( $groups as $group ) : ?>
+                        <?php theme_skema_echo_landing_hero_variable_group( $group['variable'], $group['slot'], $group['class'] ); ?>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+	<?php
+}
+
+/**
+ * Bloque interior hero-content. El título del slide es un párrafo: el H1 vive fuera del carrusel.
+ *
+ * La firma se mantiene. `$heading_tag` ya no elige la etiqueta.
+ *
+ * @param array{tagline: string, h1: string, location: string, logo_url: string} $bundle Datos de copy.
+ * @param string $heading_tag Se ignora. Conservado para no romper llamadas existentes.
  */
 function theme_skema_echo_landing_full_hero_inner_markup( array $bundle, $heading_tag = 'h2' ) {
+	unset( $heading_tag );
 	$tagline  = isset( $bundle['tagline'] ) ? $bundle['tagline'] : '';
-	$h1       = isset( $bundle['h1'] ) ? $bundle['h1'] : '';
+	$heading  = isset( $bundle['h1'] ) ? $bundle['h1'] : '';
 	$location = isset( $bundle['location'] ) ? $bundle['location'] : '';
 	$logo_url = isset( $bundle['logo_url'] ) ? $bundle['logo_url'] : '';
-	$heading_tag = 'h1' === $heading_tag ? 'h1' : 'h2';
 
 	$show_branding_row = ( $logo_url !== '' );
 	?>
@@ -611,12 +756,13 @@ function theme_skema_echo_landing_full_hero_inner_markup( array $bundle, $headin
                 <div class="project-hero-branding">
                     <div class="project-hero-logo">
                         <img src="<?php echo esc_url( $logo_url ); ?>"
-                            alt="<?php echo esc_attr( sprintf( __( 'Logo — %s', 'theme_skema' ), $h1 ) ); ?>"
+                            alt=""
                             loading="lazy" decoding="async" />
                     </div>
                     <div class="project-hero-text">
-                        <<?php echo esc_attr( $heading_tag ); ?> class="project-hero-title"><?php echo esc_html( $h1 ); ?>
-                        </<?php echo esc_attr( $heading_tag ); ?>>
+                        <?php if ( $heading !== '' ) : ?>
+                        <p class="project-hero-title"><?php echo esc_html( $heading ); ?></p>
+                        <?php endif; ?>
                         <?php if ( $tagline !== '' ) : ?>
                         <span class="tag-line"><?php echo esc_html( $tagline ); ?></span>
                         <?php endif; ?>
@@ -630,8 +776,9 @@ function theme_skema_echo_landing_full_hero_inner_markup( array $bundle, $headin
                 </div>
                 <?php else : ?>
                 <div class="project-hero-text project-hero-text--solo">
-                    <<?php echo esc_attr( $heading_tag ); ?> class="project-hero-title"><?php echo esc_html( $h1 ); ?>
-                    </<?php echo esc_attr( $heading_tag ); ?>>
+                    <?php if ( $heading !== '' ) : ?>
+                    <p class="project-hero-title"><?php echo esc_html( $heading ); ?></p>
+                    <?php endif; ?>
                     <?php if ( $tagline !== '' ) : ?>
                     <span class="tag-line"><?php echo esc_html( $tagline ); ?></span>
                     <?php endif; ?>
@@ -682,7 +829,6 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 	$desk_slides = array();
 	$mob_slides  = array();
 	$slides_yt   = array();
-	$slides_for_sr = array();
 
 	if ( 'images' === $tipo ) {
 		$desk_slides = theme_skema_landing_full_hero_slides_from_image_repeater( $post_id, $rep_desk );
@@ -690,24 +836,33 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		if ( empty( $mob_slides ) ) {
 			$mob_slides = $desk_slides;
 		}
-		$slides_for_sr = ! empty( $desk_slides ) ? $desk_slides : $mob_slides;
 	} elseif ( 'youtube' === $tipo ) {
-		$slides_yt     = theme_skema_landing_full_hero_slides_from_youtube_repeater( $post_id, $rep_youtube );
-		$slides_for_sr = $slides_yt;
+		$slides_yt = theme_skema_landing_full_hero_slides_from_youtube_repeater( $post_id, $rep_youtube );
 	}
-
-	$copy_h1 = theme_skema_landing_full_hero_sr_heading_from_first_slide( $slides_for_sr, $copy_bundle, $landing_title );
 
 	echo '<section class="landing-full-hero project-page-hero renvia-hero_one">';
-	if ( $copy_h1 !== '' ) {
-		echo '<h1 class="screen-reader-text">' . esc_html( $copy_h1 ) . '</h1>';
-	}
 	echo '<div class="shape-one" aria-hidden="true"><span></span></div>';
 
 	if ( 'images' === $tipo ) {
 		if ( empty( $desk_slides ) && empty( $mob_slides ) ) {
 			echo '</section>';
 			return;
+		}
+
+		$copy_groups = array();
+		if ( ! empty( $desk_slides ) ) {
+			$copy_groups[] = array(
+				'slot'     => 'desk',
+				'class'    => 'd-none d-sm-block',
+				'variable' => theme_skema_landing_hero_first_variable( $copy_bundle, $desk_slides, 'url' ),
+			);
+		}
+		if ( ! empty( $mob_slides ) ) {
+			$copy_groups[] = array(
+				'slot'     => 'mob',
+				'class'    => 'd-sm-none d-block',
+				'variable' => theme_skema_landing_hero_first_variable( $copy_bundle, $mob_slides, 'url' ),
+			);
 		}
 
 		echo '<div class="landing-hero landing-hero--landing-full">';
@@ -720,14 +875,15 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				if ( $img_url === '' ) {
 					continue;
 				}
-				$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
-				$slide_alt    = sprintf(
+				$slide_alt = sprintf(
 					/* translators: 1: slide number, 2: landing title */
 					__( 'Cabecera %1$d — %2$s', 'theme_skema' ),
 					$slide_i,
 					$landing_title
 				);
-				echo '<div class="landing-full-slide">';
+				theme_skema_echo_landing_hero_slide_open(
+					theme_skema_landing_hero_variable_from_slide( $copy_bundle, $slide_row )
+				);
 				echo '<div class="landing-full-slide__media" aria-hidden="true">';
 				printf(
 					'<img src="%s" class="landing-full-slide__img" alt="%s" loading="%s" decoding="async" />',
@@ -737,13 +893,11 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				);
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
-				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
-				echo '</div></div>';
+				echo '</div>';
 				++$slide_i;
 			}
 			echo '</div>';
-			echo '<div class="home-hero-dots" aria-hidden="true"></div>';
+			echo '<div class="home-hero-dots"></div>';
 			echo '</div>';
 		}
 		if ( ! empty( $mob_slides ) ) {
@@ -755,14 +909,15 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				if ( $img_url === '' ) {
 					continue;
 				}
-				$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
-				$slide_alt_m  = sprintf(
+				$slide_alt_m = sprintf(
 					/* translators: 1: slide number, 2: landing title */
 					__( 'Cabecera móvil %1$d — %2$s', 'theme_skema' ),
 					$slide_m,
 					$landing_title
 				);
-				echo '<div class="landing-full-slide">';
+				theme_skema_echo_landing_hero_slide_open(
+					theme_skema_landing_hero_variable_from_slide( $copy_bundle, $slide_row )
+				);
 				echo '<div class="landing-full-slide__media" aria-hidden="true">';
 				printf(
 					'<img src="%s" class="landing-full-slide__img" alt="%s" loading="%s" decoding="async" />',
@@ -772,15 +927,14 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 				);
 				echo '</div>';
 				echo '<div class="landing-full-slide__overlay" aria-hidden="true"></div>';
-				echo '<div class="landing-full-slide__inner">';
-				theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
-				echo '</div></div>';
+				echo '</div>';
 				++$slide_m;
 			}
 			echo '</div>';
-			echo '<div class="home-hero-dots" aria-hidden="true"></div>';
+			echo '<div class="home-hero-dots"></div>';
 			echo '</div>';
 		}
+		theme_skema_echo_landing_full_hero_stable_copy( $copy_bundle, $copy_groups );
 		echo '</div></section>';
 		return;
 	}
@@ -803,9 +957,8 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 		if ( $slide_yt_id === '' ) {
 			continue;
 		}
-		$slide_bundle = theme_skema_landing_full_hero_merge_slide_copy( $copy_bundle, $slide_row );
-		$autoplay     = 0 === $idx ? '1' : '0';
-		$embed_src    = sprintf(
+		$autoplay  = 0 === $idx ? '1' : '0';
+		$embed_src = sprintf(
 			'https://www.youtube-nocookie.com/embed/%s?rel=0&controls=0&fs=0&disablekb=1&iv_load_policy=3&modestbranding=1&playsinline=1&mute=1&enablejsapi=1&autoplay=%s',
 			rawurlencode( $slide_yt_id ),
 			$autoplay
@@ -815,23 +968,40 @@ function theme_skema_render_landing_full_hero_section( $post_id ) {
 			__( 'Cabecera vídeo %d', 'theme_skema' ),
 			$idx + 1
 		);
-		echo '<div class="landing-full-slide landing-full-slide--youtube hero-yt-slide" data-slide-index="' . esc_attr( (string) $idx ) . '" data-youtube-id="' . esc_attr( $slide_yt_id ) . '">';
+		$variable = theme_skema_landing_hero_variable_from_slide( $copy_bundle, $slide_row );
+		printf(
+			'<div class="landing-full-slide landing-full-slide--youtube hero-yt-slide" data-slide-index="%1$s" data-youtube-id="%2$s" data-slide-line="%3$s" data-slide-tagline="%4$s" data-slide-location="%5$s">',
+			esc_attr( (string) $idx ),
+			esc_attr( $slide_yt_id ),
+			esc_attr( $variable['line'] ),
+			esc_attr( $variable['tagline'] ),
+			esc_attr( $variable['location'] )
+		);
 		echo '<div class="hero-yt-embed">';
 		printf(
-			'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
+			'<iframe class="hero-yt-iframe" src="%s" title="%s" width="560" height="315" tabindex="-1" aria-hidden="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="%s"></iframe>',
 			esc_url( $embed_src ),
 			esc_attr( $slide_title ),
 			esc_attr( 0 === $idx ? 'eager' : 'lazy' )
 		);
 		echo '</div>';
 		echo '<div class="landing-full-slide__overlay landing-full-slide__overlay--youtube" aria-hidden="true"></div>';
-		echo '<div class="landing-full-slide__inner">';
-		theme_skema_echo_landing_full_hero_inner_markup( $slide_bundle, 'h2' );
-		echo '</div></div>';
+		echo '</div>';
 	}
 	echo '</div>';
-	echo '<div class="home-hero-dots" aria-hidden="true"></div>';
-	echo '</div></div></section>';
+	echo '<div class="home-hero-dots"></div>';
+	echo '</div>';
+	theme_skema_echo_landing_full_hero_stable_copy(
+		$copy_bundle,
+		array(
+			array(
+				'slot'     => 'shared',
+				'class'    => '',
+				'variable' => theme_skema_landing_hero_first_variable( $copy_bundle, $slides_yt, 'youtube_id' ),
+			),
+		)
+	);
+	echo '</div></section>';
 }
 
 /**
@@ -845,7 +1015,9 @@ function theme_skema_render_landing_hero( $post_id = null ) {
 	}
 
 	if ( null === $post_id ) {
-		$post_id = get_queried_object_id();
+		$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+			? theme_skema_viewing_landing_id()
+			: get_queried_object_id();
 	}
 	$post_id = absint( $post_id );
 	if ( ! $post_id || 'landings' !== get_post_type( $post_id ) ) {
@@ -875,7 +1047,9 @@ function theme_skema_render_landing_project_logo( $post_id = null ) {
 	}
 
 	if ( null === $post_id ) {
-		$post_id = get_queried_object_id();
+		$post_id = function_exists( 'theme_skema_viewing_landing_id' )
+			? theme_skema_viewing_landing_id()
+			: get_queried_object_id();
 	}
 	$post_id = absint( $post_id );
 	if ( ! $post_id || 'landings' !== get_post_type( $post_id ) ) {

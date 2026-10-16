@@ -101,6 +101,13 @@ $skema_zonas_galeria_nota  = function_exists( 'theme_skema_landing_medios_get_zo
 $skema_medios_maqueta = function_exists( 'theme_skema_landing_medios_get_maqueta_web_for_display' )
 	? theme_skema_landing_medios_get_maqueta_web_for_display( $post_id )
 	: null;
+$skema_show_medios_tab_apto    = count( $skema_medios_apto_slides ) > 0;
+$skema_show_medios_tab_renders = count( $skema_medios_renders_slides ) > 0;
+$skema_show_medios_tab_plantas = count( $skema_medios_plantas_slides ) > 0;
+$skema_show_medios_tab_avance  = count( $skema_medios_avance_slides ) > 0;
+$skema_show_medios_tab_video   = null !== $skema_medios_video;
+$skema_show_medios_tab_zonas   = count( $skema_zonas_galeria_items ) > 0;
+$skema_show_medios_tab_maqueta = null !== $skema_medios_maqueta;
 $skema_show_medios       = function_exists( 'theme_skema_landing_medios_should_show_block' )
 	&& theme_skema_landing_medios_should_show_block( $post_id );
 $skema_respaldo_items = function_exists( 'theme_skema_landing_get_respaldo_slider_items' )
@@ -158,10 +165,10 @@ $skema_prior_content_block = false;
             <?php if ( $skema_main_has_any ) : ?>
             <div class="<?php echo esc_attr( $skema_main_col_class ); ?> skema-landing-content-box__main">
                 <?php if ( $skema_show_desc_proyecto ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_desc_proyecto', __( 'Descripción del proyecto', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <div class="skema-landing-slot skema-landing-slot--descripcion-proyecto entry-content">
                     <?php echo apply_filters( 'the_content', $skema_desc_proyecto_raw ); ?>
                 </div>
@@ -171,10 +178,10 @@ $skema_prior_content_block = false;
 				?>
 
                 <?php if ( $skema_show_desc_inmueble ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_desc_inmueble', __( 'Descripción del inmueble (tipología)', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <div class="skema-landing-slot skema-landing-slot--descripcion-inmueble entry-content">
                     <?php echo apply_filters( 'the_content', $skema_desc_inmueble_raw ); ?>
                 </div>
@@ -184,10 +191,10 @@ $skema_prior_content_block = false;
 				?>
 
                 <?php if ( $skema_show_zonas ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_zonas_sociales', __( 'Zonas sociales', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <?php if ( $skema_has_wysiwyg && theme_skema_landing_acf_wysiwyg_has_content( $skema_zonas_intro_raw ) ) : ?>
                 <div class="skema-landing-slot skema-landing-slot--zonas-sociales-intro entry-content">
                     <?php echo apply_filters( 'the_content', $skema_zonas_intro_raw ); ?>
@@ -219,16 +226,16 @@ $skema_prior_content_block = false;
 				?>
 
                 <?php if ( $skema_show_ficha ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_ficha_apartamento', __( 'Ficha del apartamento', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <div
                     class="features-amenities-list project-ficha-grid project-ficha-grid--fa-cats mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--ficha-apartamento">
                     <?php foreach ( $skema_ficha_apto_categorias as $skema_ficha_cat ) : ?>
                     <div class="skema-ficha-apto-category">
-                        <h4 class="skema-ficha-apto-category__title">
-                            <?php echo esc_html( $skema_ficha_cat['titulo'] ); ?></h4>
+                        <h3 class="skema-ficha-apto-category__title">
+                            <?php echo esc_html( $skema_ficha_cat['titulo'] ); ?></h3>
                         <div class="skema-ficha-apto-category__items">
                             <?php foreach ( $skema_ficha_cat['items'] as $skema_ficha_item ) : ?>
                             <div class="skema-ficha-apto-item">
@@ -249,10 +256,10 @@ $skema_prior_content_block = false;
                 <?php endif; ?>
 
                 <?php if ( $skema_show_info ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_info_proyecto', __( 'Información del proyecto', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <div class="project-info-box mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--info-proyecto">
                     <ul class="skema-lland-info-proyecto-list">
                         <?php foreach ( $skema_info_proyecto_rows as $skema_info_row ) : ?>
@@ -267,73 +274,134 @@ $skema_prior_content_block = false;
                 <?php endif; ?>
 
                 <?php if ( $skema_show_medios ) : ?>
-                <h3
+                <h2
                     class="<?php echo esc_attr( $skema_content_section_heading_class( $skema_prior_content_block ) ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_medios', __( 'Medios del proyecto', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <div class="property-media-box mt-40 skema-landing-slot skema-landing-slot--medios">
                     <div class="row align-items-center">
                         <div class="col-lg-12">
                             <div class="property-tabs mb-40">
                                 <ul class="nav nav-tabs" role="tablist">
+                                    <?php
+									$skema_medios_first_tab_active = true;
+									?>
+                                    <?php if ( $skema_show_medios_tab_apto ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-apto"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-apto"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-apto"
-                                            role="tab" aria-selected="true">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Apto modelo', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_renders ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-renders"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-renders"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-renders"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Renders', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_plantas ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-plantas"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-plantas"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-plantas"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Plantas', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_avance ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-avance"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Avance de obra', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_video ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-videos"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Video', 'theme_skema' ); ?>
                                         </button>
                                     </li>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_zonas ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-zonas"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-zonas"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-zonas"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Zonas sociales', 'theme_skema' ); ?>
                                         </button>
                                     </li>
-                                    <?php if ( null !== $skema_medios_maqueta ) : ?>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
+                                    <?php if ( $skema_show_medios_tab_maqueta ) : ?>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" type="button" data-toggle="tab"
+                                        <button class="nav-link<?php echo $skema_medios_first_tab_active ? ' active' : ''; ?>" type="button" data-toggle="tab"
+                                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-maqueta"
+                                            aria-controls="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta"
                                             data-target="#<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta"
-                                            role="tab" aria-selected="false" tabindex="-1">
+                                            role="tab" aria-selected="<?php echo $skema_medios_first_tab_active ? 'true' : 'false'; ?>"
+                                            tabindex="<?php echo $skema_medios_first_tab_active ? '0' : '-1'; ?>">
                                             <?php esc_html_e( 'Maqueta web', 'theme_skema' ); ?>
                                         </button>
                                     </li>
-                                    <?php endif; ?>
+                                    <?php
+										$skema_medios_first_tab_active = false;
+									endif;
+									?>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="tab-content">
-                        <div class="tab-pane fade show active skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-apto" role="tabpanel">
+                        <?php
+						$skema_medios_first_pane_active = true;
+						?>
+                        <?php if ( $skema_show_medios_tab_apto ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-apto" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-apto">
                             <?php
 							$slides        = $skema_medios_apto_slides;
 							$modal_id      = $skema_lland_tab . '-gallery-apto';
@@ -346,8 +414,13 @@ $skema_prior_content_block = false;
 							unset( $slides, $modal_id, $modal_title, $gallery_kind, $skema_medios_lb_tpl );
 							?>
                         </div>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-renders" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_renders ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-renders" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-renders">
                             <?php
 							$slides        = $skema_medios_renders_slides;
 							$modal_id      = $skema_lland_tab . '-gallery-renders';
@@ -360,8 +433,13 @@ $skema_prior_content_block = false;
 							unset( $slides, $modal_id, $modal_title, $gallery_kind, $skema_medios_lb_tpl );
 							?>
                         </div>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-plantas" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_plantas ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-plantas" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-plantas">
                             <?php
 							$plantas_slides      = $skema_medios_plantas_slides;
 							$plantas_id_prefix   = $skema_lland_tab;
@@ -372,8 +450,13 @@ $skema_prior_content_block = false;
 							unset( $plantas_slides, $plantas_id_prefix, $skema_plantas_tpl );
 							?>
                         </div>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_avance ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-avance-obra" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-avance">
                             <?php
 							$avance_obra_slides = $skema_medios_avance_slides;
 							$avance_id_prefix   = $skema_lland_tab;
@@ -384,8 +467,13 @@ $skema_prior_content_block = false;
 							unset( $avance_obra_slides, $avance_id_prefix, $skema_avance_tpl );
 							?>
                         </div>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_video ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-videos" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-videos">
                             <?php
 							$skema_medios_video_tpl = locate_template( 'template-parts/landings/partials/medios-tab-video.php' );
 							if ( is_string( $skema_medios_video_tpl ) && $skema_medios_video_tpl !== '' ) {
@@ -394,8 +482,13 @@ $skema_prior_content_block = false;
 							unset( $skema_medios_video_tpl, $skema_medios_video );
 							?>
                         </div>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-zonas" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_zonas ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-zonas" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-zonas">
                             <?php
 							$skema_zonas_galeria_tpl = locate_template( 'template-parts/landings/partials/medios-zonas-sociales-grid.php' );
 							if ( is_string( $skema_zonas_galeria_tpl ) && $skema_zonas_galeria_tpl !== '' ) {
@@ -404,9 +497,13 @@ $skema_prior_content_block = false;
 							unset( $skema_zonas_galeria_tpl, $skema_zonas_galeria_items, $skema_zonas_galeria_nota );
 							?>
                         </div>
-                        <?php if ( null !== $skema_medios_maqueta ) : ?>
-                        <div class="tab-pane fade skema-landing-tab-pane"
-                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta" role="tabpanel">
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
+                        <?php if ( $skema_show_medios_tab_maqueta ) : ?>
+                        <div class="tab-pane fade<?php echo $skema_medios_first_pane_active ? ' show active' : ''; ?> skema-landing-tab-pane"
+                            id="<?php echo esc_attr( $skema_lland_tab ); ?>-tab-maqueta" role="tabpanel" aria-labelledby="<?php echo esc_attr( $skema_lland_tab ); ?>-btn-maqueta">
                             <?php
 							$skema_maqueta_tpl = locate_template( 'template-parts/landings/partials/medios-tab-maqueta-web.php' );
 							if ( is_string( $skema_maqueta_tpl ) && $skema_maqueta_tpl !== '' ) {
@@ -415,7 +512,10 @@ $skema_prior_content_block = false;
 							unset( $skema_maqueta_tpl );
 							?>
                         </div>
-                        <?php endif; ?>
+                        <?php
+							$skema_medios_first_pane_active = false;
+						endif;
+						?>
                     </div>
                     <p class="skema-landing-medios-legal-disclaimer" role="note">
                         <?php
@@ -434,9 +534,9 @@ $skema_prior_content_block = false;
 					$skema_aliados_h3_class = $skema_content_section_heading_class( $skema_prior_content_block );
 					$skema_aliados_h3_class = $skema_aliados_h3_class === '' ? 'mb-70' : $skema_aliados_h3_class . ' mb-70';
 					?>
-                <h3 class="<?php echo esc_attr( $skema_aliados_h3_class ); ?>">
+                <h2 class="<?php echo esc_attr( $skema_aliados_h3_class ); ?>">
                     <?php echo esc_html( $skema_section_title( 'skema_lland_titulo_respaldo', __( 'Con el respaldo de:', 'theme_skema' ) ) ); ?>
-                </h3>
+                </h2>
                 <?php endif; ?>
                 <div class="property-media-box mt-40 mb-60 skema-landing-slot skema-landing-slot--aliados">
                     <section class="renvia-choose-sec">
@@ -472,9 +572,9 @@ $skema_prior_content_block = false;
 					$skema_mapa_h3_class = $skema_content_section_heading_class( $skema_prior_content_block );
 					$skema_mapa_h3_class = $skema_mapa_h3_class === '' ? 'mb-40' : $skema_mapa_h3_class . ' mb-40';
 					?>
-                <h3 class="<?php echo esc_attr( $skema_mapa_h3_class ); ?>">
+                <h2 class="<?php echo esc_attr( $skema_mapa_h3_class ); ?>">
                     <?php echo esc_html( $skema_mapa_titulo ); ?>
-                </h3>
+                </h2>
                 <div
                     class="skema-landing-slot skema-landing-slot--mapa property-media-box mt-0 mb-60 skema-landing-mapa-wrap">
                     <div class="skema-landing-mapa-ratio">
@@ -494,7 +594,7 @@ $skema_prior_content_block = false;
             <div class="<?php echo esc_attr( $skema_sidebar_col_class ); ?> project-lead-sidebar">
                 <div class="project-info-box project-info-box--lead mb-5 mb-xl-0 skema-landing-slot skema-landing-slot--lead"
                     id="solicitar-informacion">
-                    <h5><?php esc_html_e( 'Solicitar información', 'theme_skema' ); ?></h5>
+                    <h2 class="h5 project-info-box__heading"><?php esc_html_e( 'Solicitar información', 'theme_skema' ); ?></h2>
                     <div class="skema-landing-cf7-wrap project-lead-form">
                         <?php echo do_shortcode( $skema_lland_cf7 ); ?>
                     </div>

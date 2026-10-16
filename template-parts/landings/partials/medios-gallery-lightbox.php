@@ -80,7 +80,7 @@ $skema_medios_total = count( $slides );
 	<div class="modal-dialog modal-dialog-centered modal-xl">
 		<div class="modal-content border-0 shadow-lg">
 			<div class="modal-header border-0 pb-0">
-				<h5 class="modal-title" id="<?php echo esc_attr( $modal_id ); ?>-label"><?php echo esc_html( $skema_medios_modal_title ); ?></h5>
+				<h2 class="modal-title h5" id="<?php echo esc_attr( $modal_id ); ?>-label"><?php echo esc_html( $skema_medios_modal_title ); ?></h2>
 				<button type="button" class="close" data-dismiss="modal" aria-label="<?php echo esc_attr__( 'Cerrar', 'theme_skema' ); ?>">
 					<span aria-hidden="true">&times;</span>
 				</button>

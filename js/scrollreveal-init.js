@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
     ScrollReveal().reveal('.reveal', { 
         delay: 500,
         duration: 900,

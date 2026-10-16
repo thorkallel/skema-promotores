@@ -43,7 +43,7 @@
 }
 
 .skema-proyectos .skema-proyectos__head strong{
-	color: var(--nara);
+	color: var(--nara-contrast);
 }
 
 .skema-proyectos .skema-proyectos__head .skema-proyectos__subtitle {
@@ -51,7 +51,7 @@
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
-	color: var(--nara);
+	color: var(--nara-contrast);
 	margin-bottom: 0.5rem;
 	display: block;
 }
@@ -201,7 +201,7 @@
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__ciudad i {
 	margin-right: 6px;
-	color: var(--nara);
+	color: var(--nara-contrast);
 }
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .content > .read-more.style-two {
@@ -226,7 +226,7 @@
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio,
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__label,
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__amount {
-	color: var(--nara);
+	color: var(--nara-contrast);
 }
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__logo {
@@ -276,7 +276,7 @@
 }
 
 .skema-proyectos .skema-proyectos__slider .renvia-service-card.style-two.service-ficha .service-ficha__precio .service-ficha__spec-icon {
-	color: var(--nara);
+	color: var(--nara-contrast);
 	opacity: 1;
 }
 

@@ -79,6 +79,7 @@ textarea:focus-visible,
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
     scrollbar-width: thin;
     scrollbar-color: rgba(56, 56, 56, 0.28) transparent;
 }
@@ -397,7 +398,7 @@ a.btn-nosotros {
 }
 a.btn-nosotros:hover{
 	background-color: transparent;
-	color: var(--nara);
+	color: var(--nara-contrast);
 	text-decoration: none;
 	font-weight: 600;
 }
@@ -622,21 +623,31 @@ a.btn-ponte {
 }
 a.btn-ponte:hover{
 	text-decoration: none;
-	color: var(--nara);
+	color: var(--nara-contrast);
 	background-color: white;
 }
-a.btn-catego {
+a.btn-catego,
+button.btn-catego {
     font-size: 1.6rem;
     color: var(--azul);
     text-decoration: none;
 	font-weight: 500;
 }
-a.btn-catego:hover{
+button.btn-catego {
+	background: none;
+	border: 0;
+	padding: 0;
+	font-family: inherit;
+	cursor: pointer;
+}
+a.btn-catego:hover,
+button.btn-catego:hover {
 	text-decoration: none;
 	color: var(--azul);
 	border-bottom: solid 0.3rem var(--nara);
 }
-a.btn-catego.active{
+a.btn-catego.active,
+button.btn-catego.active {
 	border-bottom: solid 0.3rem var(--nara);
 }
 span.txt-estado {
@@ -822,15 +833,33 @@ input.form-control::placeholder, textarea.form-control::placeholder{
     line-height: 1.2 !important;
 }
 
-/* CF7 aceptación: caja y texto legal alineados (sitio general; landings usan css/landings/) */
-body:not(.skema-landing-shell) .contacto .wpcf7-acceptance {
+/* Señuelo antispam de CF7: fuera de pantalla, sin display:none. */
+.skema-cf7-hp {
+	position: absolute;
+	left: -10000px;
+	top: auto;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+/* CF7 aceptación: checkbox a la izquierda del texto legal (sitio general; landings usan css/landings/) */
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance,
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance .wpcf7-list-item {
 	display: block;
+	width: 100%;
+	margin: 0;
 	margin-bottom: 0.65rem;
 }
 
 body:not(.skema-landing-shell) .contacto .wpcf7-acceptance label {
-	display: block;
+	display: flex !important;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	align-items: flex-start;
+	gap: 0.55rem;
 	position: relative;
+	width: 100%;
 	margin-bottom: 0;
 	line-height: 1.35 !important;
 	cursor: pointer;
@@ -838,18 +867,44 @@ body:not(.skema-landing-shell) .contacto .wpcf7-acceptance label {
 
 body:not(.skema-landing-shell) .contacto .wpcf7-acceptance .wpcf7-list-item-label {
 	display: block;
-	position: relative;
-	padding-left: 1.85rem;
-	min-height: 1.2em;
+	flex: 1 1 auto;
+	min-width: 0;
+	position: static;
+	padding-left: 0;
+	min-height: 0;
 }
 
-body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span:before {
-	top: 0.15em;
+/* Checkbox nativo clicable, columna izquierda (vence .contacto input[type=checkbox] oculto) */
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] {
+	order: -1;
+	position: static !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	width: 1.1rem !important;
+	height: 1.1rem !important;
+	min-width: 1.1rem !important;
+	min-height: 1.1rem !important;
+	margin: 0.2rem 0 0 !important;
+	flex: 0 0 auto;
+	flex-shrink: 0;
+	cursor: pointer;
+	accent-color: var(--nara);
+	z-index: auto !important;
 }
 
-body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span:after {
-	top: calc(-9px + 0.15em);
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span::before,
+body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"] + span::after {
+	display: none;
+	content: none;
 }
+.wpcf7 form label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #0b1f42;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
 .btn-enviar {
     background-color: var(--nara);
     color: white;
@@ -859,7 +914,7 @@ body:not(.skema-landing-shell) .contacto .wpcf7-acceptance input[type="checkbox"
 }
 .btn-enviar:hover{
 	text-decoration: none;
-	color: var(--nara);
+	color: var(--nara-contrast);
 	background-color: transparent;
 	font-weight: 500;
 }
@@ -1017,7 +1072,7 @@ span.icono-mas {
 
 .hover-infoproyecto h2,
 .hover-infoproyecto p.tipo-proyecto-meta {
-        color: var(--nara) !important;
+        color: var(--nara-contrast) !important;
     font-size: 0.9rem !important;
     text-align: start;
     font-weight: 400;
@@ -1057,7 +1112,7 @@ a.btn-verproyecto {
     text-decoration: none;
 }
 a.btn-verproyecto:hover{
-    color: var(--nara);
+    color: var(--nara-contrast);
     text-decoration: none;
     background-color: transparent;
 }
@@ -1127,7 +1182,7 @@ select#selectMapas option {
   }
 
 .divMapa p {
-    color: var(--nara);
+    color: var(--nara-contrast);
     font-size:  1.68rem;
     font-weight: 500;
     line-height: 1.1;
@@ -1218,11 +1273,16 @@ select#selectMapas option {
     font-size: 0.8rem;
     font-weight: 100;
 }
-.site-footer h6{
+.site-footer h6,
+.site-footer p.h6 {
     color: white;
     font-size: 1.2rem;
     font-weight: 200;
     letter-spacing: 2px;
+}
+.site-footer a[href^="tel:"],
+.site-footer a[href^="mailto:"] {
+    color: white;
 }
 .site-footer hr {
     background: var(--nara);
@@ -1436,9 +1496,10 @@ section.valores, section.similares  {
 .div_info_anos{
     text-align: left;
 }
-.div_info_anos h4 {
+.div_info_anos h4,
+.div_info_anos .timeline-year {
     font-size: 19px;
-    color: var(--nara);
+    color: var(--nara-contrast);
 }
 .timeline-line {
     left: 26px;
@@ -1543,7 +1604,7 @@ section.sainc{
     font-weight: 600;
 }
 .project-item .card .card-body h3{
-    color: var(--nara);
+    color: var(--nara-contrast);
     font-size: 26px;
     font-weight: 600;
 }
@@ -1578,7 +1639,7 @@ a.btn-intere:hover{
 }
 .ubica_video button:hover, .ubica_video button.active{
     background-color: transparent;
-    color: var(--nara);
+    color: var(--nara-contrast);
     text-decoration: none;
 }
 .contenido_proy img{
@@ -1850,6 +1911,59 @@ input[type="file"].custom-file-input {
   -webkit-transform: rotate(135deg);
       -ms-transform: rotate(135deg);
           transform: rotate(135deg);
+}
+
+.video-content,
+.skema-ambient-host,
+.skema-has-pause {
+    position: relative;
+}
+
+.skema-ambient-pause,
+.skema-carousel-pause {
+    position: absolute;
+    z-index: 6;
+    top: 0.75rem;
+    right: 0.75rem;
+    margin: 0;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #0b1f42;
+    border-radius: 999px;
+    background: #fff;
+    color: #0b1f42;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+/* Escritorio: mismo borde derecho que el padding de #principal-menu (8rem), debajo de la barra. */
+@media (min-width: 720px) {
+    .home-hero .skema-ambient-pause,
+    .home-hero .skema-carousel-pause {
+        top: 7rem;
+        right: 8rem;
+    }
+}
+
+.skema-ambient-pause:focus-visible,
+.skema-carousel-pause:focus-visible {
+    outline: 2px solid #0b1f42;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 /* Contraste AA: superficies naranjas con texto blanco en controles interactivos. */

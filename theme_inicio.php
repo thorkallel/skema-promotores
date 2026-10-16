@@ -5,27 +5,31 @@
 get_header(); ?>
 <main id="primary" class="site-main site-main--inicio">
     <?php
-$home_h1 = trim( wp_strip_all_tags( (string) get_the_title() ) );
-if ( '' === $home_h1 ) {
-	$home_h1 = get_bloginfo( 'name' );
+$home_h1 = '';
+if ( function_exists( 'get_field' ) ) {
+	$home_h1 = trim( wp_strip_all_tags( (string) get_field( 'home_h1' ) ) );
 }
-?>
-    <h1 class="screen-reader-text"><?php echo esc_html( $home_h1 ); ?></h1>
-    <?php
+if ( '' === $home_h1 ) {
+	$home_h1 = __( 'Constructora y promotora inmobiliaria en Cali', 'theme_skema' );
+}
 $tipo_banner = get_field('tipo_banner');
+?>
+    <div class="home-hero">
+    <?php
 
 if ($tipo_banner === 'Video') : ?>
     <div class="video-content">
         <div class="video-background">
             <div class="video-foreground reveal">
-                <video id="video-banner" class="d-none d-sm-block" src="<?php the_field('video-banner') ?>" autoplay
-                    playsinline loop muted>
-                    Your browser does not support HTML5 video.
+                <video id="video-banner" class="skema-ambient-video d-none d-sm-block" src="<?php the_field('video-banner') ?>"
+                    playsinline loop muted aria-hidden="true">
+                    <?php esc_html_e( 'Tu navegador no reproduce vídeo HTML5.', 'theme_skema' ); ?>
                 </video>
-                <video id="video-banner-movil" class="d-sm-none d-block" src="<?php the_field('video-banner-movil') ?>"
-                    autoplay playsinline loop muted>
-                    Your browser does not support HTML5 video.
+                <video id="video-banner-movil" class="skema-ambient-video d-sm-none d-block" src="<?php the_field('video-banner-movil') ?>"
+                    playsinline loop muted aria-hidden="true">
+                    <?php esc_html_e( 'Tu navegador no reproduce vídeo HTML5.', 'theme_skema' ); ?>
                 </video>
+                <button type="button" class="skema-ambient-pause" aria-pressed="false"><?php esc_html_e( 'Pausar vídeo', 'theme_skema' ); ?></button>
             </div>
         </div>
     </div>
@@ -55,7 +59,7 @@ if ($tipo_banner === 'Video') : ?>
 				endwhile;
 			endif; ?>
         </div>
-        <div class="home-hero-dots" aria-hidden="true"></div>
+        <div class="home-hero-dots"></div>
     </div>
     <div class="slider-banner d-sm-none d-block">
         <div class="slick-slider-banner">
@@ -119,6 +123,7 @@ if ($tipo_banner === 'Video') : ?>
                 <div class="hero-yt-embed">
                     <iframe class="hero-yt-iframe" src="<?php echo esc_url( $embed_src ); ?>"
                         title="<?php echo esc_attr( $slide_title ); ?>" width="560" height="315"
+                        tabindex="-1" aria-hidden="true"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen
                         loading="<?php echo 0 === $idx ? 'eager' : 'lazy'; ?>"></iframe>
@@ -128,10 +133,12 @@ if ($tipo_banner === 'Video') : ?>
 			}
 			?>
         </div>
-        <div class="home-hero-dots" aria-hidden="true"></div>
+        <div class="home-hero-dots"></div>
     </div>
     <?php endif; ?>
     <?php endif; ?>
+        <h1 class="home-hero-title"><?php echo esc_html( $home_h1 ); ?></h1>
+    </div>
     <section class="somos-lideres py-sm-5 py-2" id="que-es-skema">
         <div class="container-fluid">
             <div class="row">
@@ -156,13 +163,14 @@ if ($tipo_banner === 'Video') : ?>
                     <?php endif; ?>
                 </div>
                 <div class="col-sm-5 col-12 px-5 px-sm-3">
-                    <div class="card px-0 px-sm-3">
+                    <div class="card px-0 px-sm-3 skema-ambient-host">
                         <?php $url_video = get_field('video-home'); 
                     if ($url_video) : ?>
-                        <video id="video-home" src="<?php echo esc_url($url_video); ?>" autoplay="" playsinline=""
-                            loop="" defaultmuted="" muted="">
-                            Your browser does not support HTML5 video.
+                        <video id="video-home" class="skema-ambient-video" src="<?php echo esc_url($url_video); ?>" playsinline=""
+                            loop="" muted="" aria-hidden="true">
+                            <?php esc_html_e( 'Tu navegador no reproduce vídeo HTML5.', 'theme_skema' ); ?>
                         </video>
+                        <button type="button" class="skema-ambient-pause" aria-pressed="false"><?php esc_html_e( 'Pausar vídeo', 'theme_skema' ); ?></button>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -184,7 +192,25 @@ if ($tipo_banner === 'Video') : ?>
                         <?php if ( have_rows('slider_oportunidad') ) : ?>
                         <?php while( have_rows('slider_oportunidad') ) : the_row(); ?>
                         <div class="item-team">
-                            <img src="<?php the_sub_field('img'); ?>" alt="" class="img-fluid w-100">
+                            <?php
+                            $skema_oportu_img = get_sub_field( 'img' );
+                            $skema_oportu_src = '';
+                            $skema_oportu_alt = '';
+                            if ( is_array( $skema_oportu_img ) ) {
+                                $skema_oportu_src = isset( $skema_oportu_img['url'] ) ? (string) $skema_oportu_img['url'] : '';
+                                $skema_oportu_alt = isset( $skema_oportu_img['alt'] ) ? (string) $skema_oportu_img['alt'] : '';
+                            } elseif ( is_numeric( $skema_oportu_img ) ) {
+                                $skema_oportu_src = (string) wp_get_attachment_image_url( (int) $skema_oportu_img, 'full' );
+                                $skema_oportu_alt = (string) get_post_meta( (int) $skema_oportu_img, '_wp_attachment_image_alt', true );
+                            } else {
+                                $skema_oportu_src = (string) $skema_oportu_img;
+                                $skema_oportu_id  = attachment_url_to_postid( $skema_oportu_src );
+                                if ( $skema_oportu_id ) {
+                                    $skema_oportu_alt = (string) get_post_meta( $skema_oportu_id, '_wp_attachment_image_alt', true );
+                                }
+                            }
+                            ?>
+                            <img src="<?php echo esc_url( $skema_oportu_src ); ?>" alt="<?php echo esc_attr( $skema_oportu_alt ); ?>" class="img-fluid w-100">
                         </div>
                         <?php endwhile; ?>
                         <?php endif; ?>
@@ -244,7 +270,7 @@ if ($tipo_banner === 'Video') : ?>
                             <label for="selectMapas" class="screen-reader-text">
                                 <?php esc_html_e( 'Selecciona un tipo de proyecto para ver su mapa', 'theme_skema' ); ?>
                             </label>
-                            <select id="selectMapas">
+                            <select id="selectMapas" aria-controls="mapas-resultado">
                                 <?php if (have_rows('info_mapas')): $c = 0;
                 				while (have_rows('info_mapas')): the_row(); ?>
                                 <option value="map-<?php echo $c; ?>"><?php the_sub_field('tipo_proyecto'); ?></option>
@@ -261,6 +287,8 @@ if ($tipo_banner === 'Video') : ?>
                     </div>
                 </div>
             </div>
+            <p id="mapas-anuncio" class="screen-reader-text" aria-live="polite"></p>
+            <div id="mapas-resultado">
             <?php if (have_rows('info_mapas')): $c = 0;
             while (have_rows('info_mapas')): the_row(); ?>
             <div id="map-<?php echo $c; ?>" class="divMapa row" style="display:none;">
@@ -282,12 +310,12 @@ if ($tipo_banner === 'Video') : ?>
                             <div class="skema-mapa-stat__icon">
                                 <?php if ( is_array( $ico_txt1 ) && ! empty( $ico_txt1['ico'] ) ) : ?>
                                 <img class="ico-cons" src="<?php echo esc_url( $ico_txt1['ico'] ); ?>"
-                                    alt="<?php echo esc_attr( $ico_txt1_text !== '' ? $ico_txt1_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
+                                    alt="">
                                 <?php endif; ?>
                             </div>
                             <div class="skema-mapa-stat__content">
                                 <?php if ( $ico_txt1_text !== '' ) : ?>
-                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt1_text ); ?></h5>
+                                <p class="h5 mb-0 mt-3"><?php echo esc_html( $ico_txt1_text ); ?></p>
                                 <?php endif; ?>
                                 <hr>
                                 <p class="mb-0"><?php the_sub_field( 'const' ); ?> m²</p>
@@ -303,13 +331,12 @@ if ($tipo_banner === 'Video') : ?>
                             ?>
                             <div class="skema-mapa-stat__icon">
                                 <?php if ( is_array( $ico_txt2 ) && ! empty( $ico_txt2['ico'] ) ) : ?>
-                                <img class="ico-proye" src="<?php echo esc_url( $ico_txt2['ico'] ); ?>"
-                                    alt="<?php echo esc_attr( $ico_txt2_text !== '' ? $ico_txt2_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
+                                <img class="ico-proye" src="<?php echo esc_url( $ico_txt2['ico'] ); ?>" alt="">
                                 <?php endif; ?>
                             </div>
                             <div class="skema-mapa-stat__content">
                                 <?php if ( $ico_txt2_text !== '' ) : ?>
-                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt2_text ); ?></h5>
+                                <p class="h5 mb-0 mt-3"><?php echo esc_html( $ico_txt2_text ); ?></p>
                                 <?php endif; ?>
                                 <hr>
                                 <p class="mb-0"><?php the_sub_field( 'ejec' ); ?></p>
@@ -325,13 +352,12 @@ if ($tipo_banner === 'Video') : ?>
                             ?>
                             <div class="skema-mapa-stat__icon">
                                 <?php if ( is_array( $ico_txt3 ) && ! empty( $ico_txt3['ico'] ) ) : ?>
-                                <img class="ico-merc" src="<?php echo esc_url( $ico_txt3['ico'] ); ?>"
-                                    alt="<?php echo esc_attr( $ico_txt3_text !== '' ? $ico_txt3_text : __( 'Ícono de característica', 'theme_skema' ) ); ?>">
+                                <img class="ico-merc" src="<?php echo esc_url( $ico_txt3['ico'] ); ?>" alt="">
                                 <?php endif; ?>
                             </div>
                             <div class="skema-mapa-stat__content">
                                 <?php if ( $ico_txt3_text !== '' ) : ?>
-                                <h5 class="mb-0 mt-3"><?php echo esc_html( $ico_txt3_text ); ?></h5>
+                                <p class="h5 mb-0 mt-3"><?php echo esc_html( $ico_txt3_text ); ?></p>
                                 <?php endif; ?>
                                 <hr>
                                 <p class="mb-0"><?php the_sub_field( 'mer' ); ?></p>
@@ -343,6 +369,7 @@ if ($tipo_banner === 'Video') : ?>
             <?php $c++; 
 		    endwhile;
         endif; ?>
+            </div>
         </div>
     </section>
     <?php
